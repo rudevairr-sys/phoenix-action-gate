@@ -12,6 +12,8 @@
 | E-008 | Fechas oficiales | Documentado desde fuente viva | Recuperadas 2026-08-31T07:35:53Z |
 | E-009 | H-PHX-04 cerrado como no corroborado | Test externo ejecutado | Radar Phoenix, blob `5a94358648cbb9c37327ae4c50afe9b709eb5c96` |
 | E-010 | Documentos F0 | Implementado | El commit que contiene este archivo |
+| E-011 | Token Factory `GET /v1/models`: HTTP 200, 30 modelos, 7 NVIDIA, incluido `nvidia/Nemotron-3_5-Lightning` | Runtime observado | `docs/04-runtime/evidence/G1_LIST_MODELS_2026-08-31.json` |
+| E-012 | Token Factory `POST /v1/chat/completions` con `nvidia/Nemotron-3_5-Lightning`: ActionProposal estructurada válida, HTTP 200, sin dispatch | Runtime observado | `docs/04-runtime/evidence/G1_ACTION_PROPOSAL_2026-08-31.json` |
 
 ## Regla
 

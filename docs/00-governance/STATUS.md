@@ -1,51 +1,46 @@
 # Estado retomable
 
 Fecha: 2026-08-31  
-Estado: `F0_DOCUMENTATION_IMPLEMENTED / REVIEW_BRANCH`
+Estado: `G1_TECHNICAL_PASS / VERSIONING_PENDING`
 
-## Documentado
+## Qué está demostrado
 
-- propósito y fronteras del proyecto;
-- encaje provisional en Coding and agentic engineering;
-- requisitos oficiales recuperados en vivo;
-- separación de claims y evidencias;
-- protocolo candidato H-PHX-05;
-- límites de publicación y procedencia.
+- repositorio público independiente y licencia Apache-2.0;
+- contrato F0.5 para `ActionProposal` y separación modelo/gate;
+- acceso real a Nebius Token Factory mediante la cuenta del participante;
+- `GET /v1/models` observado con HTTP 200;
+- 7 modelos NVIDIA disponibles en la cuenta;
+- `nvidia/Nemotron-3_5-Lightning` disponible y seleccionado;
+- `POST /v1/chat/completions` observado con HTTP 200;
+- Nemotron produjo una `ActionProposal` estructurada `READ_CONTEXT` para `demo-workspace/README.md`;
+- el probe no intentó dispatch (`dispatch_attempted=false`);
+- evidencia sanitizada conservada localmente sin secretos.
 
-## Implementado
+## Evidencia G1
 
-- repositorio público independiente;
-- proyecto local enlazado a GitHub;
-- rama de revisión F0;
-- armazón documental y licencia OSI.
+- `docs/04-runtime/evidence/G1_LIST_MODELS_2026-08-31.json`;
+- `docs/04-runtime/evidence/G1_ACTION_PROPOSAL_2026-08-31.json`;
+- `tools/g1_list_models.mjs`;
+- `tools/g1_action_proposal_probe.mjs`.
 
-## Test ejecutado
+## Qué todavía NO está demostrado
 
-- estado Git local consultado;
-- presencia del README remoto verificada;
-- datos oficiales Devpost recuperados mediante el conector autenticado;
-- readback y diff final de los documentos F0: pendientes de completar en el cierre de esta rama.
-
-## Runtime observado
-
-- `main...origin/main` antes de abrir F0;
-- registro Devpost del participante: ya registrado;
-- fase del evento: submissions open.
-
-No se ha observado todavía una llamada Nemotron/Token Factory ni una decisión de acción del MVP.
-
-## Producción validada
-
-No.
+- MVP end-to-end;
+- gate determinista implementado;
+- casos `DENY`, `REVIEW` y `PREPARED` ejecutados;
+- H-PHX-05 frente a baseline;
+- clon limpio reproducible;
+- demo pública y vídeo;
+- validación de producción.
 
 ## Riesgos abiertos
 
-1. H-PHX-05 no está ejecutada.
-2. No existe integración real con Nebius o NVIDIA.
-3. No existe aplicación, demo o vídeo.
-4. La frontera exacta de reutilización del core Phoenix requiere revisión de licencia y mínima exportación.
-5. El flujo guiado Devpost mantiene `rules_acknowledged=false` en esta carpeta hasta consentimiento verificable.
+1. Los artefactos G1 están todavía sin commit.
+2. G2 no debe comenzar hasta versionar G1 mediante commit autorizado.
+3. H-PHX-05 sigue pendiente.
+4. No existe aplicación funcional ni demo.
+5. La discrepancia menor de fechas Devpost/Official Rules sigue registrada en G0 como `WARN`.
 
 ## Único siguiente gate
 
-Revisar y aceptar las reglas oficiales, fijar el tiempo disponible y cerrar el alcance del MVP antes de abrir implementación.
+Crear, tras autorización humana, un commit local de cierre G1 que incluya probes, evidencia, ledgers, RTM, STATUS y PROJECT_STATE. Validar el estado resultante. No hacer push ni crear PR sin autorización separada.

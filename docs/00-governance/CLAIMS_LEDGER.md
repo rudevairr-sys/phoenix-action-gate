@@ -10,20 +10,20 @@ Estados permitidos: `DOCUMENTED`, `IMPLEMENTED`, `TEST_EXECUTED`, `RUNTIME_OBSER
 | C-010 | Phoenix Neuron dispone de arquitectura previa relevante | DOCUMENTED | Fuente externa al repo; no importada |
 | C-011 | H-PHX-04 no corroboró diferenciación en fixtures acotados | TEST_EXECUTED | Autoridad: Action Assurance Lab y checkpoint del Radar |
 | C-012 | El pipeline completo podría aportar valor diferencial | HYPOTHESIS | H-PHX-05; todavía no ejecutada |
-| C-013 | Phoenix Action Gate usa Nemotron | INSUFFICIENT_EVIDENCE | No implementado |
-| C-014 | Phoenix Action Gate llama a Token Factory en runtime | INSUFFICIENT_EVIDENCE | No implementado |
+| C-013 | Phoenix Action Gate usa `nvidia/Nemotron-3_5-Lightning` para generar una ActionProposal estructurada | RUNTIME_OBSERVED | E-012; ejecución real en Token Factory, HTTP 200, sin dispatch |
+| C-014 | Phoenix Action Gate llama a Nebius Token Factory en runtime | RUNTIME_OBSERVED | E-011 y E-012; `GET /v1/models` y `POST /v1/chat/completions` observados |
 | C-015 | Phoenix Action Gate supera un baseline sencillo | INSUFFICIENT_EVIDENCE | Benchmark no ejecutado |
 | C-016 | Phoenix Action Gate está validado en producción | INSUFFICIENT_EVIDENCE | Producción fuera de alcance |
 | C-017 | Phoenix tiene ventaja comercial por su arquitectura | INSUFFICIENT_EVIDENCE | No existe validación comercial |
 
 ## Formulación pública permitida hoy
 
-> Phoenix Action Gate is an experimental project investigating a governed, fail-closed action pipeline for AI agents.
+> Phoenix Action Gate is an experimental project investigating a governed, fail-closed action pipeline for AI agents. A live Nebius Token Factory call using NVIDIA Nemotron 3.5 Lightning has produced a structured ActionProposal without dispatch.
 
 ## Formulaciones prohibidas hoy
 
 - “Phoenix hace seguros a los agentes.”
 - “Phoenix supera a gates bespoke.”
-- “La integración con Nemotron está terminada.”
+- “La integración completa está lista para producción.”
 - “Está listo para producción.”
 - “H-PHX-05 está validada.”

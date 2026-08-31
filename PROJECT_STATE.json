@@ -1,0 +1,141 @@
+{
+  "schema_version": "1.0.0",
+  "project": "Phoenix Action Gate",
+  "updated_at": "2026-08-31T20:27:10Z",
+  "hackathon": {
+    "name": "Nebius x NVIDIA Global AI Hackathon",
+    "rules_source": "https://nebiusglobalaihackathon.devpost.com/rules",
+    "rules_checked_at": "2026-08-31T19:42:57Z"
+  },
+  "mode": "BUILD",
+  "mavo": {
+    "variant": "phoenix-safe-3",
+    "state": "PAUSED",
+    "runtime_profile": "tool-assisted"
+  },
+  "sources": [
+    {
+      "id": "public-product-repo",
+      "ref": "rudevairr-sys/phoenix-action-gate design/f0-5-product-contract@e01960acf5200c572e5fbf89b87e28450c7ec3d6",
+      "license": "Apache-2.0",
+      "disposition": "used",
+      "reason": "Fuente pública de producto; F0 y F0.5 verificadas mediante PR y commit."
+    },
+    {
+      "id": "taller-continuity",
+      "ref": "rudevairr-sys/Ag_masv@chatgpt/taller / chatgpt/residencias/chatgpt-custodio-taller/proyectos/nebius-phoenix-action-gate/ESTADO.md",
+      "license": "private continuity source; not for publication",
+      "disposition": "reference_only",
+      "reason": "Autoridad de continuidad para reconstruir el último estado, no autoridad del runtime del producto."
+    },
+    {
+      "id": "devpost-official",
+      "ref": "nebiusglobalaihackathon.devpost.com rules and live hackathon metadata checked 2026-08-31",
+      "license": "official rules and participant metadata; reference only",
+      "disposition": "used",
+      "reason": "Autoridad para requisitos, elegibilidad, entregables, tracks y calendario del hackathon."
+    },
+    {
+      "id": "nebius-token-factory-docs",
+      "ref": "https://docs.tokenfactory.nebius.com/quickstart and structured output documentation checked 2026-08-31",
+      "license": "documentation reference only",
+      "disposition": "reference_only",
+      "reason": "Confirma la frontera API utilizada; la evidencia de runtime real se conserva separadamente."
+    },
+    {
+      "id": "nvidia-nemotron-docs",
+      "ref": "https://build.nvidia.com/nvidia/nemotron-3.5-lightning-30b-a3b checked 2026-08-31",
+      "license": "NVIDIA model terms; reference only",
+      "disposition": "reference_only",
+      "reason": "Referencia documental del modelo; su disponibilidad y uso real quedaron observados mediante Token Factory."
+    },
+    {
+      "id": "sion-live-workspace",
+      "ref": "SION_TALLER_RUST_v0.7.0 / 01_MESA_PRINCIPAL/phoenix-action-gate branch review/f05-local-reconciliation, checked 2026-08-31T20:26:00Z",
+      "license": "local governed workspace; not for publication",
+      "disposition": "used",
+      "reason": "Workspace vivo donde se conservan probes, evidencia G1 y actualizaciones de trazabilidad pendientes de commit autorizado."
+    }
+  ],
+  "claims": [
+    {
+      "id": "C-F0",
+      "text": "La fundación gobernada F0 existe en el repositorio público y permanece en una PR draft abierta y mergeable.",
+      "state": "IMPLEMENTED",
+      "evidence_refs": ["PR #1", "a4069af40740df6a98a0c2f5486439409b04a16a"]
+    },
+    {
+      "id": "C-F05",
+      "text": "El contrato de producto F0.5 existe y define ActionProposal, GateDecision, HumanReviewRecord, clases de acción/riesgo y demo candidata sin executor ni dispatch.",
+      "state": "IMPLEMENTED",
+      "evidence_refs": ["PR #6", "e01960acf5200c572e5fbf89b87e28450c7ec3d6"]
+    },
+    {
+      "id": "C-G1-CATALOG",
+      "text": "La cuenta real accede a Nebius Token Factory y observa el catálogo de modelos, incluyendo nvidia/Nemotron-3_5-Lightning.",
+      "state": "RUNTIME_OBSERVED",
+      "evidence_refs": ["docs/04-runtime/evidence/G1_LIST_MODELS_2026-08-31.json"]
+    },
+    {
+      "id": "C-G1-INFERENCE",
+      "text": "nvidia/Nemotron-3_5-Lightning genera una ActionProposal estructurada para Phoenix Action Gate mediante Token Factory sin dispatch.",
+      "state": "RUNTIME_OBSERVED",
+      "evidence_refs": ["docs/04-runtime/evidence/G1_ACTION_PROPOSAL_2026-08-31.json"]
+    },
+    {
+      "id": "C-G1-PROBES",
+      "text": "Existen probes locales fail-closed para descubrir modelos y solicitar una ActionProposal estructurada sin ejecutar ninguna acción.",
+      "state": "TEST_EXECUTED",
+      "evidence_refs": ["tools/g1_list_models.mjs", "tools/g1_action_proposal_probe.mjs", "docs/04-runtime/evidence/G1_LIST_MODELS_2026-08-31.json", "docs/04-runtime/evidence/G1_ACTION_PROPOSAL_2026-08-31.json"]
+    },
+    {
+      "id": "C-MVP",
+      "text": "Phoenix Action Gate dispone de un MVP funcional end-to-end.",
+      "state": "INSUFFICIENT_EVIDENCE",
+      "evidence_refs": []
+    },
+    {
+      "id": "C-H-PHX-05",
+      "text": "H-PHX-05 demuestra ventaja frente a un baseline competente.",
+      "state": "HYPOTHESIS",
+      "evidence_refs": []
+    },
+    {
+      "id": "C-SION-LOCAL",
+      "text": "El clon local de Phoenix Action Gate está activo en SION sobre review/f05-local-reconciliation y contiene cambios G1 todavía no versionados por commit.",
+      "state": "RUNTIME_OBSERVED",
+      "evidence_refs": ["SION git_status 2026-08-31T20:26:00Z"]
+    },
+    {
+      "id": "C-DEVPOST-JOURNEY",
+      "text": "El estado local del recorrido Devpost marca Resources completado y next_command prepare-submission, pero no existe un proyecto Devpost creado y esto no satisface G1 ni G2.",
+      "state": "RUNTIME_OBSERVED",
+      "evidence_refs": ["SION .devpost-hackathon-state.json readback", "Devpost list_my_projects count=0"]
+    }
+  ],
+  "integrations": [
+    {
+      "id": "nebius-token-factory-nvidia-model",
+      "state": "RUNTIME_OBSERVED",
+      "centrality": "core",
+      "required": true,
+      "evidence_refs": ["docs/04-runtime/evidence/G1_LIST_MODELS_2026-08-31.json", "docs/04-runtime/evidence/G1_ACTION_PROPOSAL_2026-08-31.json"]
+    }
+  ],
+  "gates": [
+    {"id":"G0","state":"WARN","reason":"Reglas oficiales revalidadas y participación registrada; existe discrepancia no bloqueante entre la fecha estructurada de inicio de judging (2026-11-02) y las Reglas Oficiales (2026-12-01), que declaran prevalecer."},
+    {"id":"G1","state":"WARN","reason":"TECHNICAL_PASS: catálogo e inferencia real observados con Nebius Token Factory y nvidia/Nemotron-3_5-Lightning, con evidencia sanitizada y RTM actualizada. Falta versionar por commit los probes y evidencia para cerrar el gate gobernado."},
+    {"id":"G2","state":"PENDING","reason":"No iniciar MVP hasta cerrar G1 mediante commit autorizado de sus artefactos y evidencia."},
+    {"id":"G3","state":"PENDING","reason":"Selección diferenciadora no se promueve hasta disponer de vertical mínimo y baseline."
+    },
+    {"id":"G4","state":"PENDING","reason":"Contratos F0.5 existen; la implementación del gate y evidencia de decisiones todavía no existe."},
+    {"id":"G5","state":"PENDING","reason":"No existe todavía construcción del vertical mínimo autorizado."},
+    {"id":"G6","state":"PENDING","reason":"H-PHX-05 y baseline competente no ejecutados."},
+    {"id":"G7","state":"PENDING","reason":"No existe aún frontera pública reproducible con build/tests/runtime completo del producto."},
+    {"id":"G8","state":"PENDING","reason":"No existe proyecto Devpost creado ni materiales finales de entrega; envío no autorizado."}
+  ],
+  "decision": {
+    "status": "REVIEW",
+    "next_step": "Obtener autorización humana para crear un commit local que versione los probes, evidencia G1, ledgers, RTM y PROJECT_STATE. Tras validar ese commit, promover G1 a PASS y abrir G2. No hacer push ni crear PR sin autorización separada."
+  }
+}
