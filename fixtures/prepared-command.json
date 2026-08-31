@@ -1,0 +1,13 @@
+{
+  "schema_version": "0.1",
+  "proposal_id": "test-command-001",
+  "intent": "Prepare bounded test execution",
+  "action_type": "RUN_COMMAND",
+  "target": {"workspace_id": "demo-workspace", "relative_path": null},
+  "operation": {"kind": "run_command", "program": "cargo", "args": ["test", "--workspace"], "cwd": ".", "timeout_ms": 60000},
+  "requested_capabilities": ["RUN_COMMAND"],
+  "preconditions": ["workspace_exists"],
+  "reversibility": {"kind": "INHERENT", "rollback_plan": null},
+  "estimated_effects": ["test process only"],
+  "model_context": {"model_id": "nvidia/Nemotron-3_5-Lightning", "provider_request_id": null}
+}

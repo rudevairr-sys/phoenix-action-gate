@@ -1,0 +1,43 @@
+{
+  "suite": "g2-deterministic-gate-core",
+  "state": "TEST_EXECUTED",
+  "executed_at": "2026-08-31T22:06:00Z",
+  "environment": {
+    "executor": "assistant_container",
+    "node": "v22.16.0",
+    "target_sion_node_observed": "v24.12.0"
+  },
+  "result": {
+    "tests": 6,
+    "pass": 6,
+    "fail": 0,
+    "cancelled": 0,
+    "skipped": 0,
+    "duration_ms": 321.811608
+  },
+  "cases": [
+    "bounded read becomes R0/PREPARED and never dispatches",
+    "reversible patch becomes R2/REVIEW",
+    "secret path fails closed as R3/DENY",
+    "allowlisted test command becomes R1/PREPARED without execution",
+    "same proposal produces same deterministic decision hash",
+    "unknown schema fails closed"
+  ],
+  "validated_copy_hashes": {
+    "package.json": "3139ed18a63dc01cf5230e0e12e541164b1cad5d9b776e00621421c702cf1b9e",
+    "src/gate.mjs": "0f9b26627a0fbe38c716e6ccf90226f01a800601ddb2031d5789abaebbfa2be7",
+    "test/gate.test.mjs": "0e90ebac98102b2574e5a2ede6a9b5e3c7597a59849c395032611c3a836f0bed",
+    "fixtures/deny-secret.json": "99e7854272d2de35cc252c35531cc876699dcea847c3c1fa8964e0b8224d622d",
+    "fixtures/prepared-command.json": "faa6f5374f7501b370c453a719404966bd9925f73fdbbabb5d76f1019f8c83ef",
+    "fixtures/prepared-read.json": "e6a6fb12a465b8307561d3d8227b8a7ae8f8e2ac8b82649787cadea144cbd655",
+    "fixtures/review-patch.json": "823f650d44b9f11cfb0c5410a3b415d6362bdf06b2a53c7515266512f42767ea",
+    "tools/g2_gate_probe.mjs": "f609f9d57e9c892188b09f9d412f168e2147633d9ab9b6b89053ddb62c76b16b"
+  },
+  "limits": [
+    "The test run occurred in the assistant execution container, not yet in the user's SION runtime.",
+    "No network call was part of these deterministic core tests.",
+    "No action was dispatched or executed by the gate."
+  ],
+  "dispatch_attempted": false,
+  "secret_exposed": false
+}

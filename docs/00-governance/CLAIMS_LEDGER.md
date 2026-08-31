@@ -15,10 +15,12 @@ Estados permitidos: `DOCUMENTED`, `IMPLEMENTED`, `TEST_EXECUTED`, `RUNTIME_OBSER
 | C-015 | Phoenix Action Gate supera un baseline sencillo | INSUFFICIENT_EVIDENCE | Benchmark no ejecutado |
 | C-016 | Phoenix Action Gate está validado en producción | INSUFFICIENT_EVIDENCE | Producción fuera de alcance |
 | C-017 | Phoenix tiene ventaja comercial por su arquitectura | INSUFFICIENT_EVIDENCE | No existe validación comercial |
+| C-018 | Existe un núcleo determinista que transforma `ActionProposal` en `PREPARED`, `REVIEW` o `DENY` sin dispatch | IMPLEMENTED | `src/gate.mjs`, fixtures y `tools/g2_gate_probe.mjs` en `review/g2-mvp-core` |
+| C-019 | El núcleo determinista supera los seis casos iniciales de G2 | TEST_EXECUTED | E-013: 6 PASS / 0 FAIL en entorno de validación; repetición en SION Node 24 pendiente |
 
 ## Formulación pública permitida hoy
 
-> Phoenix Action Gate is an experimental project investigating a governed, fail-closed action pipeline for AI agents. A live Nebius Token Factory call using NVIDIA Nemotron 3.5 Lightning has produced a structured ActionProposal without dispatch.
+> Phoenix Action Gate is an experimental project investigating a governed, fail-closed action pipeline for AI agents. A live Nebius Token Factory call using NVIDIA Nemotron 3.5 Lightning has produced a structured ActionProposal without dispatch. A deterministic local gate core now maps bounded proposals to PREPARED, REVIEW or DENY in initial tests.
 
 ## Formulaciones prohibidas hoy
 

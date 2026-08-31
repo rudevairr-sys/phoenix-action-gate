@@ -1,0 +1,13 @@
+{
+  "name": "phoenix-action-gate",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "test": "node --test",
+    "demo:gate": "node tools/g2_gate_probe.mjs"
+  },
+  "engines": {
+    "node": ">=22"
+  }
+}

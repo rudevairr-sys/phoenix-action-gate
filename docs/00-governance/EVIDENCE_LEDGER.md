@@ -14,6 +14,7 @@
 | E-010 | Documentos F0 | Implementado | El commit que contiene este archivo |
 | E-011 | Token Factory `GET /v1/models`: HTTP 200, 30 modelos, 7 NVIDIA, incluido `nvidia/Nemotron-3_5-Lightning` | Runtime observado | `docs/04-runtime/evidence/G1_LIST_MODELS_2026-08-31.json` |
 | E-012 | Token Factory `POST /v1/chat/completions` con `nvidia/Nemotron-3_5-Lightning`: ActionProposal estructurada válida, HTTP 200, sin dispatch | Runtime observado | `docs/04-runtime/evidence/G1_ACTION_PROPOSAL_2026-08-31.json` |
+| E-013 | Núcleo determinista G2: 6 tests, 6 PASS, 0 FAIL en entorno de validación; PREPARED/REVIEW/DENY, fail-closed y hash determinista | Test ejecutado | `docs/04-runtime/evidence/G2_CORE_TESTS_2026-08-31.json`; ejecución en contenedor, repetición en SION pendiente |
 
 ## Regla
 

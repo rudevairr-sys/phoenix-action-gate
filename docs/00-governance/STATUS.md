@@ -1,53 +1,62 @@
 # Estado retomable
 
 Fecha: 2026-08-31  
-Estado: `G1_PASS / G2_READY`
+Estado: `G2_IN_PROGRESS / CORE_IMPLEMENTED / SION_TEST_PENDING`
 
-## Qué está demostrado
+## G1 cerrado
 
-- repositorio público independiente y licencia Apache-2.0;
-- contrato F0.5 para `ActionProposal` y separación modelo/gate;
-- acceso real a Nebius Token Factory mediante la cuenta del participante;
-- `GET /v1/models` observado con HTTP 200;
-- 7 modelos NVIDIA disponibles en la cuenta;
-- `nvidia/Nemotron-3_5-Lightning` disponible y seleccionado;
-- `POST /v1/chat/completions` observado con HTTP 200;
-- Nemotron produjo una `ActionProposal` estructurada `READ_CONTEXT` para `demo-workspace/README.md`;
-- el probe no intentó dispatch (`dispatch_attempted=false`);
-- evidencia sanitizada conservada sin secretos;
-- artefactos G1 versionados localmente en commit `cc97dd1`.
+- Nebius Token Factory observado en runtime;
+- `nvidia/Nemotron-3_5-Lightning` observado y usado;
+- ActionProposal estructurada producida sin dispatch;
+- evidencia G1 versionada en `cc97dd1`;
+- cierre de G1 registrado en `ba6272d`.
 
-## Evidencia G1
+## G2 — núcleo determinista
 
-- `docs/04-runtime/evidence/G1_LIST_MODELS_2026-08-31.json`;
-- `docs/04-runtime/evidence/G1_ACTION_PROPOSAL_2026-08-31.json`;
-- `tools/g1_list_models.mjs`;
-- `tools/g1_action_proposal_probe.mjs`;
-- commit local `cc97dd1` (`feat(g1): record live Nebius Nemotron integration evidence`).
+Rama local: `review/g2-mvp-core`.
+
+Implementado:
+
+- `src/gate.mjs`: política determinista v0.1;
+- resultados `PREPARED`, `REVIEW` y `DENY`;
+- riesgo `R0`, `R1`, `R2`, `R3`;
+- validación de contrato y schema version;
+- target acotado a `demo-workspace`;
+- frontera básica de secretos;
+- allowlist de comandos de test;
+- exigencia de rollback para patches;
+- hash determinista de decisión;
+- `dispatch_attempted=false` en todas las decisiones;
+- cuatro fixtures y seis tests;
+- CLI de demostración `tools/g2_gate_probe.mjs`;
+- núcleo sin dependencias externas de terceros.
+
+## Evidencia de test actual
+
+`docs/04-runtime/evidence/G2_CORE_TESTS_2026-08-31.json`
+
+Resultado observado en entorno de validación:
+
+- 6 tests;
+- 6 PASS;
+- 0 FAIL;
+- Node v22.16.0;
+- target SION observado: Node v24.12.0.
+
+Esta prueba asciende el núcleo a `TEST_EXECUTED`, pero todavía no demuestra su ejecución dentro del runtime SION del usuario.
 
 ## Qué todavía NO está demostrado
 
-- MVP end-to-end;
-- gate determinista implementado;
-- casos `DENY`, `REVIEW` y `PREPARED` ejecutados;
+- repetición de `npm test` en SION Node 24;
+- conexión end-to-end Nemotron → gate determinista;
+- panel web;
+- revisión humana interactiva;
+- evidence store completo;
 - H-PHX-05 frente a baseline;
 - clon limpio reproducible;
 - demo pública y vídeo;
 - validación de producción.
 
-## Gate G1
+## Único siguiente paso seguro
 
-`PASS`.
-
-La integración obligatoria fue observada en runtime y quedó versionada con evidencia sanitizada. Esto autoriza abrir G2; no implica que exista todavía un MVP ni una integración lista para producción.
-
-## Riesgos abiertos
-
-1. H-PHX-05 sigue pendiente.
-2. No existe aplicación funcional ni demo.
-3. La discrepancia menor de fechas Devpost/Official Rules sigue registrada en G0 como `WARN`.
-4. No se ha realizado push ni PR de G1; el commit permanece local.
-
-## Único siguiente gate
-
-G2: construir el vertical mínimo del producto. Primer objetivo: implementar el gate determinista para una `ActionProposal` acotada y hacer visible el resultado `PREPARED`, `REVIEW` o `DENY` sin dispatch. Mantener Nebius/Nemotron como proponente y Phoenix como decisor.
+Versionar localmente este primer núcleo G2 y ejecutar `npm test` desde el proyecto SION. Si los seis tests pasan también allí, conservar esa evidencia y continuar con el adaptador end-to-end y el panel. No hacer push ni crear PR sin autorización separada.

@@ -1,7 +1,7 @@
 {
   "schema_version": "1.0.0",
   "project": "Phoenix Action Gate",
-  "updated_at": "2026-08-31T22:02:30Z",
+  "updated_at": "2026-08-31T22:07:30Z",
   "hackathon": {
     "name": "Nebius x NVIDIA Global AI Hackathon",
     "rules_source": "https://nebiusglobalaihackathon.devpost.com/rules",
@@ -10,7 +10,7 @@
   "mode": "BUILD",
   "mavo": {
     "variant": "phoenix-safe-3",
-    "state": "QUIESCENT",
+    "state": "RUNNING",
     "runtime_profile": "tool-assisted"
   },
   "sources": [
@@ -51,10 +51,10 @@
     },
     {
       "id": "sion-live-workspace",
-      "ref": "SION_TALLER_RUST_v0.7.0 / 01_MESA_PRINCIPAL/phoenix-action-gate review/f05-local-reconciliation@cc97dd1, checked 2026-08-31T22:02:00Z",
+      "ref": "SION_TALLER_RUST_v0.7.0 / 01_MESA_PRINCIPAL/phoenix-action-gate branch review/g2-mvp-core, checked 2026-08-31T22:07:30Z",
       "license": "local governed workspace; not for publication",
       "disposition": "used",
-      "reason": "Workspace vivo; probes, evidencia y trazabilidad G1 quedaron versionados en el commit local cc97dd1."
+      "reason": "Workspace vivo; G1 está cerrado y el primer núcleo determinista de G2 está implementado localmente, pendiente de commit y repetición de tests en Node 24 de SION."
     }
   ],
   "claims": [
@@ -89,6 +89,12 @@
       "evidence_refs": ["cc97dd1", "tools/g1_list_models.mjs", "tools/g1_action_proposal_probe.mjs", "docs/04-runtime/evidence/G1_LIST_MODELS_2026-08-31.json", "docs/04-runtime/evidence/G1_ACTION_PROPOSAL_2026-08-31.json"]
     },
     {
+      "id": "C-G2-CORE",
+      "text": "Existe un núcleo determinista v0.1 que transforma ActionProposal en PREPARED, REVIEW o DENY, calcula riesgo y hash de decisión, y no dispone de dispatch.",
+      "state": "TEST_EXECUTED",
+      "evidence_refs": ["src/gate.mjs", "test/gate.test.mjs", "docs/04-runtime/evidence/G2_CORE_TESTS_2026-08-31.json"]
+    },
+    {
       "id": "C-MVP",
       "text": "Phoenix Action Gate dispone de un MVP funcional end-to-end.",
       "state": "INSUFFICIENT_EVIDENCE",
@@ -102,9 +108,9 @@
     },
     {
       "id": "C-SION-LOCAL",
-      "text": "El cierre técnico de G1 está versionado localmente en review/f05-local-reconciliation@cc97dd1 y el árbol quedó limpio inmediatamente después del commit.",
+      "text": "G1 está versionado localmente y G2 se desarrolla en una rama de revisión dedicada.",
       "state": "RUNTIME_OBSERVED",
-      "evidence_refs": ["cc97dd1", "SION git_status 2026-08-31T22:02:00Z"]
+      "evidence_refs": ["cc97dd1", "ba6272d", "review/g2-mvp-core"]
     },
     {
       "id": "C-DEVPOST-JOURNEY",
@@ -124,17 +130,17 @@
   ],
   "gates": [
     {"id":"G0","state":"WARN","reason":"Reglas oficiales revalidadas y participación registrada; existe discrepancia no bloqueante entre la fecha estructurada de inicio de judging (2026-11-02) y las Reglas Oficiales (2026-12-01), que declaran prevalecer."},
-    {"id":"G1","state":"PASS","reason":"Token Factory y nvidia/Nemotron-3_5-Lightning fueron observados en runtime; catálogo e inferencia estructurada produjeron HTTP 200, sin dispatch ni secretos, y la evidencia quedó versionada localmente en cc97dd1."},
-    {"id":"G2","state":"PENDING","reason":"Listo para abrir el vertical mínimo del producto: gate determinista y representación visible de PREPARED/REVIEW/DENY sin dispatch."},
+    {"id":"G1","state":"PASS","reason":"Token Factory y nvidia/Nemotron-3_5-Lightning fueron observados en runtime; catálogo e inferencia estructurada produjeron HTTP 200, sin dispatch ni secretos, y la evidencia quedó versionada localmente."},
+    {"id":"G2","state":"WARN","reason":"IN_PROGRESS: núcleo determinista implementado y 6/6 tests pasan en entorno de validación. Falta versionar este corte y repetir `npm test` en Node 24 del SION del usuario antes de conectar Nemotron y construir el panel."},
     {"id":"G3","state":"PENDING","reason":"Selección diferenciadora no se promueve hasta disponer de vertical mínimo y baseline."},
-    {"id":"G4","state":"PENDING","reason":"Contratos F0.5 existen; la implementación del gate y evidencia de decisiones todavía no existe."},
-    {"id":"G5","state":"PENDING","reason":"No existe todavía construcción completa del vertical mínimo autorizado."},
+    {"id":"G4","state":"PENDING","reason":"Los contratos existen; falta completar integración end-to-end, revisión humana y evidence store."},
+    {"id":"G5","state":"PENDING","reason":"El vertical mínimo aún no incluye adaptador end-to-end ni panel."},
     {"id":"G6","state":"PENDING","reason":"H-PHX-05 y baseline competente no ejecutados."},
     {"id":"G7","state":"PENDING","reason":"No existe aún frontera pública reproducible con build/tests/runtime completo del producto."},
     {"id":"G8","state":"PENDING","reason":"No existe proyecto Devpost creado ni materiales finales de entrega; envío no autorizado."}
   ],
   "decision": {
     "status": "GO",
-    "next_step": "Abrir G2 en una rama local dedicada e implementar el primer vertical mínimo: una política determinista que reciba ActionProposal, emita PREPARED/REVIEW/DENY con reason codes y no disponga de ningún mecanismo de dispatch. No hacer push ni crear PR sin autorización separada."
+    "next_step": "Versionar localmente el primer núcleo G2 y ejecutar `npm test` desde 01_MESA_PRINCIPAL/phoenix-action-gate en el Node 24 de SION. Si pasa, conservar evidencia local y continuar con Nemotron -> gate -> panel. No hacer push ni crear PR sin autorización separada."
   }
 }

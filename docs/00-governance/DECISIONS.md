@@ -40,3 +40,10 @@
 ## D-008 — Estado Devpost local
 
 **Decisión:** inicializar continuidad Devpost porque el participante ya aparece registrado, pero mantener `rules_acknowledged=false` hasta recuperar consentimiento verificable en este proyecto.
+
+## D-009 — Núcleo G2 sin dependencias externas
+
+**Decisión:** implementar el primer vertical determinista del MVP con módulos ESM de Node y APIs estándar, sin framework ni dependencias de terceros en el núcleo.  
+**Motivo:** minimizar superficie operativa, instalación, riesgo de supply chain y tiempo de entrega antes de demostrar `PREPARED`, `REVIEW` y `DENY`. El runtime SION observado dispone de Node 24.  
+**Alcance:** contrato, política determinista, fixtures, hash de decisión y tests. La UI se añade encima una vez validado el núcleo.  
+**Estado:** aceptada para G2; reversible si la UI o el despliegue exigen otro adaptador.
