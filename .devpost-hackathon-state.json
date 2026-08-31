@@ -1,0 +1,38 @@
+{
+  "plugin": "devpost-hackathon",
+  "version": 2,
+  "hackathon": {
+    "slug": "nebiusglobalaihackathon",
+    "name": "Nebius x NVIDIA Global AI Hackathon",
+    "url": "https://nebiusglobalaihackathon.devpost.com/",
+    "selected": true,
+    "source": "known"
+  },
+  "participant": {
+    "name": "",
+    "display_name": ""
+  },
+  "project": {
+    "name": "Phoenix Action Gate",
+    "summary": "Experimental fail-closed governance gateway for actions proposed by AI agents.",
+    "ai_usage": "",
+    "codex_usage": "F0 repository governance and traceability scaffold"
+  },
+  "current_stage": "review-hackathon-rules",
+  "completed_stages": [
+    "start-hackathon"
+  ],
+  "rules_acknowledged": false,
+  "learning": {
+    "status": "not-started",
+    "current_step": "",
+    "completed_steps": [],
+    "plan_file": "",
+    "checklist_file": ""
+  },
+  "submission": {
+    "draft_file": "devpost-submission.md",
+    "status": "not-started"
+  },
+  "next_command": "review-hackathon-rules"
+}
