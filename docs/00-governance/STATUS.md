@@ -1,7 +1,7 @@
 # Estado retomable
 
 Fecha: 2026-08-31  
-Estado: `G1_TECHNICAL_PASS / VERSIONING_PENDING`
+Estado: `G1_PASS / G2_READY`
 
 ## Qué está demostrado
 
@@ -14,14 +14,16 @@ Estado: `G1_TECHNICAL_PASS / VERSIONING_PENDING`
 - `POST /v1/chat/completions` observado con HTTP 200;
 - Nemotron produjo una `ActionProposal` estructurada `READ_CONTEXT` para `demo-workspace/README.md`;
 - el probe no intentó dispatch (`dispatch_attempted=false`);
-- evidencia sanitizada conservada localmente sin secretos.
+- evidencia sanitizada conservada sin secretos;
+- artefactos G1 versionados localmente en commit `cc97dd1`.
 
 ## Evidencia G1
 
 - `docs/04-runtime/evidence/G1_LIST_MODELS_2026-08-31.json`;
 - `docs/04-runtime/evidence/G1_ACTION_PROPOSAL_2026-08-31.json`;
 - `tools/g1_list_models.mjs`;
-- `tools/g1_action_proposal_probe.mjs`.
+- `tools/g1_action_proposal_probe.mjs`;
+- commit local `cc97dd1` (`feat(g1): record live Nebius Nemotron integration evidence`).
 
 ## Qué todavía NO está demostrado
 
@@ -33,14 +35,19 @@ Estado: `G1_TECHNICAL_PASS / VERSIONING_PENDING`
 - demo pública y vídeo;
 - validación de producción.
 
+## Gate G1
+
+`PASS`.
+
+La integración obligatoria fue observada en runtime y quedó versionada con evidencia sanitizada. Esto autoriza abrir G2; no implica que exista todavía un MVP ni una integración lista para producción.
+
 ## Riesgos abiertos
 
-1. Los artefactos G1 están todavía sin commit.
-2. G2 no debe comenzar hasta versionar G1 mediante commit autorizado.
-3. H-PHX-05 sigue pendiente.
-4. No existe aplicación funcional ni demo.
-5. La discrepancia menor de fechas Devpost/Official Rules sigue registrada en G0 como `WARN`.
+1. H-PHX-05 sigue pendiente.
+2. No existe aplicación funcional ni demo.
+3. La discrepancia menor de fechas Devpost/Official Rules sigue registrada en G0 como `WARN`.
+4. No se ha realizado push ni PR de G1; el commit permanece local.
 
 ## Único siguiente gate
 
-Crear, tras autorización humana, un commit local de cierre G1 que incluya probes, evidencia, ledgers, RTM, STATUS y PROJECT_STATE. Validar el estado resultante. No hacer push ni crear PR sin autorización separada.
+G2: construir el vertical mínimo del producto. Primer objetivo: implementar el gate determinista para una `ActionProposal` acotada y hacer visible el resultado `PREPARED`, `REVIEW` o `DENY` sin dispatch. Mantener Nebius/Nemotron como proponente y Phoenix como decisor.

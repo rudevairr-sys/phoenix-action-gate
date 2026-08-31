@@ -1,7 +1,7 @@
 {
   "schema_version": "1.0.0",
   "project": "Phoenix Action Gate",
-  "updated_at": "2026-08-31T20:27:10Z",
+  "updated_at": "2026-08-31T22:02:30Z",
   "hackathon": {
     "name": "Nebius x NVIDIA Global AI Hackathon",
     "rules_source": "https://nebiusglobalaihackathon.devpost.com/rules",
@@ -10,7 +10,7 @@
   "mode": "BUILD",
   "mavo": {
     "variant": "phoenix-safe-3",
-    "state": "PAUSED",
+    "state": "QUIESCENT",
     "runtime_profile": "tool-assisted"
   },
   "sources": [
@@ -51,10 +51,10 @@
     },
     {
       "id": "sion-live-workspace",
-      "ref": "SION_TALLER_RUST_v0.7.0 / 01_MESA_PRINCIPAL/phoenix-action-gate branch review/f05-local-reconciliation, checked 2026-08-31T20:26:00Z",
+      "ref": "SION_TALLER_RUST_v0.7.0 / 01_MESA_PRINCIPAL/phoenix-action-gate review/f05-local-reconciliation@cc97dd1, checked 2026-08-31T22:02:00Z",
       "license": "local governed workspace; not for publication",
       "disposition": "used",
-      "reason": "Workspace vivo donde se conservan probes, evidencia G1 y actualizaciones de trazabilidad pendientes de commit autorizado."
+      "reason": "Workspace vivo; probes, evidencia y trazabilidad G1 quedaron versionados en el commit local cc97dd1."
     }
   ],
   "claims": [
@@ -84,9 +84,9 @@
     },
     {
       "id": "C-G1-PROBES",
-      "text": "Existen probes locales fail-closed para descubrir modelos y solicitar una ActionProposal estructurada sin ejecutar ninguna acción.",
+      "text": "Existen probes fail-closed versionados para descubrir modelos y solicitar una ActionProposal estructurada sin ejecutar ninguna acción.",
       "state": "TEST_EXECUTED",
-      "evidence_refs": ["tools/g1_list_models.mjs", "tools/g1_action_proposal_probe.mjs", "docs/04-runtime/evidence/G1_LIST_MODELS_2026-08-31.json", "docs/04-runtime/evidence/G1_ACTION_PROPOSAL_2026-08-31.json"]
+      "evidence_refs": ["cc97dd1", "tools/g1_list_models.mjs", "tools/g1_action_proposal_probe.mjs", "docs/04-runtime/evidence/G1_LIST_MODELS_2026-08-31.json", "docs/04-runtime/evidence/G1_ACTION_PROPOSAL_2026-08-31.json"]
     },
     {
       "id": "C-MVP",
@@ -102,13 +102,13 @@
     },
     {
       "id": "C-SION-LOCAL",
-      "text": "El clon local de Phoenix Action Gate está activo en SION sobre review/f05-local-reconciliation y contiene cambios G1 todavía no versionados por commit.",
+      "text": "El cierre técnico de G1 está versionado localmente en review/f05-local-reconciliation@cc97dd1 y el árbol quedó limpio inmediatamente después del commit.",
       "state": "RUNTIME_OBSERVED",
-      "evidence_refs": ["SION git_status 2026-08-31T20:26:00Z"]
+      "evidence_refs": ["cc97dd1", "SION git_status 2026-08-31T22:02:00Z"]
     },
     {
       "id": "C-DEVPOST-JOURNEY",
-      "text": "El estado local del recorrido Devpost marca Resources completado y next_command prepare-submission, pero no existe un proyecto Devpost creado y esto no satisface G1 ni G2.",
+      "text": "El estado local del recorrido Devpost marca Resources completado y next_command prepare-submission, pero no existe un proyecto Devpost creado y esto no sustituye los gates técnicos del producto.",
       "state": "RUNTIME_OBSERVED",
       "evidence_refs": ["SION .devpost-hackathon-state.json readback", "Devpost list_my_projects count=0"]
     }
@@ -119,23 +119,22 @@
       "state": "RUNTIME_OBSERVED",
       "centrality": "core",
       "required": true,
-      "evidence_refs": ["docs/04-runtime/evidence/G1_LIST_MODELS_2026-08-31.json", "docs/04-runtime/evidence/G1_ACTION_PROPOSAL_2026-08-31.json"]
+      "evidence_refs": ["cc97dd1", "docs/04-runtime/evidence/G1_LIST_MODELS_2026-08-31.json", "docs/04-runtime/evidence/G1_ACTION_PROPOSAL_2026-08-31.json"]
     }
   ],
   "gates": [
     {"id":"G0","state":"WARN","reason":"Reglas oficiales revalidadas y participación registrada; existe discrepancia no bloqueante entre la fecha estructurada de inicio de judging (2026-11-02) y las Reglas Oficiales (2026-12-01), que declaran prevalecer."},
-    {"id":"G1","state":"WARN","reason":"TECHNICAL_PASS: catálogo e inferencia real observados con Nebius Token Factory y nvidia/Nemotron-3_5-Lightning, con evidencia sanitizada y RTM actualizada. Falta versionar por commit los probes y evidencia para cerrar el gate gobernado."},
-    {"id":"G2","state":"PENDING","reason":"No iniciar MVP hasta cerrar G1 mediante commit autorizado de sus artefactos y evidencia."},
-    {"id":"G3","state":"PENDING","reason":"Selección diferenciadora no se promueve hasta disponer de vertical mínimo y baseline."
-    },
+    {"id":"G1","state":"PASS","reason":"Token Factory y nvidia/Nemotron-3_5-Lightning fueron observados en runtime; catálogo e inferencia estructurada produjeron HTTP 200, sin dispatch ni secretos, y la evidencia quedó versionada localmente en cc97dd1."},
+    {"id":"G2","state":"PENDING","reason":"Listo para abrir el vertical mínimo del producto: gate determinista y representación visible de PREPARED/REVIEW/DENY sin dispatch."},
+    {"id":"G3","state":"PENDING","reason":"Selección diferenciadora no se promueve hasta disponer de vertical mínimo y baseline."},
     {"id":"G4","state":"PENDING","reason":"Contratos F0.5 existen; la implementación del gate y evidencia de decisiones todavía no existe."},
-    {"id":"G5","state":"PENDING","reason":"No existe todavía construcción del vertical mínimo autorizado."},
+    {"id":"G5","state":"PENDING","reason":"No existe todavía construcción completa del vertical mínimo autorizado."},
     {"id":"G6","state":"PENDING","reason":"H-PHX-05 y baseline competente no ejecutados."},
     {"id":"G7","state":"PENDING","reason":"No existe aún frontera pública reproducible con build/tests/runtime completo del producto."},
     {"id":"G8","state":"PENDING","reason":"No existe proyecto Devpost creado ni materiales finales de entrega; envío no autorizado."}
   ],
   "decision": {
-    "status": "REVIEW",
-    "next_step": "Obtener autorización humana para crear un commit local que versione los probes, evidencia G1, ledgers, RTM y PROJECT_STATE. Tras validar ese commit, promover G1 a PASS y abrir G2. No hacer push ni crear PR sin autorización separada."
+    "status": "GO",
+    "next_step": "Abrir G2 en una rama local dedicada e implementar el primer vertical mínimo: una política determinista que reciba ActionProposal, emita PREPARED/REVIEW/DENY con reason codes y no disponga de ningún mecanismo de dispatch. No hacer push ni crear PR sin autorización separada."
   }
 }
