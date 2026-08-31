@@ -1,7 +1,7 @@
 # Estado retomable
 
 Fecha: 2026-08-31  
-Estado: `G2_IN_PROGRESS / CORE_IMPLEMENTED / SION_TEST_PENDING`
+Estado: `G2_IN_PROGRESS / E2E_RUNTIME_OBSERVED / PANEL_READY`
 
 ## G1 cerrado
 
@@ -15,7 +15,7 @@ Estado: `G2_IN_PROGRESS / CORE_IMPLEMENTED / SION_TEST_PENDING`
 
 Rama local: `review/g2-mvp-core`.
 
-Implementado:
+Implementado y versionado en `6248158`:
 
 - `src/gate.mjs`: política determinista v0.1;
 - resultados `PREPARED`, `REVIEW` y `DENY`;
@@ -31,27 +31,38 @@ Implementado:
 - CLI de demostración `tools/g2_gate_probe.mjs`;
 - núcleo sin dependencias externas de terceros.
 
-## Evidencia de test actual
+## Evidencia de tests
 
-`docs/04-runtime/evidence/G2_CORE_TESTS_2026-08-31.json`
+- `docs/04-runtime/evidence/G2_CORE_TESTS_2026-08-31.json`: 6 PASS / 0 FAIL en entorno de validación.
+- `docs/04-runtime/evidence/G2_SION_TESTS_2026-08-31.json`: 6 PASS / 0 FAIL en el SION local del operador; duración total 201.0834 ms.
 
-Resultado observado en entorno de validación:
+## G2 — pipeline end-to-end observado
 
-- 6 tests;
-- 6 PASS;
-- 0 FAIL;
-- Node v22.16.0;
-- target SION observado: Node v24.12.0.
+La ejecución real `npm run demo:e2e` completó el recorrido:
 
-Esta prueba asciende el núcleo a `TEST_EXECUTED`, pero todavía no demuestra su ejecución dentro del runtime SION del usuario.
+`Nebius Token Factory → nvidia/Nemotron-3_5-Lightning → ActionProposal → Phoenix Gate → GateDecision`
+
+Resultado observado:
+
+- HTTP 200;
+- latencia 4654 ms;
+- 1166 tokens totales;
+- provider response `chatcmpl-f0b5b889`;
+- propuesta `READ_CONTEXT` para `demo-workspace/README.md`;
+- decisión `R0 / PREPARED`;
+- 7 checks `PASS`;
+- `decision_hash=ee2cdb280c34525257ab0ba587e4bbaccfb89132d5ddb626134deb7467b73d24`;
+- `dispatch_attempted=false`;
+- `secret_exposed=false`.
+
+Evidencia: `docs/04-runtime/evidence/G2_E2E_NEMOTRON_GATE_2026-08-31.json`.
 
 ## Qué todavía NO está demostrado
 
-- repetición de `npm test` en SION Node 24;
-- conexión end-to-end Nemotron → gate determinista;
 - panel web;
 - revisión humana interactiva;
-- evidence store completo;
+- evidence store completo para múltiples ejecuciones;
+- recorridos live `REVIEW` y `DENY` desde Nemotron;
 - H-PHX-05 frente a baseline;
 - clon limpio reproducible;
 - demo pública y vídeo;
@@ -59,4 +70,4 @@ Esta prueba asciende el núcleo a `TEST_EXECUTED`, pero todavía no demuestra su
 
 ## Único siguiente paso seguro
 
-Versionar localmente este primer núcleo G2 y ejecutar `npm test` desde el proyecto SION. Si los seis tests pasan también allí, conservar esa evidencia y continuar con el adaptador end-to-end y el panel. No hacer push ni crear PR sin autorización separada.
+Versionar este corte end-to-end y comenzar el panel web mínimo. La primera pantalla debe mostrar claramente intención, propuesta Nemotron, checks Phoenix, riesgo, decisión y evidencia; no debe existir ningún botón o endpoint de dispatch. No hacer push ni crear PR sin autorización separada.

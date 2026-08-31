@@ -5,7 +5,8 @@
   "type": "module",
   "scripts": {
     "test": "node --test",
-    "demo:gate": "node tools/g2_gate_probe.mjs"
+    "demo:gate": "node tools/g2_gate_probe.mjs",
+    "demo:e2e": "node tools/g2_end_to_end_probe.mjs"
   },
   "engines": {
     "node": ">=22"

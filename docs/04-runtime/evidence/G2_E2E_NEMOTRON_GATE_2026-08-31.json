@@ -1,0 +1,81 @@
+{
+  "probe": "g2-end-to-end-nemotron-gate",
+  "execution_origin": "operator_local_sion_runtime",
+  "command": "npm run demo:e2e",
+  "working_directory": "01_MESA_PRINCIPAL/phoenix-action-gate",
+  "ok": true,
+  "state": "PIPELINE_OBSERVED",
+  "provider": {
+    "model": "nvidia/Nemotron-3_5-Lightning",
+    "endpoint": "https://api.tokenfactory.nebius.com/v1/chat/completions",
+    "http_status": 200,
+    "latency_ms": 4654,
+    "started_at": "2026-08-31T22:17:13.953Z",
+    "finished_at": "2026-08-31T22:17:18.620Z",
+    "provider_response_id": "chatcmpl-f0b5b889",
+    "usage": {
+      "completion_tokens": 1091,
+      "prompt_tokens": 75,
+      "total_tokens": 1166,
+      "completion_tokens_details": {
+        "accepted_prediction_tokens": null,
+        "audio_tokens": null,
+        "reasoning_tokens": 906,
+        "rejected_prediction_tokens": null
+      },
+      "prompt_tokens_details": null,
+      "prompt_cache_hit_tokens": 0,
+      "prompt_cache_miss_tokens": 75
+    }
+  },
+  "proposal": {
+    "schema_version": "0.1",
+    "proposal_id": "readme-inspect-001",
+    "intent": "READ_CONTEXT",
+    "action_type": "READ_CONTEXT",
+    "target": {
+      "workspace_id": "demo-workspace",
+      "relative_path": "README.md"
+    },
+    "operation": {
+      "kind": "read_file"
+    },
+    "requested_capabilities": ["READ_CONTEXT"],
+    "preconditions": [],
+    "reversibility": {
+      "kind": "INHERENT",
+      "rollback_plan": null
+    },
+    "estimated_effects": [],
+    "model_context": {
+      "model_id": "nvidia/Nemotron-3_5-Lightning",
+      "provider_request_id": "chatcmpl-f0b5b889"
+    }
+  },
+  "decision": {
+    "decision_version": "0.1",
+    "proposal_id": "readme-inspect-001",
+    "outcome": "PREPARED",
+    "risk_class": "R0",
+    "policy_version": "phoenix-action-gate/0.1.0",
+    "reason_codes": ["BOUNDED_READ"],
+    "checks": [
+      {"check":"schema_valid","status":"PASS","evidence_ref":"0.1"},
+      {"check":"target_in_scope","status":"PASS","evidence_ref":"demo-workspace"},
+      {"check":"secret_boundary_clear","status":"PASS","evidence_ref":"no secret-like path"},
+      {"check":"capability_known","status":"PASS","evidence_ref":"READ_CONTEXT"},
+      {"check":"operation_valid","status":"PASS","evidence_ref":"read_file"},
+      {"check":"rollback_sufficient","status":"PASS","evidence_ref":"INHERENT"},
+      {"check":"evidence_complete","status":"PASS","evidence_ref":"nvidia/Nemotron-3_5-Lightning"}
+    ],
+    "human_review_required": false,
+    "rollback_status": "INHERENT",
+    "decision_id": "decision-ee2cdb280c345252",
+    "evidence_bundle_id": "evidence-ee2cdb280c345252",
+    "decision_hash": "ee2cdb280c34525257ab0ba587e4bbaccfb89132d5ddb626134deb7467b73d24",
+    "dispatch_attempted": false
+  },
+  "dispatch_attempted": false,
+  "secret_exposed": false,
+  "evidence_origin": "operator_runtime_output"
+}

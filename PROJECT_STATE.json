@@ -1,7 +1,7 @@
 {
   "schema_version": "1.0.0",
   "project": "Phoenix Action Gate",
-  "updated_at": "2026-08-31T22:07:30Z",
+  "updated_at": "2026-08-31T22:19:45Z",
   "hackathon": {
     "name": "Nebius x NVIDIA Global AI Hackathon",
     "rules_source": "https://nebiusglobalaihackathon.devpost.com/rules",
@@ -51,10 +51,10 @@
     },
     {
       "id": "sion-live-workspace",
-      "ref": "SION_TALLER_RUST_v0.7.0 / 01_MESA_PRINCIPAL/phoenix-action-gate branch review/g2-mvp-core, checked 2026-08-31T22:07:30Z",
+      "ref": "SION_TALLER_RUST_v0.7.0 / 01_MESA_PRINCIPAL/phoenix-action-gate branch review/g2-mvp-core@6248158 plus end-to-end cut, checked 2026-08-31T22:19:33Z",
       "license": "local governed workspace; not for publication",
       "disposition": "used",
-      "reason": "Workspace vivo; G1 está cerrado y el primer núcleo determinista de G2 está implementado localmente, pendiente de commit y repetición de tests en Node 24 de SION."
+      "reason": "Workspace vivo; G1 está cerrado, el núcleo G2 está versionado y probado en SION y el pipeline end-to-end fue observado con la cuenta real, pendiente de commit de este corte."
     }
   ],
   "claims": [
@@ -92,11 +92,17 @@
       "id": "C-G2-CORE",
       "text": "Existe un núcleo determinista v0.1 que transforma ActionProposal en PREPARED, REVIEW o DENY, calcula riesgo y hash de decisión, y no dispone de dispatch.",
       "state": "TEST_EXECUTED",
-      "evidence_refs": ["src/gate.mjs", "test/gate.test.mjs", "docs/04-runtime/evidence/G2_CORE_TESTS_2026-08-31.json"]
+      "evidence_refs": ["6248158", "src/gate.mjs", "test/gate.test.mjs", "docs/04-runtime/evidence/G2_CORE_TESTS_2026-08-31.json", "docs/04-runtime/evidence/G2_SION_TESTS_2026-08-31.json"]
+    },
+    {
+      "id": "C-G2-E2E",
+      "text": "Una llamada real de nvidia/Nemotron-3_5-Lightning alimenta directamente el gate determinista y produce una GateDecision trazable sin dispatch.",
+      "state": "RUNTIME_OBSERVED",
+      "evidence_refs": ["docs/04-runtime/evidence/G2_E2E_NEMOTRON_GATE_2026-08-31.json"]
     },
     {
       "id": "C-MVP",
-      "text": "Phoenix Action Gate dispone de un MVP funcional end-to-end.",
+      "text": "Phoenix Action Gate dispone de un MVP funcional completo con interfaz web y recorrido demostrable.",
       "state": "INSUFFICIENT_EVIDENCE",
       "evidence_refs": []
     },
@@ -108,9 +114,9 @@
     },
     {
       "id": "C-SION-LOCAL",
-      "text": "G1 está versionado localmente y G2 se desarrolla en una rama de revisión dedicada.",
+      "text": "G1 está versionado localmente y G2 se desarrolla en la rama de revisión dedicada review/g2-mvp-core.",
       "state": "RUNTIME_OBSERVED",
-      "evidence_refs": ["cc97dd1", "ba6272d", "review/g2-mvp-core"]
+      "evidence_refs": ["cc97dd1", "ba6272d", "6248158", "review/g2-mvp-core"]
     },
     {
       "id": "C-DEVPOST-JOURNEY",
@@ -125,22 +131,22 @@
       "state": "RUNTIME_OBSERVED",
       "centrality": "core",
       "required": true,
-      "evidence_refs": ["cc97dd1", "docs/04-runtime/evidence/G1_LIST_MODELS_2026-08-31.json", "docs/04-runtime/evidence/G1_ACTION_PROPOSAL_2026-08-31.json"]
+      "evidence_refs": ["cc97dd1", "docs/04-runtime/evidence/G1_LIST_MODELS_2026-08-31.json", "docs/04-runtime/evidence/G1_ACTION_PROPOSAL_2026-08-31.json", "docs/04-runtime/evidence/G2_E2E_NEMOTRON_GATE_2026-08-31.json"]
     }
   ],
   "gates": [
     {"id":"G0","state":"WARN","reason":"Reglas oficiales revalidadas y participación registrada; existe discrepancia no bloqueante entre la fecha estructurada de inicio de judging (2026-11-02) y las Reglas Oficiales (2026-12-01), que declaran prevalecer."},
     {"id":"G1","state":"PASS","reason":"Token Factory y nvidia/Nemotron-3_5-Lightning fueron observados en runtime; catálogo e inferencia estructurada produjeron HTTP 200, sin dispatch ni secretos, y la evidencia quedó versionada localmente."},
-    {"id":"G2","state":"WARN","reason":"IN_PROGRESS: núcleo determinista implementado y 6/6 tests pasan en entorno de validación. Falta versionar este corte y repetir `npm test` en Node 24 del SION del usuario antes de conectar Nemotron y construir el panel."},
-    {"id":"G3","state":"PENDING","reason":"Selección diferenciadora no se promueve hasta disponer de vertical mínimo y baseline."},
-    {"id":"G4","state":"PENDING","reason":"Los contratos existen; falta completar integración end-to-end, revisión humana y evidence store."},
-    {"id":"G5","state":"PENDING","reason":"El vertical mínimo aún no incluye adaptador end-to-end ni panel."},
+    {"id":"G2","state":"WARN","reason":"IN_PROGRESS: núcleo determinista versionado en 6248158 y probado 6/6 en SION; pipeline real Nemotron -> ActionProposal -> Phoenix Gate observado con HTTP 200, decisión R0/PREPARED y evidencia sanitizada. Falta interfaz web y recorridos live REVIEW/DENY."},
+    {"id":"G3","state":"PENDING","reason":"Selección diferenciadora no se promueve hasta disponer de vertical mínimo visible y baseline."},
+    {"id":"G4","state":"PENDING","reason":"Los contratos existen; falta completar revisión humana interactiva y evidence store de múltiples ejecuciones."},
+    {"id":"G5","state":"PENDING","reason":"El vertical mínimo aún no incluye panel web completo."},
     {"id":"G6","state":"PENDING","reason":"H-PHX-05 y baseline competente no ejecutados."},
     {"id":"G7","state":"PENDING","reason":"No existe aún frontera pública reproducible con build/tests/runtime completo del producto."},
     {"id":"G8","state":"PENDING","reason":"No existe proyecto Devpost creado ni materiales finales de entrega; envío no autorizado."}
   ],
   "decision": {
     "status": "GO",
-    "next_step": "Versionar localmente el primer núcleo G2 y ejecutar `npm test` desde 01_MESA_PRINCIPAL/phoenix-action-gate en el Node 24 de SION. Si pasa, conservar evidencia local y continuar con Nemotron -> gate -> panel. No hacer push ni crear PR sin autorización separada."
+    "next_step": "Versionar localmente el corte end-to-end y construir el panel web mínimo que muestre intención, propuesta Nemotron, checks Phoenix, riesgo, decisión y evidencia. No añadir dispatch ni hacer push/PR sin autorización separada."
   }
 }
