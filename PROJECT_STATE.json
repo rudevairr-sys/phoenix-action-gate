@@ -1,16 +1,16 @@
 {
   "schema_version": "1.0.0",
   "project": "Phoenix Action Gate",
-  "updated_at": "2026-08-31T22:19:45Z",
+  "updated_at": "2026-09-01T00:57:30Z",
   "hackathon": {
     "name": "Nebius x NVIDIA Global AI Hackathon",
     "rules_source": "https://nebiusglobalaihackathon.devpost.com/rules",
     "rules_checked_at": "2026-08-31T19:42:57Z"
   },
-  "mode": "BUILD",
+  "mode": "VALIDATE",
   "mavo": {
     "variant": "phoenix-safe-3",
-    "state": "RUNNING",
+    "state": "REFLECTING",
     "runtime_profile": "tool-assisted"
   },
   "sources": [
@@ -51,10 +51,10 @@
     },
     {
       "id": "sion-live-workspace",
-      "ref": "SION_TALLER_RUST_v0.7.0 / 01_MESA_PRINCIPAL/phoenix-action-gate branch review/g2-mvp-core@6248158 plus end-to-end cut, checked 2026-08-31T22:19:33Z",
+      "ref": "SION_TALLER_RUST_v0.7.0 / 01_MESA_PRINCIPAL/phoenix-action-gate branch review/g2-mvp-core@6d02f21 plus local validation cut, checked 2026-09-01",
       "license": "local governed workspace; not for publication",
       "disposition": "used",
-      "reason": "Workspace vivo; G1 está cerrado, el núcleo G2 está versionado y probado en SION y el pipeline end-to-end fue observado con la cuenta real, pendiente de commit de este corte."
+      "reason": "Workspace vivo; gate individual y pipeline live versionados; panel conversacional, Plan Gate y H-PHX-05 Trials 001/002 están validados localmente y pendientes de commit de checkpoint."
     }
   ],
   "claims": [
@@ -71,58 +71,52 @@
       "evidence_refs": ["PR #6", "e01960acf5200c572e5fbf89b87e28450c7ec3d6"]
     },
     {
-      "id": "C-G1-CATALOG",
-      "text": "La cuenta real accede a Nebius Token Factory y observa el catálogo de modelos, incluyendo nvidia/Nemotron-3_5-Lightning.",
+      "id": "C-G1-INTEGRATION",
+      "text": "Nebius Token Factory y nvidia/Nemotron-3_5-Lightning fueron usados en runtime para producir una ActionProposal estructurada sin dispatch.",
       "state": "RUNTIME_OBSERVED",
-      "evidence_refs": ["docs/04-runtime/evidence/G1_LIST_MODELS_2026-08-31.json"]
-    },
-    {
-      "id": "C-G1-INFERENCE",
-      "text": "nvidia/Nemotron-3_5-Lightning genera una ActionProposal estructurada para Phoenix Action Gate mediante Token Factory sin dispatch.",
-      "state": "RUNTIME_OBSERVED",
-      "evidence_refs": ["docs/04-runtime/evidence/G1_ACTION_PROPOSAL_2026-08-31.json"]
-    },
-    {
-      "id": "C-G1-PROBES",
-      "text": "Existen probes fail-closed versionados para descubrir modelos y solicitar una ActionProposal estructurada sin ejecutar ninguna acción.",
-      "state": "TEST_EXECUTED",
-      "evidence_refs": ["cc97dd1", "tools/g1_list_models.mjs", "tools/g1_action_proposal_probe.mjs", "docs/04-runtime/evidence/G1_LIST_MODELS_2026-08-31.json", "docs/04-runtime/evidence/G1_ACTION_PROPOSAL_2026-08-31.json"]
-    },
-    {
-      "id": "C-G2-CORE",
-      "text": "Existe un núcleo determinista v0.1 que transforma ActionProposal en PREPARED, REVIEW o DENY, calcula riesgo y hash de decisión, y no dispone de dispatch.",
-      "state": "TEST_EXECUTED",
-      "evidence_refs": ["6248158", "src/gate.mjs", "test/gate.test.mjs", "docs/04-runtime/evidence/G2_CORE_TESTS_2026-08-31.json", "docs/04-runtime/evidence/G2_SION_TESTS_2026-08-31.json"]
+      "evidence_refs": ["cc97dd1", "docs/04-runtime/evidence/G1_LIST_MODELS_2026-08-31.json", "docs/04-runtime/evidence/G1_ACTION_PROPOSAL_2026-08-31.json"]
     },
     {
       "id": "C-G2-E2E",
-      "text": "Una llamada real de nvidia/Nemotron-3_5-Lightning alimenta directamente el gate determinista y produce una GateDecision trazable sin dispatch.",
+      "text": "Una llamada real de Nemotron alimenta directamente el gate determinista y produce una GateDecision trazable sin dispatch.",
       "state": "RUNTIME_OBSERVED",
-      "evidence_refs": ["docs/04-runtime/evidence/G2_E2E_NEMOTRON_GATE_2026-08-31.json"]
+      "evidence_refs": ["6d02f21", "docs/04-runtime/evidence/G2_E2E_NEMOTRON_GATE_2026-08-31.json"]
+    },
+    {
+      "id": "C-G2-REGRESSION",
+      "text": "La regresión local ampliada del producto pasa 23/23 tests en SION.",
+      "state": "TEST_EXECUTED",
+      "evidence_refs": ["docs/04-runtime/evidence/G2_SION_TESTS_2026-09-01.json"]
+    },
+    {
+      "id": "C-H-PHX-05-TRIAL-001",
+      "text": "Phoenix propaga bloqueos causales a pasos posteriores que el baseline independiente no propaga, aunque Trial 001 no cambió la decisión global porque ambos agregados fueron DENY.",
+      "state": "TEST_EXECUTED",
+      "evidence_refs": ["docs/04-runtime/evidence/H_PHOENIX_05_CAUSAL_PLAN_TRIAL_001_2026-09-01.json"]
+    },
+    {
+      "id": "C-H-PHX-05-TRIAL-002",
+      "text": "En un fixture preregistrado sin DENY locales en el baseline, Phoenix detecta una precondición de estado obsoleta entre pasos y cambia la decisión global de REVIEW a DENY, con expected version, observed version y último escritor trazables.",
+      "state": "TEST_EXECUTED",
+      "evidence_refs": ["docs/04-runtime/evidence/H_PHOENIX_05_CAUSAL_PLAN_TRIAL_002_2026-09-01.json"]
+    },
+    {
+      "id": "C-H-PHX-05-GENERAL",
+      "text": "Phoenix Action Gate supera de forma general a gates competentes.",
+      "state": "INSUFFICIENT_EVIDENCE",
+      "evidence_refs": ["Trial 003 con baseline state-aware pendiente"]
     },
     {
       "id": "C-MVP",
-      "text": "Phoenix Action Gate dispone de un MVP funcional completo con interfaz web y recorrido demostrable.",
+      "text": "Phoenix Action Gate dispone de un MVP público reproducible completo.",
       "state": "INSUFFICIENT_EVIDENCE",
       "evidence_refs": []
     },
     {
-      "id": "C-H-PHX-05",
-      "text": "H-PHX-05 demuestra ventaja frente a un baseline competente.",
-      "state": "HYPOTHESIS",
-      "evidence_refs": []
-    },
-    {
-      "id": "C-SION-LOCAL",
-      "text": "G1 está versionado localmente y G2 se desarrolla en la rama de revisión dedicada review/g2-mvp-core.",
-      "state": "RUNTIME_OBSERVED",
-      "evidence_refs": ["cc97dd1", "ba6272d", "6248158", "review/g2-mvp-core"]
-    },
-    {
       "id": "C-DEVPOST-JOURNEY",
-      "text": "El estado local del recorrido Devpost marca Resources completado y next_command prepare-submission, pero no existe un proyecto Devpost creado y esto no sustituye los gates técnicos del producto.",
+      "text": "El estado local del recorrido Devpost no sustituye los gates técnicos del producto ni autoriza submission.",
       "state": "RUNTIME_OBSERVED",
-      "evidence_refs": ["SION .devpost-hackathon-state.json readback", "Devpost list_my_projects count=0"]
+      "evidence_refs": ["Devpost list_my_projects count=0"]
     }
   ],
   "integrations": [
@@ -131,22 +125,22 @@
       "state": "RUNTIME_OBSERVED",
       "centrality": "core",
       "required": true,
-      "evidence_refs": ["cc97dd1", "docs/04-runtime/evidence/G1_LIST_MODELS_2026-08-31.json", "docs/04-runtime/evidence/G1_ACTION_PROPOSAL_2026-08-31.json", "docs/04-runtime/evidence/G2_E2E_NEMOTRON_GATE_2026-08-31.json"]
+      "evidence_refs": ["cc97dd1", "6d02f21", "docs/04-runtime/evidence/G2_E2E_NEMOTRON_GATE_2026-08-31.json"]
     }
   ],
   "gates": [
-    {"id":"G0","state":"WARN","reason":"Reglas oficiales revalidadas y participación registrada; existe discrepancia no bloqueante entre la fecha estructurada de inicio de judging (2026-11-02) y las Reglas Oficiales (2026-12-01), que declaran prevalecer."},
-    {"id":"G1","state":"PASS","reason":"Token Factory y nvidia/Nemotron-3_5-Lightning fueron observados en runtime; catálogo e inferencia estructurada produjeron HTTP 200, sin dispatch ni secretos, y la evidencia quedó versionada localmente."},
-    {"id":"G2","state":"WARN","reason":"IN_PROGRESS: núcleo determinista versionado en 6248158 y probado 6/6 en SION; pipeline real Nemotron -> ActionProposal -> Phoenix Gate observado con HTTP 200, decisión R0/PREPARED y evidencia sanitizada. Falta interfaz web y recorridos live REVIEW/DENY."},
-    {"id":"G3","state":"PENDING","reason":"Selección diferenciadora no se promueve hasta disponer de vertical mínimo visible y baseline."},
-    {"id":"G4","state":"PENDING","reason":"Los contratos existen; falta completar revisión humana interactiva y evidence store de múltiples ejecuciones."},
-    {"id":"G5","state":"PENDING","reason":"El vertical mínimo aún no incluye panel web completo."},
-    {"id":"G6","state":"PENDING","reason":"H-PHX-05 y baseline competente no ejecutados."},
-    {"id":"G7","state":"PENDING","reason":"No existe aún frontera pública reproducible con build/tests/runtime completo del producto."},
-    {"id":"G8","state":"PENDING","reason":"No existe proyecto Devpost creado ni materiales finales de entrega; envío no autorizado."}
+    {"id":"G0","state":"WARN","reason":"Reglas oficiales revalidadas; discrepancia menor de fecha de judging registrada con prevalencia de Official Rules."},
+    {"id":"G1","state":"PASS","reason":"Integración obligatoria Nebius/NVIDIA observada y versionada con evidencia sanitizada."},
+    {"id":"G2","state":"PASS","reason":"Gate individual, pipeline live y vertical visible existen; regresión actual 23/23. La ampliación multiacción se valida en G6."},
+    {"id":"G3","state":"WARN","reason":"La diferenciación ya tiene un discriminante favorable en Trial 002, pero aún no se cierra contra un baseline state-aware más fuerte."},
+    {"id":"G4","state":"WARN","reason":"Contratos y políticas existen; el contrato plan-level continúa evolucionando durante validación experimental."},
+    {"id":"G5","state":"WARN","reason":"Panel local y conversación live existen, pero el plan multiacción live todavía no está integrado ni versionado en este corte."},
+    {"id":"G6","state":"WARN","reason":"IN_PROGRESS: Trial 001 FEASIBLE_WITH_LIMITATION; Trial 002 FEASIBLE_DISCRIMINANT_PASS. Siguiente obligación: baseline state-aware y Trial 003 preregistrado."},
+    {"id":"G7","state":"PENDING","reason":"Clon limpio, publicación del corte, tamper evidence y reproducción pública pendientes."},
+    {"id":"G8","state":"PENDING","reason":"Entrega y submission no autorizados."}
   ],
   "decision": {
-    "status": "GO",
-    "next_step": "Versionar localmente el corte end-to-end y construir el panel web mínimo que muestre intención, propuesta Nemotron, checks Phoenix, riesgo, decisión y evidencia. No añadir dispatch ni hacer push/PR sin autorización separada."
+    "status": "GO_WITH_EVIDENCE_BOUNDARY",
+    "next_step": "Cerrar el checkpoint local de Trial 002 y construir un baseline state-aware sencillo pero competente. Preregistrar Trial 003 para buscar una diferencia más profunda que stale-state simple. No hacer push, PR, deploy ni submission sin autorización separada."
   }
 }

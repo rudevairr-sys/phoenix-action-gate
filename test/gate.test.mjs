@@ -54,3 +54,21 @@ test('unknown schema fails closed', async () => {
   assert.equal(decision.risk_class, 'R3');
   assert.ok(decision.reason_codes.includes('UNSUPPORTED_SCHEMA_VERSION'));
 });
+
+test('read proposal with contradictory rollback semantics fails closed', async () => {
+  const proposal = await fixture('prepared-read.json');
+  proposal.reversibility = { kind: 'NONE', rollback_plan: null };
+  const decision = evaluateActionProposal(proposal);
+  assert.equal(decision.outcome, 'DENY');
+  assert.equal(decision.risk_class, 'R3');
+  assert.ok(decision.reason_codes.includes('REVERSIBILITY_MISMATCH'));
+});
+
+test('allowlisted command with contradictory rollback semantics fails closed', async () => {
+  const proposal = await fixture('prepared-command.json');
+  proposal.reversibility = { kind: 'NONE', rollback_plan: null };
+  const decision = evaluateActionProposal(proposal);
+  assert.equal(decision.outcome, 'DENY');
+  assert.equal(decision.risk_class, 'R3');
+  assert.ok(decision.reason_codes.includes('REVERSIBILITY_MISMATCH'));
+});

@@ -1,0 +1,75 @@
+{
+  "schema_version": "0.1",
+  "plan_id": "auth-like-plan-001",
+  "goal": "Inspect configuration, prepare a reversible README patch, and run tests without executing anything.",
+  "actions": [
+    {
+      "step_id": "s1-read-readme",
+      "depends_on": [],
+      "proposal": {
+        "schema_version": "0.1",
+        "proposal_id": "plan-readme-001",
+        "intent": "Inspect README before changes",
+        "action_type": "READ_CONTEXT",
+        "target": {"workspace_id": "demo-workspace", "relative_path": "README.md"},
+        "operation": {"kind": "read_file"},
+        "requested_capabilities": ["READ_CONTEXT"],
+        "preconditions": [],
+        "reversibility": {"kind": "INHERENT", "rollback_plan": null},
+        "estimated_effects": [],
+        "model_context": {"model_id": "nvidia/Nemotron-3_5-Lightning", "provider_request_id": "fixture-plan"}
+      }
+    },
+    {
+      "step_id": "s2-read-env",
+      "depends_on": [],
+      "proposal": {
+        "schema_version": "0.1",
+        "proposal_id": "plan-env-001",
+        "intent": "Inspect environment configuration",
+        "action_type": "READ_CONTEXT",
+        "target": {"workspace_id": "demo-workspace", "relative_path": ".env"},
+        "operation": {"kind": "read_file"},
+        "requested_capabilities": ["READ_CONTEXT"],
+        "preconditions": [],
+        "reversibility": {"kind": "INHERENT", "rollback_plan": null},
+        "estimated_effects": [],
+        "model_context": {"model_id": "nvidia/Nemotron-3_5-Lightning", "provider_request_id": "fixture-plan"}
+      }
+    },
+    {
+      "step_id": "s3-patch-readme",
+      "depends_on": ["s1-read-readme", "s2-read-env"],
+      "proposal": {
+        "schema_version": "0.1",
+        "proposal_id": "plan-patch-001",
+        "intent": "Prepare a configuration-aware README heading change",
+        "action_type": "WRITE_PATCH",
+        "target": {"workspace_id": "demo-workspace", "relative_path": "README.md"},
+        "operation": {"kind": "write_patch", "diff": "@@ -1 +1 @@\n-Welcome\n+Configured welcome", "base_version": "sha256:demo"},
+        "requested_capabilities": ["WRITE_PATCH"],
+        "preconditions": ["README inspected", "configuration inspected"],
+        "reversibility": {"kind": "ROLLBACK_PLAN", "rollback_plan": {"kind": "reverse_diff"}},
+        "estimated_effects": ["README heading changes"],
+        "model_context": {"model_id": "nvidia/Nemotron-3_5-Lightning", "provider_request_id": "fixture-plan"}
+      }
+    },
+    {
+      "step_id": "s4-run-tests",
+      "depends_on": ["s3-patch-readme"],
+      "proposal": {
+        "schema_version": "0.1",
+        "proposal_id": "plan-tests-001",
+        "intent": "Run the bounded project test command after the proposed patch",
+        "action_type": "RUN_COMMAND",
+        "target": {"workspace_id": "demo-workspace", "relative_path": null},
+        "operation": {"kind": "run_command", "program": "npm", "args": ["test"], "cwd": ".", "timeout_ms": 60000},
+        "requested_capabilities": ["RUN_COMMAND"],
+        "preconditions": ["patch accepted"],
+        "reversibility": {"kind": "INHERENT", "rollback_plan": null},
+        "estimated_effects": ["test process only"],
+        "model_context": {"model_id": "nvidia/Nemotron-3_5-Lightning", "provider_request_id": "fixture-plan"}
+      }
+    }
+  ]
+}

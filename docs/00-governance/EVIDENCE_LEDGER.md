@@ -17,6 +17,9 @@
 | E-013 | Núcleo determinista G2: 6 tests, 6 PASS, 0 FAIL en entorno de validación; PREPARED/REVIEW/DENY, fail-closed y hash determinista | Test ejecutado | `docs/04-runtime/evidence/G2_CORE_TESTS_2026-08-31.json` |
 | E-014 | Repetición del núcleo G2 en el SION local del usuario: `npm test`, 6 tests, 6 PASS, 0 FAIL, 201.0834 ms | Test ejecutado | `docs/04-runtime/evidence/G2_SION_TESTS_2026-08-31.json`; salida aportada por el operador |
 | E-015 | Pipeline real `Nebius/Nemotron → ActionProposal → Phoenix Gate`: HTTP 200, 1166 tokens, 4654 ms, decisión `R0/PREPARED`, 7 checks PASS, sin dispatch | Runtime observado | `docs/04-runtime/evidence/G2_E2E_NEMOTRON_GATE_2026-08-31.json`; provider response `chatcmpl-f0b5b889` |
+| E-016 | H-PHX-05 Trial 001: Phoenix propagó dos bloqueos causales (`s3`, `s4`) que el baseline independiente no propagó; ambos agregados acabaron en `DENY` | Test ejecutado | `docs/04-runtime/evidence/H_PHOENIX_05_CAUSAL_PLAN_TRIAL_001_2026-09-01.json`; `FEASIBLE_WITH_LIMITATION` |
+| E-017 | Regresión ampliada en SION: 23 tests, 23 PASS, 0 FAIL, 444.6959 ms | Test ejecutado | `docs/04-runtime/evidence/G2_SION_TESTS_2026-09-01.json`; salida aportada por el operador |
+| E-018 | H-PHX-05 Trial 002 preregistrado: baseline global `REVIEW`, Phoenix global `DENY`; 0 acciones baseline en DENY; Phoenix detectó `README.md` esperado `v1`, proyectado `v2`, último escritor `s2-patch-v1-to-v2` | Test ejecutado | `docs/04-runtime/evidence/H_PHOENIX_05_CAUSAL_PLAN_TRIAL_002_2026-09-01.json`; `FEASIBLE_DISCRIMINANT_PASS` |
 
 ## Regla
 

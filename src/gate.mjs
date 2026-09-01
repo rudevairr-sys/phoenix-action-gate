@@ -133,6 +133,10 @@ function commandAssessment(operation) {
   };
 }
 
+function inherentReversibilityIsValid(reversibility) {
+  return reversibility?.kind === 'INHERENT' && reversibility?.rollback_plan === null;
+}
+
 function makeDecision(proposal, outcome, riskClass, reasonCodes, checks, rollbackStatus) {
   const decisionCore = {
     decision_version: DECISION_VERSION,
@@ -198,6 +202,10 @@ export function evaluateActionProposal(proposal) {
     checks.push({ check: 'operation_valid', status: operationValid ? 'PASS' : 'FAIL', evidence_ref: proposal.operation.kind ?? 'missing' });
     if (!operationValid) return makeDecision(proposal, 'DENY', 'R3', ['INVALID_OPERATION'], checks, 'UNKNOWN');
 
+    const semanticsValid = inherentReversibilityIsValid(proposal.reversibility);
+    checks.push({ check: 'reversibility_semantics', status: semanticsValid ? 'PASS' : 'FAIL', evidence_ref: proposal.reversibility.kind });
+    if (!semanticsValid) return makeDecision(proposal, 'DENY', 'R3', ['REVERSIBILITY_MISMATCH'], checks, 'UNKNOWN');
+
     checks.push({ check: 'rollback_sufficient', status: 'PASS', evidence_ref: 'INHERENT' });
     checks.push({ check: 'evidence_complete', status: 'PASS', evidence_ref: proposal.model_context.model_id });
     return makeDecision(proposal, 'PREPARED', 'R0', ['BOUNDED_READ'], checks, 'INHERENT');
@@ -229,6 +237,10 @@ export function evaluateActionProposal(proposal) {
       'UNKNOWN'
     );
   }
+
+  const semanticsValid = inherentReversibilityIsValid(proposal.reversibility);
+  checks.push({ check: 'reversibility_semantics', status: semanticsValid ? 'PASS' : 'FAIL', evidence_ref: proposal.reversibility.kind });
+  if (!semanticsValid) return makeDecision(proposal, 'DENY', 'R3', ['REVERSIBILITY_MISMATCH'], checks, 'UNKNOWN');
 
   checks.push({ check: 'rollback_sufficient', status: 'PASS', evidence_ref: 'INHERENT' });
   checks.push({ check: 'evidence_complete', status: 'PASS', evidence_ref: proposal.model_context.model_id });

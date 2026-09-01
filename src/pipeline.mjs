@@ -1,6 +1,6 @@
 import { createHash } from 'node:crypto';
 import { evaluateActionProposal, POLICY_VERSION } from './gate.mjs';
-import { NebiusProposalError, requestReadContextProposal } from './nebius.mjs';
+import { NebiusProposalError, requestConversationalProposal, requestReadContextProposal } from './nebius.mjs';
 
 function stable(value) {
   if (Array.isArray(value)) return value.map(stable);
@@ -42,6 +42,22 @@ function providerFailureDecision(error) {
   };
 }
 
+function failClosedResult(error, extra = {}) {
+  return {
+    ok: false,
+    state: 'FAIL_CLOSED',
+    provider_error: {
+      code: error.code,
+      details: error.details ?? {}
+    },
+    proposal: null,
+    decision: providerFailureDecision(error),
+    dispatch_attempted: false,
+    secret_exposed: false,
+    ...extra
+  };
+}
+
 export async function runReadContextPipeline(options = {}) {
   try {
     const { proposal, provider } = await requestReadContextProposal(options);
@@ -57,17 +73,30 @@ export async function runReadContextPipeline(options = {}) {
     };
   } catch (error) {
     if (!(error instanceof NebiusProposalError)) throw error;
+    return failClosedResult(error);
+  }
+}
+
+export async function runConversationPipeline(userMessage, options = {}) {
+  try {
+    const { assistant_message: assistantMessage, proposal, provider } = await requestConversationalProposal(userMessage, options);
+    const decision = evaluateActionProposal(proposal);
     return {
-      ok: false,
-      state: 'FAIL_CLOSED',
-      provider_error: {
-        code: error.code,
-        details: error.details ?? {}
-      },
-      proposal: null,
-      decision: providerFailureDecision(error),
+      ok: decision.outcome !== 'DENY',
+      state: 'CONVERSATION_PIPELINE_OBSERVED',
+      user_message: userMessage.trim(),
+      assistant_message: assistantMessage,
+      provider,
+      proposal,
+      decision,
       dispatch_attempted: false,
       secret_exposed: false
     };
+  } catch (error) {
+    if (!(error instanceof NebiusProposalError)) throw error;
+    return failClosedResult(error, {
+      user_message: typeof userMessage === 'string' ? userMessage.trim().slice(0, 2000) : null,
+      assistant_message: null
+    });
   }
 }

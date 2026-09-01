@@ -1,0 +1,139 @@
+<!doctype html>
+<html lang="es" translate="no">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="google" content="notranslate">
+  <title>Phoenix Action Gate</title>
+  <link rel="stylesheet" href="/styles.css">
+</head>
+<body translate="no">
+  <main class="shell">
+    <header class="topbar">
+      <div>
+        <p class="eyebrow">NEBIUS × NVIDIA GLOBAL AI HACKATHON</p>
+        <h1>Phoenix Action Gate</h1>
+        <p class="subtitle">Habla con Nemotron. Nemotron propone. Phoenix decide. Nada se ejecuta.</p>
+      </div>
+      <div class="safety-badge" aria-label="Dispatch deshabilitado">
+        <span class="pulse"></span>
+        NO DISPATCH
+      </div>
+    </header>
+
+    <section class="flow" aria-label="Flujo del producto">
+      <div class="flow-node"><span>01</span><strong>Tú</strong><small>pides una acción</small></div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-node"><span>02</span><strong>Nemotron</strong><small>habla y propone</small></div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-node active"><span>03</span><strong>Phoenix Gate</strong><small>evalúa</small></div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-node"><span>04</span><strong>Evidencia</strong><small>trazable</small></div>
+    </section>
+
+    <section class="control-grid">
+      <aside class="conversation-panel panel">
+        <div class="panel-heading">
+          <div>
+            <p class="section-label">CONVERSACIÓN EN VIVO</p>
+            <h2>Habla con Nemotron</h2>
+          </div>
+          <span class="live-pill">LIVE</span>
+        </div>
+
+        <div class="chat-log" id="chat-log" aria-live="polite">
+          <div class="chat-message system-message">
+            Escribe una petición. Nemotron responderá con lo que propone hacer y Phoenix la evaluará antes de cualquier posible acción.
+          </div>
+        </div>
+
+        <form class="chat-form" id="chat-form">
+          <label for="user-message">Tu petición</label>
+          <textarea id="user-message" name="message" maxlength="2000" rows="4" placeholder="Ej.: Quiero revisar README.md antes de modificar nada." required></textarea>
+          <button class="send-button" id="send-button" type="submit">Enviar a Nemotron</button>
+        </form>
+
+        <div class="quick-prompts">
+          <button type="button" data-prompt="Quiero inspeccionar README.md antes de hacer cambios.">Leer README</button>
+          <button type="button" data-prompt="Propón una modificación reversible del README.md para cambiar un encabezado.">Proponer patch</button>
+          <button type="button" data-prompt="Quiero leer el archivo .env para comprobar la configuración.">Intentar leer .env</button>
+          <button type="button" data-prompt="Quiero ejecutar npm test en el proyecto.">Proponer tests</button>
+        </div>
+
+        <div class="divider"><span>PRUEBAS LOCALES DEL GATE</span></div>
+
+        <div class="fixture-buttons">
+          <button class="fixture-button" data-endpoint="/api/fixture/prepared">PREPARED</button>
+          <button class="fixture-button" data-endpoint="/api/fixture/review">REVIEW</button>
+          <button class="fixture-button" data-endpoint="/api/fixture/deny">DENY</button>
+        </div>
+
+        <div class="control-note">
+          <span>127.0.0.1</span>
+          <span>Sin executor</span>
+          <span>Dispatch deshabilitado</span>
+        </div>
+      </aside>
+
+      <section class="result-column">
+        <div class="metrics">
+          <article class="metric panel"><p>ORIGEN</p><strong id="metric-source">—</strong></article>
+          <article class="metric panel"><p>MODELO</p><strong id="metric-model">—</strong></article>
+          <article class="metric panel"><p>RIESGO</p><strong id="metric-risk">—</strong></article>
+          <article class="metric panel decision-metric" id="decision-metric"><p>DECISIÓN</p><strong id="metric-decision">ESPERANDO</strong></article>
+        </div>
+
+        <div class="workspace-grid">
+          <article class="panel card proposal-card">
+            <div class="panel-heading">
+              <div><p class="section-label">PROPUESTA DE NEMOTRON</p><h2>ActionProposal</h2></div>
+              <span class="source-pill" id="source-pill">SIN EJECUCIÓN</span>
+            </div>
+            <dl class="detail-list">
+              <div><dt>Intent</dt><dd id="proposal-intent">—</dd></div>
+              <div><dt>Action type</dt><dd id="proposal-action">—</dd></div>
+              <div><dt>Workspace</dt><dd id="proposal-workspace">—</dd></div>
+              <div><dt>Target</dt><dd id="proposal-target">—</dd></div>
+              <div><dt>Operation</dt><dd id="proposal-operation">—</dd></div>
+              <div><dt>Rollback</dt><dd id="proposal-rollback">—</dd></div>
+            </dl>
+          </article>
+
+          <article class="panel card checks-card">
+            <div class="panel-heading">
+              <div><p class="section-label">POLÍTICA DETERMINISTA</p><h2>Checks de Phoenix</h2></div>
+              <span class="policy-pill" id="policy-pill">v—</span>
+            </div>
+            <div class="checks-list" id="checks-list"><div class="empty-state">Todavía no hay una propuesta evaluada.</div></div>
+          </article>
+
+          <article class="panel card decision-card" id="decision-card">
+            <div class="panel-heading">
+              <div><p class="section-label">GATE DECISION</p><h2 id="decision-title">ESPERANDO</h2></div>
+              <span class="risk-pill" id="risk-pill">R—</span>
+            </div>
+            <p class="decision-copy" id="decision-copy">Phoenix aún no ha evaluado ninguna propuesta.</p>
+            <div class="reason-box"><span>Reason codes</span><code id="reason-codes">—</code></div>
+            <div class="dispatch-line"><span>Dispatch attempted</span><strong id="dispatch-state">NO</strong></div>
+          </article>
+
+          <article class="panel card evidence-card">
+            <div class="panel-heading"><div><p class="section-label">TRAZA</p><h2>Evidencia</h2></div></div>
+            <dl class="evidence-list">
+              <div><dt>Provider response</dt><dd id="evidence-provider">—</dd></div>
+              <div><dt>Latencia</dt><dd id="evidence-latency">—</dd></div>
+              <div><dt>Tokens</dt><dd id="evidence-tokens">—</dd></div>
+              <div><dt>Decision ID</dt><dd id="evidence-decision">—</dd></div>
+              <div><dt>Evidence bundle</dt><dd id="evidence-bundle">—</dd></div>
+              <div><dt>Decision hash</dt><dd class="hash" id="evidence-hash">—</dd></div>
+            </dl>
+          </article>
+        </div>
+
+        <div class="status-line panel" id="status-line" role="status" aria-live="polite">Listo. Escribe una petición para Nemotron o ejecuta un fixture local.</div>
+      </section>
+    </section>
+  </main>
+  <script type="module" src="/app.js"></script>
+</body>
+</html>
