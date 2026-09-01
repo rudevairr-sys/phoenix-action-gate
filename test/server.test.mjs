@@ -5,12 +5,36 @@ import { createPanelServer } from '../src/server.mjs';
 let server;
 let baseUrl;
 let observedMessage = null;
+let observedHistory = null;
 
-const conversationStub = async (message) => {
+const conversationStub = async (message, options = {}) => {
   observedMessage = message;
+  observedHistory = options.history ?? [];
+
+  if (message === 'nemo') {
+    return {
+      ok: true,
+      state: 'CHAT_ONLY',
+      turn_mode: 'CHAT',
+      user_message: message,
+      assistant_message: 'Hola. Soy Nemotron. ¿Qué quieres revisar o hacer?',
+      provider: {
+        model: 'nvidia/Nemotron-3_5-Lightning',
+        latency_ms: 8,
+        provider_response_id: 'chatcmpl-chat-test',
+        usage: { total_tokens: 20 }
+      },
+      proposal: null,
+      decision: null,
+      dispatch_attempted: false,
+      secret_exposed: false
+    };
+  }
+
   return {
     ok: true,
-    state: 'CONVERSATION_PIPELINE_OBSERVED',
+    state: 'CONVERSATION_ACTION_EVALUATED',
+    turn_mode: 'ACTION_PROPOSAL',
     user_message: message,
     assistant_message: 'Propongo inspeccionar README.md antes de hacer cambios.',
     provider: {
@@ -67,25 +91,58 @@ after(async () => {
   await new Promise((resolve, reject) => server.close((error) => error ? reject(error) : resolve()));
 });
 
-test('panel health exposes policy and confirms dispatch is unavailable', async () => {
+test('panel health exposes policy, bounded history and confirms dispatch is unavailable', async () => {
   const response = await fetch(`${baseUrl}/api/health`);
   assert.equal(response.status, 200);
   const body = await response.json();
   assert.equal(body.ok, true);
   assert.equal(body.dispatch_available, false);
+  assert.equal(body.chat_history_limit, 8);
   assert.equal(body.policy_version, 'phoenix-action-gate/0.1.0');
+});
+
+test('panel chat can return Nemotron speech without forcing an ActionProposal', async () => {
+  const response = await fetch(`${baseUrl}/api/chat`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ message: 'nemo', history: [] })
+  });
+  assert.equal(response.status, 200);
+  const body = await response.json();
+  assert.equal(body.source, 'LIVE_NEBIUS_NEMOTRON');
+  assert.equal(body.turn_mode, 'CHAT');
+  assert.equal(body.proposal, null);
+  assert.equal(body.decision, null);
+  assert.match(body.assistant_message, /Nemotron/);
+  assert.equal(body.dispatch_attempted, false);
+});
+
+test('panel chat forwards bounded conversation history for follow-up references', async () => {
+  const history = [
+    { role: 'user', content: 'quiero leer el readme' },
+    { role: 'assistant', content: 'Propongo leer README.md.' }
+  ];
+  const response = await fetch(`${baseUrl}/api/chat`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ message: 'podemos borrarlo?', history })
+  });
+  assert.equal(response.status, 200);
+  assert.equal(observedMessage, 'podemos borrarlo?');
+  assert.deepEqual(observedHistory, history);
 });
 
 test('panel chat forwards the user message and returns Nemotron speech plus one governed decision', async () => {
   const response = await fetch(`${baseUrl}/api/chat`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ message: 'Quiero revisar README.md' })
+    body: JSON.stringify({ message: 'Quiero revisar README.md', history: [] })
   });
   assert.equal(response.status, 200);
   const body = await response.json();
   assert.equal(observedMessage, 'Quiero revisar README.md');
   assert.equal(body.source, 'LIVE_NEBIUS_NEMOTRON');
+  assert.equal(body.turn_mode, 'ACTION_PROPOSAL');
   assert.match(body.assistant_message, /README\.md/);
   assert.equal(body.decision.outcome, 'PREPARED');
   assert.equal(body.dispatch_attempted, false);
@@ -101,6 +158,21 @@ test('panel rejects an empty chat message without invoking a proposal', async ()
   assert.equal(response.status, 400);
   const body = await response.json();
   assert.equal(body.error, 'USER_MESSAGE_INVALID');
+  assert.equal(body.dispatch_attempted, false);
+  assert.equal(observedMessage, null);
+});
+
+test('panel rejects malformed or oversized chat history before invoking Nemotron', async () => {
+  observedMessage = null;
+  const invalidHistory = Array.from({ length: 9 }, (_, index) => ({ role: 'user', content: `turn-${index}` }));
+  const response = await fetch(`${baseUrl}/api/chat`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ message: 'hola', history: invalidHistory })
+  });
+  assert.equal(response.status, 400);
+  const body = await response.json();
+  assert.equal(body.error, 'INVALID_CHAT_HISTORY');
   assert.equal(body.dispatch_attempted, false);
   assert.equal(observedMessage, null);
 });

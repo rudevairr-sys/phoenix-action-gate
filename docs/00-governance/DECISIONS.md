@@ -47,3 +47,15 @@
 **Motivo:** minimizar superficie operativa, instalación, riesgo de supply chain y tiempo de entrega antes de demostrar `PREPARED`, `REVIEW` y `DENY`. El runtime SION observado dispone de Node 24.  
 **Alcance:** contrato, política determinista, fixtures, hash de decisión y tests. La UI se añade encima una vez validado el núcleo.  
 **Estado:** aceptada para G2; reversible si la UI o el despliegue exigen otro adaptador.
+
+## D-010 — Frontera conversacional single-turn explícita
+
+**Decisión:** usar una única función forzada `emit_phoenix_turn` como frontera entre Nemotron y el contrato de Phoenix. Nemotron clasifica el turno como `CHAT`, `READ_CONTEXT`, `WRITE_PATCH` o `RUN_COMMAND`; el adaptador construye una única `ActionProposal` cuando corresponde y Phoenix conserva la autoridad de decisión.
+
+**Motivo:** los ensayos LIVE con múltiples tools y selección automática produjeron JSON inválido, narración sin propuesta y tool calls múltiples. La función única elimina la selección ambigua sin convertir al modelo en autoridad ni habilitar ejecución.
+
+**Evidencia:** 44/44 tests y tres rutas LIVE observadas: `.env → DENY`, `README.md → PREPARED`, `npm test → PREPARED`, todas sin dispatch.
+
+**Límite:** solo se promueve a `RUNTIME_OBSERVED` la frontera single-action observada. El plan multiacción generado por Nemotron sigue pendiente.
+
+**Estado:** aceptada y validada para checkpoint local; reversible mediante commit posterior. Sin push, PR, deploy ni submission.

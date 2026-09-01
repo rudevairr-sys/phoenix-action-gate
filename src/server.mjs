@@ -8,7 +8,9 @@ import { runConversationPipeline, runReadContextPipeline } from './pipeline.mjs'
 
 const WEB_ROOT = fileURLToPath(new URL('../web/', import.meta.url));
 const FIXTURE_ROOT = fileURLToPath(new URL('../fixtures/', import.meta.url));
-const MAX_JSON_BODY_BYTES = 8 * 1024;
+const MAX_JSON_BODY_BYTES = 16 * 1024;
+const MAX_HISTORY_ITEMS = 8;
+const MAX_HISTORY_CHARS = 6000;
 
 const MIME_TYPES = new Map([
   ['.html', 'text/html; charset=utf-8'],
@@ -69,6 +71,42 @@ async function readJsonBody(request) {
   }
 }
 
+function normalizeHistory(history) {
+  if (history === undefined) return [];
+  if (!Array.isArray(history) || history.length > MAX_HISTORY_ITEMS) {
+    const error = new Error('INVALID_CHAT_HISTORY');
+    error.code = 'INVALID_CHAT_HISTORY';
+    throw error;
+  }
+
+  let totalChars = 0;
+  const normalized = history.map((item) => {
+    if (!item || !['user', 'assistant'].includes(item.role) || typeof item.content !== 'string') {
+      const error = new Error('INVALID_CHAT_HISTORY');
+      error.code = 'INVALID_CHAT_HISTORY';
+      throw error;
+    }
+
+    const content = item.content.trim();
+    if (!content || content.length > 1500) {
+      const error = new Error('INVALID_CHAT_HISTORY');
+      error.code = 'INVALID_CHAT_HISTORY';
+      throw error;
+    }
+
+    totalChars += content.length;
+    if (totalChars > MAX_HISTORY_CHARS) {
+      const error = new Error('INVALID_CHAT_HISTORY');
+      error.code = 'INVALID_CHAT_HISTORY';
+      throw error;
+    }
+
+    return { role: item.role, content };
+  });
+
+  return normalized;
+}
+
 async function readFixture(name) {
   const filename = FIXTURE_SCENARIOS.get(name);
   if (!filename) return null;
@@ -105,6 +143,7 @@ export function createPanelServer({ runConversation = runConversationPipeline } 
           product: 'Phoenix Action Gate',
           policy_version: POLICY_VERSION,
           default_model: DEFAULT_MODEL,
+          chat_history_limit: MAX_HISTORY_ITEMS,
           dispatch_available: false
         });
         return;
@@ -123,7 +162,8 @@ export function createPanelServer({ runConversation = runConversationPipeline } 
           return;
         }
 
-        const result = await runConversation(message);
+        const history = normalizeHistory(body.history);
+        const result = await runConversation(message, { history });
         sendJson(response, 200, {
           source: 'LIVE_NEBIUS_NEMOTRON',
           ...result
@@ -168,7 +208,8 @@ export function createPanelServer({ runConversation = runConversationPipeline } 
 
       sendJson(response, 405, { ok: false, error: 'METHOD_NOT_ALLOWED' });
     } catch (error) {
-      const statusCode = error?.code === 'INVALID_JSON' || error?.code === 'REQUEST_BODY_TOO_LARGE' ? 400 : 500;
+      const clientErrorCodes = new Set(['INVALID_JSON', 'REQUEST_BODY_TOO_LARGE', 'INVALID_CHAT_HISTORY']);
+      const statusCode = clientErrorCodes.has(error?.code) ? 400 : 500;
       sendJson(response, statusCode, {
         ok: false,
         state: 'FAIL_CLOSED',

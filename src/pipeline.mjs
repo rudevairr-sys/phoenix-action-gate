@@ -1,6 +1,7 @@
 import { createHash } from 'node:crypto';
 import { evaluateActionProposal, POLICY_VERSION } from './gate.mjs';
-import { NebiusProposalError, requestConversationalProposal, requestReadContextProposal } from './nebius.mjs';
+import { NebiusProposalError, requestReadContextProposal } from './nebius.mjs';
+import { requestConversationalProposal } from './nebius-conversation.mjs';
 
 function stable(value) {
   if (Array.isArray(value)) return value.map(stable);
@@ -46,6 +47,8 @@ function failClosedResult(error, extra = {}) {
   return {
     ok: false,
     state: 'FAIL_CLOSED',
+    turn_mode: 'ERROR',
+    provider: error.details?.provider ?? null,
     provider_error: {
       code: error.code,
       details: error.details ?? {}
@@ -79,11 +82,33 @@ export async function runReadContextPipeline(options = {}) {
 
 export async function runConversationPipeline(userMessage, options = {}) {
   try {
-    const { assistant_message: assistantMessage, proposal, provider } = await requestConversationalProposal(userMessage, options);
+    const {
+      mode,
+      assistant_message: assistantMessage,
+      proposal,
+      provider
+    } = await requestConversationalProposal(userMessage, options);
+
+    if (mode === 'CHAT') {
+      return {
+        ok: true,
+        state: 'CHAT_ONLY',
+        turn_mode: 'CHAT',
+        user_message: userMessage.trim(),
+        assistant_message: assistantMessage,
+        provider,
+        proposal: null,
+        decision: null,
+        dispatch_attempted: false,
+        secret_exposed: false
+      };
+    }
+
     const decision = evaluateActionProposal(proposal);
     return {
       ok: decision.outcome !== 'DENY',
-      state: 'CONVERSATION_PIPELINE_OBSERVED',
+      state: 'CONVERSATION_ACTION_EVALUATED',
+      turn_mode: 'ACTION_PROPOSAL',
       user_message: userMessage.trim(),
       assistant_message: assistantMessage,
       provider,

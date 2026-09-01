@@ -1,7 +1,7 @@
 {
   "schema_version": "1.0.0",
   "project": "Phoenix Action Gate",
-  "updated_at": "2026-09-01T01:09:30Z",
+  "updated_at": "2026-09-01T09:41:15Z",
   "hackathon": {
     "name": "Nebius x NVIDIA Global AI Hackathon",
     "rules_source": "https://nebiusglobalaihackathon.devpost.com/rules",
@@ -10,7 +10,7 @@
   "mode": "VALIDATE",
   "mavo": {
     "variant": "phoenix-safe-3",
-    "state": "REFLECTING",
+    "state": "QUIESCENT",
     "runtime_profile": "tool-assisted"
   },
   "sources": [
@@ -37,7 +37,7 @@
     },
     {
       "id": "nebius-token-factory-docs",
-      "ref": "https://docs.tokenfactory.nebius.com checked 2026-08-31",
+      "ref": "https://docs.tokenfactory.nebius.com checked 2026-09-01 for function-calling boundary",
       "license": "documentation reference only",
       "disposition": "reference_only",
       "reason": "Referencia de la frontera API; la evidencia real se conserva por separado."
@@ -50,11 +50,18 @@
       "reason": "Referencia documental del modelo; disponibilidad y uso real observados en Token Factory."
     },
     {
+      "id": "legacy-mavo-neuron-local",
+      "ref": "user-provided mavo_neuron_local (2).zip inspected 2026-09-01",
+      "license": "unknown/private user-provided source; not for publication",
+      "disposition": "reference_only",
+      "reason": "Antecedente histórico con ideas de causalidad, delta, veto y separación de planos. No se copió código ni se incorporó al runtime de Action Gate."
+    },
+    {
       "id": "sion-live-workspace",
-      "ref": "SION_TALLER_RUST_v0.7.0 / 01_MESA_PRINCIPAL/phoenix-action-gate branch review/g2-mvp-core@0aaac0c plus Trial 003 validation cut",
+      "ref": "SION_TALLER_RUST_v0.7.0 / 01_MESA_PRINCIPAL/phoenix-action-gate branch review/g2-mvp-core; checkpoints through 1a66c44 plus current single-turn checkpoint",
       "license": "local governed workspace; not for publication",
       "disposition": "used",
-      "reason": "Workspace vivo; panel conversacional y Trials 001/002 versionados; Trial 003 ejecutado con 29/29 tests y pendiente de commit del checkpoint."
+      "reason": "Workspace vivo; gate, panel, Trials 001-003 y frontera single-turn emit_phoenix_turn validados. Regresión 44/44 y tres rutas LIVE observadas sin dispatch."
     }
   ],
   "claims": [
@@ -72,21 +79,27 @@
     },
     {
       "id": "C-G1-INTEGRATION",
-      "text": "Nebius Token Factory y nvidia/Nemotron-3_5-Lightning fueron usados en runtime para producir una ActionProposal estructurada sin dispatch.",
+      "text": "Nebius Token Factory y nvidia/Nemotron-3_5-Lightning fueron usados en runtime para producir ActionProposal sin dispatch.",
       "state": "RUNTIME_OBSERVED",
-      "evidence_refs": ["cc97dd1", "docs/04-runtime/evidence/G1_ACTION_PROPOSAL_2026-08-31.json"]
+      "evidence_refs": ["cc97dd1", "docs/04-runtime/evidence/G1_ACTION_PROPOSAL_2026-08-31.json", "docs/04-runtime/evidence/G2_LIVE_EMIT_TURN_2026-09-01.json"]
     },
     {
       "id": "C-G2-E2E",
       "text": "Una llamada real de Nemotron alimenta el gate determinista y produce una GateDecision trazable sin dispatch.",
       "state": "RUNTIME_OBSERVED",
-      "evidence_refs": ["6d02f21", "docs/04-runtime/evidence/G2_E2E_NEMOTRON_GATE_2026-08-31.json"]
+      "evidence_refs": ["6d02f21", "docs/04-runtime/evidence/G2_E2E_NEMOTRON_GATE_2026-08-31.json", "docs/04-runtime/evidence/G2_LIVE_EMIT_TURN_2026-09-01.json"]
+    },
+    {
+      "id": "C-G2-SINGLE-TURN",
+      "text": "La frontera emit_phoenix_turn fue observada LIVE para READ_CONTEXT seguro, READ_CONTEXT sobre .env y RUN_COMMAND npm test, con decisiones R0/PREPARED, R3/DENY y R1/PREPARED respectivamente y sin dispatch.",
+      "state": "RUNTIME_OBSERVED",
+      "evidence_refs": ["docs/04-runtime/evidence/G2_LIVE_EMIT_TURN_2026-09-01.json"]
     },
     {
       "id": "C-G6-REGRESSION",
-      "text": "La regresión local ampliada pasa 29/29 tests.",
+      "text": "La regresión local ampliada pasa 44/44 tests.",
       "state": "TEST_EXECUTED",
-      "evidence_refs": ["docs/04-runtime/evidence/G2_SION_TESTS_2026-09-01_TRIAL003.json"]
+      "evidence_refs": ["docs/04-runtime/evidence/G2_SION_TESTS_2026-09-01_EMIT_TURN.json"]
     },
     {
       "id": "C-H-PHX-05-TRIAL-001",
@@ -110,7 +123,7 @@
       "id": "C-H-PHX-05-GENERAL",
       "text": "Phoenix Action Gate supera de forma general a gates competentes.",
       "state": "INSUFFICIENT_EVIDENCE",
-      "evidence_refs": ["Trial 003 favorable pero limitado; runtime multiacción live pendiente"]
+      "evidence_refs": ["Trials 002/003 favorables pero limitados; runtime multiacción live pendiente"]
     },
     {
       "id": "C-MVP-PUBLIC",
@@ -125,22 +138,22 @@
       "state": "RUNTIME_OBSERVED",
       "centrality": "core",
       "required": true,
-      "evidence_refs": ["cc97dd1", "6d02f21", "docs/04-runtime/evidence/G2_E2E_NEMOTRON_GATE_2026-08-31.json"]
+      "evidence_refs": ["cc97dd1", "6d02f21", "docs/04-runtime/evidence/G2_E2E_NEMOTRON_GATE_2026-08-31.json", "docs/04-runtime/evidence/G2_LIVE_EMIT_TURN_2026-09-01.json"]
     }
   ],
   "gates": [
     {"id":"G0","state":"WARN","reason":"Reglas oficiales revalidadas; discrepancia menor de fecha de judging registrada con prevalencia de Official Rules."},
     {"id":"G1","state":"PASS","reason":"Integración obligatoria Nebius/NVIDIA observada y versionada con evidencia sanitizada."},
-    {"id":"G2","state":"PASS","reason":"Gate individual, pipeline live y panel conversacional existen; regresión actual 29/29."},
+    {"id":"G2","state":"PASS","reason":"Gate individual, pipeline live y panel conversacional existen; frontera emit_phoenix_turn observada LIVE y regresión actual 44/44."},
     {"id":"G3","state":"WARN","reason":"La diferenciación tiene resultados favorables, pero sigue limitada a baselines y fixtures preregistrados."},
     {"id":"G4","state":"WARN","reason":"Contratos y políticas existen; el contrato plan-level incluye estado y lineage pero aún evoluciona."},
-    {"id":"G5","state":"WARN","reason":"Panel local y conversación live existen; plan multiacción live aún no integrado."},
+    {"id":"G5","state":"WARN","reason":"Panel local y conversación single-turn live están observados; plan multiacción live aún no integrado."},
     {"id":"G6","state":"WARN","reason":"IN_PROGRESS: Trial 001 FEASIBLE_WITH_LIMITATION; Trials 002 y 003 FEASIBLE_DISCRIMINANT_PASS. Falta llevar la capacidad diferencial a un plan generado por Nemotron real y observarla end-to-end."},
     {"id":"G7","state":"PENDING","reason":"Clon limpio, publicación del corte, tamper evidence y reproducción pública pendientes."},
     {"id":"G8","state":"PENDING","reason":"Entrega y submission no autorizados."}
   ],
   "decision": {
     "status": "GO_WITH_EVIDENCE_BOUNDARY",
-    "next_step": "Versionar Trial 003 y llevar el plan multiacción al runtime real: petición del usuario -> Nemotron genera plan -> Phoenix evalúa estado y lineage -> panel muestra decisiones por paso y global. Sin executor ni dispatch; sin push/PR/deploy/submission sin autorización separada."
+    "next_step": "Mantener congelada la frontera single-turn y llevar el plan multiacción al runtime real: petición del usuario -> Nemotron genera plan -> Phoenix evalúa dependencias, estado y lineage -> panel muestra decisiones por paso y global. Sin executor ni dispatch; sin push/PR/deploy/submission sin autorización separada."
   }
 }

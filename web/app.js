@@ -2,6 +2,8 @@ const $ = (selector) => document.querySelector(selector);
 const $$ = (selector) => [...document.querySelectorAll(selector)];
 
 const VALID_OUTCOMES = new Set(['PREPARED', 'REVIEW', 'DENY']);
+const MAX_HISTORY_ITEMS = 8;
+const conversationHistory = [];
 
 const ui = {
   chatForm: $('#chat-form'),
@@ -52,6 +54,12 @@ function setStatus(message, state = '') {
   ui.status.textContent = message;
 }
 
+function remember(role, content) {
+  if (!content) return;
+  conversationHistory.push({ role, content: String(content).trim().slice(0, 1500) });
+  while (conversationHistory.length > MAX_HISTORY_ITEMS) conversationHistory.shift();
+}
+
 function appendChat(role, text, label) {
   if (!text) return;
   const wrapper = document.createElement('div');
@@ -71,12 +79,12 @@ function appendChat(role, text, label) {
   ui.chatLog.scrollTop = ui.chatLog.scrollHeight;
 }
 
-function renderChecks(checks = []) {
+function renderChecks(checks = [], emptyMessage = 'No se devolvieron checks.') {
   ui.checks.replaceChildren();
   if (!checks.length) {
     const empty = document.createElement('div');
     empty.className = 'empty-state';
-    empty.textContent = 'No se devolvieron checks.';
+    empty.textContent = emptyMessage;
     ui.checks.append(empty);
     return;
   }
@@ -102,6 +110,14 @@ function renderChecks(checks = []) {
   }
 }
 
+function renderProviderEvidence(result) {
+  const provider = result.provider ?? null;
+  const isLive = result.source === 'LIVE_NEBIUS_NEMOTRON';
+  setText(ui.provider, isLive ? provider?.provider_response_id : 'LOCAL FIXTURE');
+  setText(ui.latency, isLive && provider?.latency_ms !== undefined && provider?.latency_ms !== null ? `${provider.latency_ms} ms` : (isLive ? '—' : 'LOCAL'));
+  setText(ui.tokens, isLive ? provider?.usage?.total_tokens : '—');
+}
+
 function renderFailClosedVisual(message) {
   ui.decisionMetric.className = 'metric panel decision-metric deny';
   ui.decisionCard.className = 'panel card decision-card deny';
@@ -111,6 +127,74 @@ function renderFailClosedVisual(message) {
   setText(ui.riskPill, 'R3');
   setText(ui.decisionCopy, message);
   setText(ui.dispatch, 'NO');
+}
+
+function renderChatOnly(result) {
+  const provider = result.provider ?? null;
+
+  setText(ui.sourceMetric, 'LIVE');
+  setText(ui.model, provider?.model);
+  setText(ui.risk, '—');
+  setText(ui.decision, 'CHAT');
+  setText(ui.source, 'LIVE NEMOTRON');
+
+  setText(ui.intent, 'Sin acción gobernable');
+  setText(ui.action, 'CHAT');
+  setText(ui.workspace, '—');
+  setText(ui.target, '—');
+  setText(ui.operation, '—');
+  setText(ui.rollback, '—');
+
+  renderChecks([], 'No hay ActionProposal en este turno. Phoenix no tiene ninguna acción que evaluar.');
+  setText(ui.decisionTitle, 'SIN ACCIÓN');
+  setText(ui.riskPill, '—');
+  setText(ui.decisionCopy, 'Nemotron respondió conversacionalmente. No se propuso ninguna acción sobre el workspace.');
+  setText(ui.reasonCodes, 'CHAT_ONLY');
+  setText(ui.dispatch, 'NO');
+  setText(ui.decisionId, '—');
+  setText(ui.bundle, '—');
+  setText(ui.hash, '—');
+  renderProviderEvidence(result);
+
+  ui.decisionMetric.className = 'metric panel decision-metric';
+  ui.decisionCard.className = 'panel card decision-card';
+  setStatus('Nemotron respondió en modo CHAT. Phoenix no evaluó ninguna acción y dispatch sigue deshabilitado.', 'success');
+}
+
+function renderProviderFailure(result) {
+  const provider = result.provider ?? null;
+  const decision = result.decision ?? {};
+  const code = result.provider_error?.code ?? decision.reason_codes?.[0] ?? 'PROVIDER_FAILURE';
+
+  setText(ui.sourceMetric, 'LIVE');
+  setText(ui.model, provider?.model);
+  setText(ui.risk, decision.risk_class ?? 'R3');
+  setText(ui.decision, 'DENY');
+  setText(ui.source, 'LIVE NEMOTRON');
+
+  setText(ui.intent, 'Turno inválido del proveedor');
+  setText(ui.action, '—');
+  setText(ui.workspace, '—');
+  setText(ui.target, '—');
+  setText(ui.operation, '—');
+  setText(ui.rollback, '—');
+
+  renderChecks(decision.checks, 'El proveedor no produjo un turno evaluable.');
+  setText(ui.policy, decision.policy_version);
+  setText(ui.decisionTitle, 'DENY');
+  setText(ui.riskPill, decision.risk_class ?? 'R3');
+  setText(ui.decisionCopy, 'Nemotron no produjo un turno válido. Phoenix cerró el turno sin convertirlo en una acción.');
+  setText(ui.reasonCodes, Array.isArray(decision.reason_codes) ? decision.reason_codes.join(' · ') : code);
+  setText(ui.dispatch, 'NO');
+
+  renderProviderEvidence(result);
+  setText(ui.decisionId, decision.decision_id);
+  setText(ui.bundle, decision.evidence_bundle_id);
+  setText(ui.hash, decision.decision_hash);
+
+  ui.decisionMetric.className = 'metric panel decision-metric deny';
+  ui.decisionCard.className = 'panel card decision-card deny';
+  setStatus(`Nemotron no produjo un turno válido (${code}). Phoenix cerró el turno; no hubo ActionProposal ni dispatch.`, 'error');
 }
 
 function renderResult(result) {
@@ -147,12 +231,10 @@ function renderResult(result) {
   setText(ui.reasonCodes, Array.isArray(decision.reason_codes) ? decision.reason_codes.join(' · ') : null);
   setText(ui.dispatch, decision.dispatch_attempted === true ? 'YES' : 'NO');
 
-  setText(ui.provider, isLive ? provider?.provider_response_id : 'LOCAL FIXTURE');
-  setText(ui.latency, isLive && provider?.latency_ms !== undefined ? `${provider.latency_ms} ms` : 'LOCAL');
+  renderProviderEvidence(result);
   setText(ui.decisionId, decision.decision_id);
   setText(ui.bundle, decision.evidence_bundle_id);
   setText(ui.hash, decision.decision_hash);
-  setText(ui.tokens, isLive ? provider?.usage?.total_tokens : '—');
 
   ui.decisionMetric.className = `metric panel decision-metric ${outcomeClass}`;
   ui.decisionCard.className = `panel card decision-card ${outcomeClass}`;
@@ -174,25 +256,35 @@ function setBusy(busy) {
 async function runConversation(message) {
   $$('.fixture-button').forEach((button) => button.classList.remove('active'));
   appendChat('user', message, 'TÚ');
+  const history = conversationHistory.map((item) => ({ ...item }));
   setBusy(true);
-  setStatus('Nemotron está preparando una propuesta estructurada…', 'running');
+  setStatus('Nemotron está respondiendo o preparando una propuesta gobernable…', 'running');
 
   try {
     const response = await fetch('/api/chat', {
       method: 'POST',
       headers: { Accept: 'application/json', 'Content-Type': 'application/json' },
-      body: JSON.stringify({ message })
+      body: JSON.stringify({ message, history })
     });
     const result = await response.json();
     if (!response.ok) throw new Error(result.error ?? `HTTP_${response.status}`);
 
     if (result.assistant_message) {
       appendChat('assistant', result.assistant_message, 'NEMOTRON');
+      remember('user', message);
+      remember('assistant', result.assistant_message);
     } else {
-      appendChat('system', 'Nemotron no devolvió una respuesta conversacional válida. Phoenix cerró el turno.', 'SISTEMA');
+      const code = result.provider_error?.code ?? result.error ?? 'UNKNOWN_MODEL_ERROR';
+      appendChat('system', `Nemotron no produjo un turno válido (${code}). Phoenix cerró el turno.`, 'SISTEMA');
     }
 
-    renderResult(result);
+    if (result.turn_mode === 'CHAT') {
+      renderChatOnly(result);
+    } else if (result.turn_mode === 'ERROR') {
+      renderProviderFailure(result);
+    } else {
+      renderResult(result);
+    }
   } catch (error) {
     appendChat('system', `La solicitud no produjo un resultado gobernado válido: ${error.message}`, 'SISTEMA');
     renderFailClosedVisual('El panel no obtuvo una decisión gobernada válida y muestra DENY por defecto.');

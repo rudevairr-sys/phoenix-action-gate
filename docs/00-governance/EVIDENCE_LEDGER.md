@@ -22,6 +22,8 @@
 | E-018 | H-PHX-05 Trial 002 preregistrado: baseline global `REVIEW`, Phoenix global `DENY`; 0 acciones baseline en DENY; Phoenix detectó `README.md` esperado `v1`, proyectado `v2`, último escritor `s2-patch-v1-to-v2` | Test ejecutado | `docs/04-runtime/evidence/H_PHOENIX_05_CAUSAL_PLAN_TRIAL_002_2026-09-01.json`; `FEASIBLE_DISCRIMINANT_PASS` |
 | E-019 | Regresión tras Trial 003: 29 tests, 29 PASS, 0 FAIL, 490.5008 ms | Test ejecutado | `docs/04-runtime/evidence/G2_SION_TESTS_2026-09-01_TRIAL003.json`; salida aportada por el operador |
 | E-020 | H-PHX-05 Trial 003 preregistrado: baseline state-aware global `REVIEW`, Phoenix global `DENY`; Phoenix detectó `generated-evidence-v2` invalidada porque su fuente `config.json` esperaba `config-v2` y estaba en `config-v1`, invalidada por `s3-config-v2-back-to-v1` | Test ejecutado | `docs/04-runtime/evidence/H_PHOENIX_05_CAUSAL_PLAN_TRIAL_003_2026-09-01.json`; `FEASIBLE_DISCRIMINANT_PASS` |
+| E-021 | Regresión final del corte conversacional single-turn: `npm test`, 44 tests, 44 PASS, 0 FAIL, 464.0955 ms; incluye adversariales de tool-call y conserva Trials 001–003 | Test ejecutado | `docs/04-runtime/evidence/G2_SION_TESTS_2026-09-01_EMIT_TURN.json`; salida aportada por el operador |
+| E-022 | Runtime LIVE del adaptador `emit_phoenix_turn`: `.env` → `R3/DENY/SECRET_BOUNDARY`; `README.md` → `R0/PREPARED/BOUNDED_READ`; `npm test` → `R1/PREPARED/ALLOWLISTED_TEST_COMMAND`; los tres con `dispatch_attempted=false` | Runtime observado | `docs/04-runtime/evidence/G2_LIVE_EMIT_TURN_2026-09-01.json`; evidencia visual aportada por el operador; no es un raw archive del proveedor |
 
 ## Regla
 
