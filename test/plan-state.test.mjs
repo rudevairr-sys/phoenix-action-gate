@@ -1,14 +1,14 @@
 import assert from 'node:assert/strict';
 import { readFile } from 'node:fs/promises';
 import test from 'node:test';
-import { comparePlanEvaluators, evaluateIndependentBaseline } from '../src/baseline.mjs';
+import { comparePlanEvaluators, evaluateIndependentBaseline, evaluateStateAwareBaseline } from '../src/baseline.mjs';
 import { evaluateActionPlan } from '../src/plan-gate.mjs';
 
 async function staleFixture() {
   return JSON.parse(await readFile(new URL('../fixtures/plan-stale-state.json', import.meta.url), 'utf8'));
 }
 
-test('Trial 002 baseline has no individual DENY and aggregates to REVIEW', async () => {
+test('Trial 002 independent baseline has no individual DENY and aggregates to REVIEW', async () => {
   const plan = await staleFixture();
   const baseline = evaluateIndependentBaseline(plan);
   assert.equal(baseline.outcome, 'REVIEW');
@@ -37,7 +37,7 @@ test('Phoenix detects stale state after a projected approved patch and denies th
   assert.equal(phoenix.dispatch_attempted, false);
 });
 
-test('Trial 002 produces an aggregate decision divergence: baseline REVIEW vs Phoenix DENY', async () => {
+test('Trial 002 produces an aggregate decision divergence against the independent baseline', async () => {
   const plan = await staleFixture();
   const baseline = evaluateIndependentBaseline(plan);
   const phoenix = evaluateActionPlan(plan);
@@ -49,6 +49,20 @@ test('Trial 002 produces an aggregate decision divergence: baseline REVIEW vs Ph
   assert.equal(comparison.divergences[0].step_id, 's3-test-with-stale-evidence');
   assert.equal(comparison.divergences[0].baseline_outcome, 'PREPARED');
   assert.equal(comparison.divergences[0].phoenix_outcome, 'DENY');
+});
+
+test('state-aware baseline qualifies for Trial 003 by catching Trial 002 stale state too', async () => {
+  const plan = await staleFixture();
+  const baseline = evaluateStateAwareBaseline(plan);
+  const staleStep = baseline.steps.find((step) => step.step_id === 's3-test-with-stale-evidence');
+
+  assert.equal(baseline.outcome, 'DENY');
+  assert.equal(staleStep.base_outcome, 'PREPARED');
+  assert.equal(staleStep.outcome, 'DENY');
+  assert.ok(staleStep.reason_codes.includes('STALE_STATE_PRECONDITION'));
+  assert.equal(staleStep.state_conflicts[0].expected_version, 'sha256:v1');
+  assert.equal(staleStep.state_conflicts[0].observed_version, 'sha256:v2');
+  assert.equal(baseline.evidence_lineage_reasoning, false);
 });
 
 test('Phoenix does not deny the same plan when downstream evidence expects the projected v2 state', async () => {

@@ -20,6 +20,8 @@
 | E-016 | H-PHX-05 Trial 001: Phoenix propagó dos bloqueos causales (`s3`, `s4`) que el baseline independiente no propagó; ambos agregados acabaron en `DENY` | Test ejecutado | `docs/04-runtime/evidence/H_PHOENIX_05_CAUSAL_PLAN_TRIAL_001_2026-09-01.json`; `FEASIBLE_WITH_LIMITATION` |
 | E-017 | Regresión ampliada en SION: 23 tests, 23 PASS, 0 FAIL, 444.6959 ms | Test ejecutado | `docs/04-runtime/evidence/G2_SION_TESTS_2026-09-01.json`; salida aportada por el operador |
 | E-018 | H-PHX-05 Trial 002 preregistrado: baseline global `REVIEW`, Phoenix global `DENY`; 0 acciones baseline en DENY; Phoenix detectó `README.md` esperado `v1`, proyectado `v2`, último escritor `s2-patch-v1-to-v2` | Test ejecutado | `docs/04-runtime/evidence/H_PHOENIX_05_CAUSAL_PLAN_TRIAL_002_2026-09-01.json`; `FEASIBLE_DISCRIMINANT_PASS` |
+| E-019 | Regresión tras Trial 003: 29 tests, 29 PASS, 0 FAIL, 490.5008 ms | Test ejecutado | `docs/04-runtime/evidence/G2_SION_TESTS_2026-09-01_TRIAL003.json`; salida aportada por el operador |
+| E-020 | H-PHX-05 Trial 003 preregistrado: baseline state-aware global `REVIEW`, Phoenix global `DENY`; Phoenix detectó `generated-evidence-v2` invalidada porque su fuente `config.json` esperaba `config-v2` y estaba en `config-v1`, invalidada por `s3-config-v2-back-to-v1` | Test ejecutado | `docs/04-runtime/evidence/H_PHOENIX_05_CAUSAL_PLAN_TRIAL_003_2026-09-01.json`; `FEASIBLE_DISCRIMINANT_PASS` |
 
 ## Regla
 
