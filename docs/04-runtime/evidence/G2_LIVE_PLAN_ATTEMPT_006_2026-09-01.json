@@ -1,0 +1,36 @@
+{
+  "schema_version": "1.0",
+  "captured_at": "2026-09-01",
+  "evidence_type": "operator_observed_live_plan_failure",
+  "command": "npm run demo:plan:live",
+  "result": {
+    "ok": false,
+    "state": "FAIL_CLOSED",
+    "provider_error_code": "MODEL_PLAN_CONTRACT_INVALID",
+    "dispatch_attempted": false
+  },
+  "provider": {
+    "transport": "chat_completions_compact_plan",
+    "model": "nvidia/Nemotron-3_5-Lightning",
+    "endpoint": "https://api.tokenfactory.nebius.com/v1/chat/completions",
+    "http_status": 200,
+    "latency_ms": 12765,
+    "provider_response_id": "chatcmpl-0e67de5c",
+    "finish_reason": "tool_calls",
+    "usage": {
+      "completion_tokens": 2119,
+      "prompt_tokens": 1173,
+      "total_tokens": 3292,
+      "reasoning_tokens": 1605
+    }
+  },
+  "contract_failure": {
+    "step_id": "s2",
+    "target_path": "generated.md",
+    "known_boundary": "The compact adapter rejected the WRITE_PATCH target transition before Phoenix received an ActionPlan. The previous diagnostic did not preserve which target state field was missing or conflicting, so no narrower cause is claimed."
+  },
+  "classification": "COUNTEREXAMPLE",
+  "conclusion": "The compact transport itself succeeded live: HTTP 200, finish_reason=tool_calls and materially lower output size than the earlier verbose plan contract. The remaining failure was local normalization of a generated.md write step, not provider transport or Phoenix Plan Gate.",
+  "next_candidate": "Remove redundant target-current-state repetition from the compact model contract. For WRITE_PATCH, deterministically infer the target's current version from the declared projected state when Nemotron omits that same target from requires_state; preserve any explicit model requirement unchanged so stale-state conflicts can still reach Phoenix. Keep cross-resource requirements and evidence lineage model-proposed.",
+  "promotion": "NOT_PROMOTED"
+}

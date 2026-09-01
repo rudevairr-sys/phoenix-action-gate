@@ -25,7 +25,7 @@
 ## D-005 — H-PHX-05 no es un claim
 
 **Decisión:** tratar H-PHX-05 como hipótesis falsable, con baseline sencillo competente y criterios fijados antes del resultado.  
-**Estado:** protocolo inicial documentado; no ejecutado.
+**Estado:** protocolo ejecutado por etapas; los resultados favorables siguen limitados por su evidencia.
 
 ## D-006 — Sin dispatch productivo
 
@@ -54,8 +54,28 @@
 
 **Motivo:** los ensayos LIVE con múltiples tools y selección automática produjeron JSON inválido, narración sin propuesta y tool calls múltiples. La función única elimina la selección ambigua sin convertir al modelo en autoridad ni habilitar ejecución.
 
-**Evidencia:** 44/44 tests y tres rutas LIVE observadas: `.env → DENY`, `README.md → PREPARED`, `npm test → PREPARED`, todas sin dispatch.
+**Evidencia:** rutas LIVE observadas: `.env → DENY`, `README.md → PREPARED`, `npm test → PREPARED`, todas sin dispatch; regresión incluida en E-025.
 
-**Límite:** solo se promueve a `RUNTIME_OBSERVED` la frontera single-action observada. El plan multiacción generado por Nemotron sigue pendiente.
+**Límite:** algunos bordes conversacionales siguen requiriendo mejor UX para distinguir petición incompleta, provider fail-closed y decisión política de Phoenix.
 
 **Estado:** aceptada y validada para checkpoint local; reversible mediante commit posterior. Sin push, PR, deploy ni submission.
+
+## D-011 — Plan LIVE con contrato semántico compacto
+
+**Decisión:** mantener el Plan Gate canónico y reducir únicamente el contrato que Nemotron debe producir mediante `compact-plan/0.2`. Nemotron propone pasos, dependencias, transiciones objetivo, requisitos cruzados y lineage; el adaptador deriva metadatos mecánicos y estado de target desde la proyección conocida.
+
+**Motivo:** los contratos de plan completos sobre Chat Completions se truncaron incluso con presupuestos elevados; la ruta Responses observada presentó incompatibilidad de campo y después timeout. El contrato compacto produjo una sola tool call LIVE en 7582 ms y 2669 tokens totales.
+
+**Salvaguarda:** una expectativa explícita del modelo en `needs_state` se preserva incluso si contradice el estado proyectado; no se corrige silenciosamente y puede activar `STALE_STATE_PRECONDITION`.
+
+**Evidencia:** E-023, E-024 y E-025.
+
+**Estado:** aceptada como frontera LIVE actual del plan; sin executor ni dispatch.
+
+## D-012 — Podar transportes que no mejoren la demo
+
+**Decisión:** no continuar inflando tokens en el contrato completo ni convertir una espera superior a 60 s en el camino normal de demo. La ruta Responses no se considera fallida en general, pero queda `PRUNED` para este vertical síncrono hasta nueva evidencia que justifique reabrirla.
+
+**Motivo:** preservar latencia, simplicidad y reproducibilidad. Los contraejemplos se conservan en E-023.
+
+**Estado:** vigente.

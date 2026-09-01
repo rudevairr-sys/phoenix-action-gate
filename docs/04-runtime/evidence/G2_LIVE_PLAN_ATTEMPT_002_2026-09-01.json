@@ -1,0 +1,35 @@
+{
+  "schema_version": "1.0",
+  "captured_at": "2026-09-01",
+  "evidence_type": "operator_observed_live_plan_failure",
+  "command": "npm run demo:plan:live",
+  "result": {
+    "ok": false,
+    "state": "FAIL_CLOSED",
+    "provider_error_code": "MODEL_PLAN_OUTPUT_TRUNCATED",
+    "dispatch_attempted": false
+  },
+  "provider": {
+    "transport": "chat_completions",
+    "model": "nvidia/Nemotron-3_5-Lightning",
+    "endpoint": "https://api.tokenfactory.nebius.com/v1/chat/completions",
+    "http_status": 200,
+    "latency_ms": 28684,
+    "provider_response_id": "chatcmpl-2cf938d3",
+    "finish_reason": "length",
+    "usage": {
+      "completion_tokens": 8000,
+      "prompt_tokens": 1723,
+      "total_tokens": 9723,
+      "reasoning_tokens": 1940
+    }
+  },
+  "observed_tool_calls": {
+    "count": 3,
+    "names": ["emit_phoenix_plan", "emit_phoenix_plan", "emit_phoenix_plan"]
+  },
+  "classification": "COUNTEREXAMPLE",
+  "conclusion": "Increasing the Chat Completions plan budget from 4200 to 8000 did not resolve the transport failure. The response again terminated by length and emitted more repeated plan tool calls. Further token inflation is pruned.",
+  "next_candidate": "Move only the live plan proposal transport to Nebius Responses API and request one required function call with parallel_tool_calls=false and max_tool_calls=1. Preserve Phoenix Plan Gate, baseline and no-dispatch semantics unchanged.",
+  "promotion": "NOT_PROMOTED"
+}

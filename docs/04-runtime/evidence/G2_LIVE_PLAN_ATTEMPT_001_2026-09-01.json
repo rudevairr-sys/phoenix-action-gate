@@ -1,0 +1,36 @@
+{
+  "schema_version": "1.0",
+  "captured_at": "2026-09-01",
+  "evidence_type": "operator_observed_live_plan_failure",
+  "command": "npm run demo:plan:live",
+  "result": {
+    "ok": false,
+    "state": "FAIL_CLOSED",
+    "provider_error_code_at_observation": "MODEL_PLAN_TOOL_COUNT_INVALID",
+    "dispatch_attempted": false
+  },
+  "provider": {
+    "model": "nvidia/Nemotron-3_5-Lightning",
+    "endpoint": "https://api.tokenfactory.nebius.com/v1/chat/completions",
+    "http_status": 200,
+    "latency_ms": 16375,
+    "provider_response_id": "chatcmpl-1bbeecaf",
+    "finish_reason": "length",
+    "usage": {
+      "completion_tokens": 4200,
+      "prompt_tokens": 1699,
+      "total_tokens": 5899,
+      "reasoning_tokens": 1902
+    }
+  },
+  "observed_tool_calls": {
+    "count": 2,
+    "names": ["emit_phoenix_plan", "emit_phoenix_plan"]
+  },
+  "analysis_boundary": "The runtime output proves truncation and two observed tool calls, but the failed adapter did not archive sanitized arguments for the two calls. No claim is made about whether either call contained a complete valid plan.",
+  "follow_up": {
+    "classification": "COUNTEREXAMPLE",
+    "change": "Increase plan output budget to 8000, request low reasoning effort, require concise fields, and give finish_reason=length precedence as MODEL_PLAN_OUTPUT_TRUNCATED. Multiple complete tool calls remain fail-closed.",
+    "promotion": "NOT_PROMOTED"
+  }
+}

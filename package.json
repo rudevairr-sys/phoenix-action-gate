@@ -10,6 +10,7 @@
     "demo:plan": "node tools/g2_plan_compare_probe.mjs",
     "demo:state": "node tools/g2_state_compare_probe.mjs",
     "demo:lineage": "node tools/g2_lineage_compare_probe.mjs",
+    "demo:plan:live": "node tools/g2_live_plan_probe.mjs",
     "panel": "node src/server.mjs"
   },
   "engines": {

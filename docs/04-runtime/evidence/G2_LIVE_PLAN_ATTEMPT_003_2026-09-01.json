@@ -1,0 +1,23 @@
+{
+  "schema_version": "1.0",
+  "captured_at": "2026-09-01",
+  "evidence_type": "operator_observed_live_plan_failure",
+  "command": "npm run demo:plan:live",
+  "result": {
+    "ok": false,
+    "state": "FAIL_CLOSED",
+    "provider_error_code": "TOKEN_FACTORY_HTTP_ERROR",
+    "dispatch_attempted": false
+  },
+  "provider": {
+    "transport": "responses",
+    "endpoint": "https://api.tokenfactory.nebius.com/v1/responses",
+    "http_status": 400,
+    "latency_ms": 1467,
+    "response_shape": ["detail", "error"]
+  },
+  "classification": "COUNTEREXAMPLE",
+  "evidence_boundary": "The adapter at this point preserved only the HTTP status and top-level response keys, so the exact provider validation message was not observable. No claim is made about the cause of the 400 response.",
+  "next_candidate": "Preserve a sanitized subset of the provider error body (detail loc/msg/type and error message/type/code/param only), add regression coverage, and repeat the same live request once before changing transport or schema.",
+  "promotion": "NOT_PROMOTED"
+}
