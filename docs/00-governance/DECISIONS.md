@@ -99,3 +99,21 @@
 **Límite:** esto valida el corte local del panel y adaptador; no autoriza claims de producción, superioridad general, publicación, dispatch ni integración canónica con Phoenix Neuron.
 
 **Estado:** aceptada para checkpoint local. Sin push, PR, deploy ni submission.
+
+## D-014 — Preregistrar receipt/tamper antes de implementar
+
+**Decisión:** abrir `EVIDENCE_RECEIPT_TAMPER_TRIAL_001` como ensayo falsable y congelar su protocolo antes de escribir baseline o candidato.
+
+**Baseline fijado:** `snapshot-receipt-baseline/0.1.0`, competente en binding canónico de subject, decisión, policy artifact y evidencia explícita, pero sin traversal automático de `derives_from`.
+
+**Discriminante fijado:** T5 — la evidencia y el receipt permanecen intactos, pero cambia una fuente causal declarada. El resultado preregistrado es `B0=VALID` frente a `Phoenix=INVALID/LINEAGE_BINDING_INVALIDATED`.
+
+**Controles obligatorios:** decisión, subject, política y evidencia explícita alterados deben ser detectados por ambos; un cambio irrelevante no puede invalidar el receipt.
+
+**Escalado:** un resultado favorable frente a B0 no autoriza claim público de diferenciación. Debe preregistrarse un baseline B1 lineage-aware antes de Trial 002. Si B1 iguala al candidato con menor complejidad, tamper/receipt queda como capacidad útil de G7 y no como diferenciador.
+
+**Frontera:** no modificar `gate.mjs` ni `plan-gate.mjs`, no importar Phoenix Neuron, no habilitar dispatch y no cambiar fixtures después de ver resultados.
+
+**Protocolo:** `docs/02-research/EVIDENCE_RECEIPT_TAMPER_TRIAL_001_PROTOCOL.md`.
+
+**Estado:** preregistrada / no ejecutada.

@@ -1,7 +1,7 @@
 {
   "schema_version": "1.0.0",
   "project": "Phoenix Action Gate",
-  "updated_at": "2026-09-02T00:27:00Z",
+  "updated_at": "2026-09-02T00:40:00Z",
   "hackathon": {
     "name": "Nebius x NVIDIA Global AI Hackathon",
     "rules_source": "https://nebiusglobalaihackathon.devpost.com/rules",
@@ -10,9 +10,9 @@
   "mode": "VALIDATE",
   "mavo": {
     "variant": "phoenix-safe-3",
-    "state": "QUIESCENT",
+    "state": "RUNNING",
     "runtime_profile": "tool-assisted",
-    "reason": "The panel/adapter validation block has satisfied its declared acceptance criteria: 58/58 regression, clean single-submit .env secret-boundary denial, destructive-command denial, provider-vs-policy separation, live plan-lineage view, and no dispatch."
+    "reason": "EVIDENCE_RECEIPT_TAMPER_TRIAL_001 is preregistered and authorized. The next allowed implementation is the competent snapshot receipt baseline B0 only."
   },
   "sources": [
     {
@@ -55,7 +55,7 @@
       "ref": "01_MESA_PRINCIPAL/PHOENIX_NEURON_LAB plus user-provided mavo_neuron_local (2).zip",
       "license": "private/internal reference; not for publication or code transfer without a separate gate",
       "disposition": "reference_only",
-      "reason": "Antecedente conceptual para model-governance, fail-closed, causal/state and traceability ideas. Phoenix Action Gate is not a canonical Phoenix Neuron integration."
+      "reason": "Antecedente conceptual para model-governance, fail-closed, causal/state, artifact binding and traceability ideas. Phoenix Action Gate is not a canonical Phoenix Neuron integration."
     },
     {
       "id": "phoenix-strategy-review",
@@ -66,10 +66,10 @@
     },
     {
       "id": "sion-live-workspace",
-      "ref": "SION_TALLER_RUST_v0.7.0 / 01_MESA_PRINCIPAL/phoenix-action-gate / review/g2-mvp-core / validated panel cut",
+      "ref": "SION_TALLER_RUST_v0.7.0 / 01_MESA_PRINCIPAL/phoenix-action-gate / review/g2-mvp-core / checkpoint 092d987",
       "license": "local governed workspace; not for publication",
       "disposition": "used",
-      "reason": "Workspace vivo. El corte actual tiene regresión 58/58 y rutas LIVE de secret boundary, destructive command, provider-boundary y plan-lineage observadas sin dispatch."
+      "reason": "Validated panel cut is the frozen starting point for the tamper trial."
     }
   ],
   "claims": [
@@ -182,6 +182,12 @@
       "evidence_refs": ["Bounded fixtures and live runs support a narrow discriminant, not general superiority"]
     },
     {
+      "id": "C-TAMPER-001",
+      "text": "Un receipt Phoenix con causal evidence binding detecta una invalidación post-decisión que el baseline snapshot B0 no detecta.",
+      "state": "HYPOTHESIS",
+      "evidence_refs": ["docs/02-research/EVIDENCE_RECEIPT_TAMPER_TRIAL_001_PROTOCOL.md; preregistered, not executed"]
+    },
+    {
       "id": "C-PHOENIX-NEURON-INTEGRATION",
       "text": "Phoenix Action Gate is canonically integrated with or powered by Phoenix Neuron.",
       "state": "INSUFFICIENT_EVIDENCE",
@@ -223,7 +229,7 @@
     {
       "id": "G2",
       "state": "PASS",
-      "reason": "Gate individual, pipeline LIVE, compact plan y bloque panel/adaptador están implementados; el corte actual pasa 58/58 y mantiene dispatch deshabilitado."
+      "reason": "Gate individual, pipeline LIVE, compact plan y panel/adaptador validados; corte 092d987 pasa 58/58 y mantiene dispatch deshabilitado."
     },
     {
       "id": "G3",
@@ -233,12 +239,12 @@
     {
       "id": "G4",
       "state": "WARN",
-      "reason": "Contratos y políticas existen; receipt/tamper binding visible sigue siendo brecha candidata no validada."
+      "reason": "EVIDENCE_RECEIPT_TAMPER_TRIAL_001 está preregistrado pero no ejecutado; no existe claim positivo de tamper/receipt."
     },
     {
       "id": "G5",
       "state": "PASS",
-      "reason": "Panel actual observado LIVE con provider-vs-policy distinction, destructive denial, secret-boundary denial y plan-lineage divergence; regresión final 58/58."
+      "reason": "Panel observado LIVE con provider-vs-policy distinction, destructive denial, secret-boundary denial y plan-lineage divergence; regresión final 58/58."
     },
     {
       "id": "G6",
@@ -248,7 +254,7 @@
     {
       "id": "G7",
       "state": "PENDING",
-      "reason": "Clon limpio, publicación del corte, tamper evidence y reproducción pública pendientes."
+      "reason": "Clon limpio y reproducción pública pendientes; tamper evidence acaba de entrar en fase experimental preregistrada."
     },
     {
       "id": "G8",
@@ -260,7 +266,9 @@
     "status": "GO_WITH_EVIDENCE_BOUNDARY",
     "differentiation_thesis": "Phoenix does not only ask whether an action is allowed; in bounded multi-action plans it can ask whether the action is still justified by current projected state and causally valid evidence.",
     "observatory_report": "docs/02-research/OBSERVATORIO_DIFFERENTIATION_GAPS_2026-09-01.md",
-    "next_discriminant_candidate": "EVIDENCE_RECEIPT_TAMPER_TRIAL_001",
-    "next_step": "Keep the validated panel block closed. Next, either begin G7 clean-clone/public reproducibility or preregister EVIDENCE_RECEIPT_TAMPER_TRIAL_001 with a competent baseline. No push/PR/deploy/submission without separate human authorization."
+    "active_trial": "EVIDENCE_RECEIPT_TAMPER_TRIAL_001",
+    "trial_protocol": "docs/02-research/EVIDENCE_RECEIPT_TAMPER_TRIAL_001_PROTOCOL.md",
+    "trial_state": "PREREGISTERED_NOT_EXECUTED",
+    "next_step": "Implement snapshot-receipt-baseline/0.1.0 only, run T0-T7 against B0, freeze baseline results and complexity, then review baseline competence before any Phoenix receipt candidate is implemented. Do not modify gate.mjs or plan-gate.mjs. No push/PR/deploy/submission."
   }
 }
