@@ -10,6 +10,7 @@ const ui = {
   chatLog: $('#chat-log'),
   userMessage: $('#user-message'),
   sendButton: $('#send-button'),
+  planButton: $('#plan-button'),
   sourceMetric: $('#metric-source'),
   model: $('#metric-model'),
   risk: $('#metric-risk'),
@@ -36,7 +37,31 @@ const ui = {
   bundle: $('#evidence-bundle'),
   hash: $('#evidence-hash'),
   tokens: $('#evidence-tokens'),
-  status: $('#status-line')
+  status: $('#status-line'),
+  singleResultGrid: $('#single-result-grid'),
+  planResult: $('#plan-result'),
+  planId: $('#plan-id'),
+  planBaseline: $('#plan-baseline'),
+  planPhoenix: $('#plan-phoenix'),
+  planDivergence: $('#plan-divergence'),
+  planSteps: $('#plan-steps'),
+  lineageStatus: $('#lineage-status'),
+  lineageEvidence: $('#lineage-evidence'),
+  lineageSource: $('#lineage-source'),
+  lineageExpected: $('#lineage-expected'),
+  lineageObserved: $('#lineage-observed'),
+  lineageInvalidatedBy: $('#lineage-invalidated-by'),
+  planProvider: $('#plan-provider'),
+  planLatency: $('#plan-latency'),
+  planTokens: $('#plan-tokens'),
+  planDecisionId: $('#plan-decision-id'),
+  planBundle: $('#plan-bundle'),
+  planHash: $('#plan-hash'),
+  planDecisionTitle: $('#plan-decision-title'),
+  planDecisionCopy: $('#plan-decision-copy'),
+  planReasonCodes: $('#plan-reason-codes'),
+  planDispatch: $('#plan-dispatch'),
+  planReasonCard: $('.plan-reason-card')
 };
 
 const decisionMessages = {
@@ -46,12 +71,23 @@ const decisionMessages = {
 };
 
 function setText(node, value, fallback = '—') {
+  if (!node) return;
   node.textContent = value === null || value === undefined || value === '' ? fallback : String(value);
 }
 
 function setStatus(message, state = '') {
   ui.status.className = `status-line panel ${state}`.trim();
   ui.status.textContent = message;
+}
+
+function showSingleView() {
+  ui.singleResultGrid.hidden = false;
+  ui.planResult.hidden = true;
+}
+
+function showPlanView() {
+  ui.singleResultGrid.hidden = true;
+  ui.planResult.hidden = false;
 }
 
 function remember(role, content) {
@@ -110,19 +146,33 @@ function renderChecks(checks = [], emptyMessage = 'No se devolvieron checks.') {
   }
 }
 
+function isSingleLive(result) {
+  return result.source === 'LIVE_NEBIUS_NEMOTRON';
+}
+
 function renderProviderEvidence(result) {
   const provider = result.provider ?? null;
-  const isLive = result.source === 'LIVE_NEBIUS_NEMOTRON';
+  const isLive = isSingleLive(result);
   setText(ui.provider, isLive ? provider?.provider_response_id : 'LOCAL FIXTURE');
   setText(ui.latency, isLive && provider?.latency_ms !== undefined && provider?.latency_ms !== null ? `${provider.latency_ms} ms` : (isLive ? '—' : 'LOCAL'));
   setText(ui.tokens, isLive ? provider?.usage?.total_tokens : '—');
 }
 
-function renderFailClosedVisual(message) {
-  ui.decisionMetric.className = 'metric panel decision-metric deny';
-  ui.decisionCard.className = 'panel card decision-card deny';
-  setText(ui.decision, 'DENY');
-  setText(ui.decisionTitle, 'DENY');
+function resetSingleProposalDetails() {
+  setText(ui.intent, '—');
+  setText(ui.action, '—');
+  setText(ui.workspace, '—');
+  setText(ui.target, '—');
+  setText(ui.operation, '—');
+  setText(ui.rollback, '—');
+}
+
+function renderTransportFailureVisual(message) {
+  showSingleView();
+  ui.decisionMetric.className = 'metric panel decision-metric provider-fail';
+  ui.decisionCard.className = 'panel card decision-card provider-fail';
+  setText(ui.decision, 'PROVIDER FAIL-CLOSED');
+  setText(ui.decisionTitle, 'PROVIDER FAIL-CLOSED');
   setText(ui.risk, 'R3');
   setText(ui.riskPill, 'R3');
   setText(ui.decisionCopy, message);
@@ -130,6 +180,7 @@ function renderFailClosedVisual(message) {
 }
 
 function renderChatOnly(result) {
+  showSingleView();
   const provider = result.provider ?? null;
 
   setText(ui.sourceMetric, 'LIVE');
@@ -161,7 +212,40 @@ function renderChatOnly(result) {
   setStatus('Nemotron respondió en modo CHAT. Phoenix no evaluó ninguna acción y dispatch sigue deshabilitado.', 'success');
 }
 
+function renderClarification(result) {
+  showSingleView();
+  const provider = result.provider ?? null;
+
+  setText(ui.sourceMetric, 'LIVE');
+  setText(ui.model, provider?.model);
+  setText(ui.risk, '—');
+  setText(ui.decision, 'ACLARAR');
+  setText(ui.source, 'LIVE NEMOTRON');
+  setText(ui.intent, 'Petición incompleta');
+  setText(ui.action, 'SIN ACTIONPROPOSAL');
+  setText(ui.workspace, '—');
+  setText(ui.target, '—');
+  setText(ui.operation, '—');
+  setText(ui.rollback, '—');
+
+  renderChecks([], 'La petición necesita una aclaración antes de construir una ActionProposal. Phoenix no evaluó ninguna acción.');
+  setText(ui.decisionTitle, 'ACLARACIÓN REQUERIDA');
+  setText(ui.riskPill, '—');
+  setText(ui.decisionCopy, result.assistant_message ?? 'Falta concretar la modificación solicitada.');
+  setText(ui.reasonCodes, result.clarification_reason ?? 'INCOMPLETE_REQUEST');
+  setText(ui.dispatch, 'NO');
+  setText(ui.decisionId, '—');
+  setText(ui.bundle, '—');
+  setText(ui.hash, '—');
+  renderProviderEvidence(result);
+
+  ui.decisionMetric.className = 'metric panel decision-metric clarification';
+  ui.decisionCard.className = 'panel card decision-card clarification';
+  setStatus('Falta información para preparar una ActionProposal. No se inventó ningún cambio y no hubo dispatch.', 'running');
+}
+
 function renderProviderFailure(result) {
+  showSingleView();
   const provider = result.provider ?? null;
   const decision = result.decision ?? {};
   const code = result.provider_error?.code ?? decision.reason_codes?.[0] ?? 'PROVIDER_FAILURE';
@@ -169,11 +253,11 @@ function renderProviderFailure(result) {
   setText(ui.sourceMetric, 'LIVE');
   setText(ui.model, provider?.model);
   setText(ui.risk, decision.risk_class ?? 'R3');
-  setText(ui.decision, 'DENY');
+  setText(ui.decision, 'PROVIDER FAIL-CLOSED');
   setText(ui.source, 'LIVE NEMOTRON');
 
   setText(ui.intent, 'Turno inválido del proveedor');
-  setText(ui.action, '—');
+  setText(ui.action, 'SIN ACTIONPROPOSAL');
   setText(ui.workspace, '—');
   setText(ui.target, '—');
   setText(ui.operation, '—');
@@ -181,9 +265,9 @@ function renderProviderFailure(result) {
 
   renderChecks(decision.checks, 'El proveedor no produjo un turno evaluable.');
   setText(ui.policy, decision.policy_version);
-  setText(ui.decisionTitle, 'DENY');
+  setText(ui.decisionTitle, 'PROVIDER FAIL-CLOSED');
   setText(ui.riskPill, decision.risk_class ?? 'R3');
-  setText(ui.decisionCopy, 'Nemotron no produjo un turno válido. Phoenix cerró el turno sin convertirlo en una acción.');
+  setText(ui.decisionCopy, 'Nemotron no produjo un turno válido. Phoenix no recibió una ActionProposal; el adaptador cerró el turno sin ejecución.');
   setText(ui.reasonCodes, Array.isArray(decision.reason_codes) ? decision.reason_codes.join(' · ') : code);
   setText(ui.dispatch, 'NO');
 
@@ -192,22 +276,21 @@ function renderProviderFailure(result) {
   setText(ui.bundle, decision.evidence_bundle_id);
   setText(ui.hash, decision.decision_hash);
 
-  ui.decisionMetric.className = 'metric panel decision-metric deny';
-  ui.decisionCard.className = 'panel card decision-card deny';
-  setStatus(`Nemotron no produjo un turno válido (${code}). Phoenix cerró el turno; no hubo ActionProposal ni dispatch.`, 'error');
+  ui.decisionMetric.className = 'metric panel decision-metric provider-fail';
+  ui.decisionCard.className = 'panel card decision-card provider-fail';
+  setStatus(`Provider fail-closed (${code}). No hubo ActionProposal, decisión política sobre una acción ni dispatch.`, 'error');
 }
 
 function renderResult(result) {
+  showSingleView();
   const proposal = result.proposal ?? {};
   const decision = result.decision ?? {};
   const provider = result.provider ?? null;
   const outcome = decision.outcome;
 
-  if (!VALID_OUTCOMES.has(outcome)) {
-    throw new Error('INVALID_DECISION_PAYLOAD');
-  }
+  if (!VALID_OUTCOMES.has(outcome)) throw new Error('INVALID_DECISION_PAYLOAD');
 
-  const isLive = result.source === 'LIVE_NEBIUS_NEMOTRON';
+  const isLive = isSingleLive(result);
   const outcomeClass = outcome.toLowerCase();
 
   setText(ui.sourceMetric, isLive ? 'LIVE' : 'LOCAL');
@@ -241,14 +324,176 @@ function renderResult(result) {
 
   setStatus(
     isLive
-      ? `Nemotron propuso una acción y Phoenix decidió ${outcome}. Dispatch continúa deshabilitado.`
+      ? `Nemotron produjo una ActionProposal y Phoenix decidió ${outcome}. Dispatch continúa deshabilitado.`
       : `Fixture local evaluado por Phoenix → ${outcome}. Nemotron no participó en esta ejecución.`,
     outcome === 'DENY' ? 'error' : 'success'
   );
 }
 
+function outcomeChip(outcome) {
+  const chip = document.createElement('span');
+  const normalized = VALID_OUTCOMES.has(outcome) ? outcome : '—';
+  chip.className = `outcome-chip ${String(normalized).toLowerCase()}`.trim();
+  chip.textContent = normalized;
+  return chip;
+}
+
+function renderPlanSteps(result) {
+  ui.planSteps.replaceChildren();
+  const phoenixSteps = Array.isArray(result.phoenix?.steps) ? result.phoenix.steps : [];
+  const baselineSteps = Array.isArray(result.baseline?.steps) ? result.baseline.steps : [];
+
+  if (!phoenixSteps.length) {
+    const empty = document.createElement('div');
+    empty.className = 'empty-state';
+    empty.textContent = 'El plan no produjo pasos evaluables.';
+    ui.planSteps.append(empty);
+    return;
+  }
+
+  for (const step of phoenixSteps) {
+    const baselineStep = baselineSteps.find((item) => item.step_id === step.step_id);
+    const row = document.createElement('div');
+    row.className = 'plan-step';
+
+    const id = document.createElement('span');
+    id.className = 'plan-step-id';
+    id.textContent = step.step_id ?? '—';
+
+    const action = document.createElement('span');
+    action.className = 'plan-step-action';
+    action.textContent = step.action_type ?? '—';
+
+    const target = document.createElement('span');
+    target.className = 'plan-step-target';
+    const targetPath = step.target?.relative_path ?? '(workspace root)';
+    const reasons = Array.isArray(step.causal_reason_codes) && step.causal_reason_codes.length
+      ? ` · ${step.causal_reason_codes.join(', ')}`
+      : '';
+    target.textContent = `${targetPath}${reasons}`;
+
+    const baseline = outcomeChip(baselineStep?.outcome ?? baselineStep?.effective_outcome ?? '—');
+    baseline.title = 'Baseline';
+
+    const phoenix = outcomeChip(step.effective_outcome ?? step.base_outcome ?? '—');
+    phoenix.title = 'Phoenix';
+
+    row.append(id, action, target, baseline, phoenix);
+    ui.planSteps.append(row);
+  }
+}
+
+function renderLineage(result) {
+  const conflict = result.discriminant?.lineage_conflict ?? null;
+  const invalidated = result.discriminant?.evidence_lineage_invalidation_detected === true;
+
+  ui.lineageStatus.className = `risk-pill ${invalidated ? 'invalid' : 'valid'}`;
+  setText(ui.lineageStatus, invalidated ? 'INVALIDATED' : 'NO CONFLICT');
+  setText(ui.lineageEvidence, conflict?.evidence_id);
+  setText(ui.lineageSource, conflict?.source_resource);
+  setText(ui.lineageExpected, conflict?.expected_source_version);
+  setText(ui.lineageObserved, conflict?.observed_source_version);
+  setText(ui.lineageInvalidatedBy, conflict?.invalidated_by);
+}
+
+function renderPlanEvidence(result) {
+  const provider = result.provider ?? null;
+  const phoenix = result.phoenix ?? {};
+  setText(ui.planProvider, provider?.provider_response_id);
+  setText(ui.planLatency, provider?.latency_ms !== undefined && provider?.latency_ms !== null ? `${provider.latency_ms} ms` : null);
+  setText(ui.planTokens, provider?.usage?.total_tokens);
+  setText(ui.planDecisionId, phoenix.plan_decision_id);
+  setText(ui.planBundle, phoenix.evidence_bundle_id);
+  setText(ui.planHash, phoenix.decision_hash);
+}
+
+function renderPlanResult(result) {
+  showPlanView();
+  const phoenix = result.phoenix ?? {};
+  const baseline = result.baseline ?? null;
+  const outcome = phoenix.outcome;
+  if (!VALID_OUTCOMES.has(outcome)) throw new Error('INVALID_PLAN_DECISION_PAYLOAD');
+
+  setText(ui.sourceMetric, 'LIVE PLAN');
+  setText(ui.model, result.provider?.model);
+  setText(ui.risk, phoenix.risk_class);
+  setText(ui.decision, outcome);
+  ui.decisionMetric.className = `metric panel decision-metric ${outcome.toLowerCase()}`;
+
+  setText(ui.planId, result.plan?.plan_id);
+  setText(ui.planBaseline, baseline?.outcome ?? 'N/A');
+  setText(ui.planPhoenix, outcome);
+  setText(ui.planDivergence, result.comparison?.divergence_count ?? 0);
+
+  renderPlanSteps(result);
+  renderLineage(result);
+  renderPlanEvidence(result);
+
+  setText(ui.planDecisionTitle, outcome);
+  setText(ui.planDecisionCopy,
+    result.discriminant?.evidence_lineage_invalidation_detected
+      ? 'Phoenix detectó que una evidencia downstream dependía de una versión causal que cambió después de producirla.'
+      : decisionMessages[outcome]
+  );
+  setText(ui.planReasonCodes, Array.isArray(phoenix.reason_codes) ? phoenix.reason_codes.join(' · ') : null);
+  setText(ui.planDispatch, phoenix.dispatch_attempted === true ? 'YES' : 'NO');
+  ui.planReasonCard.className = `panel card plan-reason-card ${outcome.toLowerCase()}`;
+
+  const baselineOutcome = baseline?.outcome ?? 'N/A';
+  const divergence = result.comparison?.divergence_count ?? 0;
+  setStatus(
+    `Plan LIVE evaluado: baseline ${baselineOutcome} → Phoenix ${outcome}. Divergencias: ${divergence}. Dispatch deshabilitado.`,
+    outcome === 'DENY' ? 'error' : 'success'
+  );
+}
+
+function renderPlanFailure(result) {
+  showPlanView();
+  const code = result.provider_error?.code ?? result.phoenix?.reason_codes?.[0] ?? 'PROVIDER_FAILURE';
+  const provider = result.provider ?? null;
+  const phoenix = result.phoenix ?? {};
+
+  setText(ui.sourceMetric, 'LIVE PLAN');
+  setText(ui.model, provider?.model);
+  setText(ui.risk, phoenix.risk_class ?? 'R3');
+  setText(ui.decision, 'PROVIDER FAIL-CLOSED');
+  ui.decisionMetric.className = 'metric panel decision-metric provider-fail';
+
+  setText(ui.planId, 'NO PLAN');
+  setText(ui.planBaseline, 'N/A');
+  setText(ui.planPhoenix, 'PROVIDER FAIL-CLOSED');
+  setText(ui.planDivergence, 'N/A');
+  ui.planSteps.replaceChildren();
+  const empty = document.createElement('div');
+  empty.className = 'empty-state';
+  empty.textContent = 'Nemotron no produjo un plan válido para Phoenix. No hay pasos que evaluar.';
+  ui.planSteps.append(empty);
+
+  ui.lineageStatus.className = 'risk-pill';
+  setText(ui.lineageStatus, 'N/A');
+  setText(ui.lineageEvidence, '—');
+  setText(ui.lineageSource, '—');
+  setText(ui.lineageExpected, '—');
+  setText(ui.lineageObserved, '—');
+  setText(ui.lineageInvalidatedBy, '—');
+
+  setText(ui.planProvider, provider?.provider_response_id);
+  setText(ui.planLatency, provider?.latency_ms !== undefined && provider?.latency_ms !== null ? `${provider.latency_ms} ms` : null);
+  setText(ui.planTokens, provider?.usage?.total_tokens);
+  setText(ui.planDecisionId, phoenix.plan_decision_id);
+  setText(ui.planBundle, phoenix.evidence_bundle_id);
+  setText(ui.planHash, phoenix.decision_hash);
+  setText(ui.planDecisionTitle, 'PROVIDER FAIL-CLOSED');
+  setText(ui.planDecisionCopy, 'El proveedor no produjo un ActionPlan válido. Phoenix no recibió un plan evaluable y nada fue ejecutado.');
+  setText(ui.planReasonCodes, code);
+  setText(ui.planDispatch, 'NO');
+  ui.planReasonCard.className = 'panel card plan-reason-card deny';
+  setStatus(`Plan provider fail-closed (${code}). No hubo ActionPlan evaluable ni dispatch.`, 'error');
+}
+
 function setBusy(busy) {
   ui.sendButton.disabled = busy;
+  ui.planButton.disabled = busy;
   ui.userMessage.disabled = busy;
   $$('.fixture-button').forEach((button) => { button.disabled = busy; });
 }
@@ -270,16 +515,19 @@ async function runConversation(message) {
     if (!response.ok) throw new Error(result.error ?? `HTTP_${response.status}`);
 
     if (result.assistant_message) {
-      appendChat('assistant', result.assistant_message, 'NEMOTRON');
+      const label = result.turn_mode === 'CLARIFICATION' ? 'PHOENIX · ACLARACIÓN' : 'NEMOTRON';
+      appendChat('assistant', result.assistant_message, label);
       remember('user', message);
       remember('assistant', result.assistant_message);
-    } else {
+    } else if (result.turn_mode === 'ERROR') {
       const code = result.provider_error?.code ?? result.error ?? 'UNKNOWN_MODEL_ERROR';
-      appendChat('system', `Nemotron no produjo un turno válido (${code}). Phoenix cerró el turno.`, 'SISTEMA');
+      appendChat('system', `Provider fail-closed (${code}). No se construyó ninguna ActionProposal.`, 'SISTEMA');
     }
 
     if (result.turn_mode === 'CHAT') {
       renderChatOnly(result);
+    } else if (result.turn_mode === 'CLARIFICATION') {
+      renderClarification(result);
     } else if (result.turn_mode === 'ERROR') {
       renderProviderFailure(result);
     } else {
@@ -287,8 +535,51 @@ async function runConversation(message) {
     }
   } catch (error) {
     appendChat('system', `La solicitud no produjo un resultado gobernado válido: ${error.message}`, 'SISTEMA');
-    renderFailClosedVisual('El panel no obtuvo una decisión gobernada válida y muestra DENY por defecto.');
+    renderTransportFailureVisual('El panel no obtuvo un resultado gobernado válido. No se construyó ninguna ActionProposal y no hubo dispatch.');
+    resetSingleProposalDetails();
     setStatus(`Solicitud cerrada: ${error.message}`, 'error');
+  } finally {
+    setBusy(false);
+    ui.userMessage.focus();
+  }
+}
+
+async function runPlan(message) {
+  $$('.fixture-button').forEach((button) => button.classList.remove('active'));
+  appendChat('user', message, 'TÚ · PLAN');
+  setBusy(true);
+  setStatus('Nemotron está proponiendo un plan compacto. Phoenix evaluará dependencias, estado y lineage sin ejecutar nada…', 'running');
+
+  try {
+    const response = await fetch('/api/plan', {
+      method: 'POST',
+      headers: { Accept: 'application/json', 'Content-Type': 'application/json' },
+      body: JSON.stringify({ message })
+    });
+    const result = await response.json();
+    if (!response.ok) throw new Error(result.error ?? `HTTP_${response.status}`);
+
+    if (result.state === 'FAIL_CLOSED' || !result.plan) {
+      appendChat('system', `Plan provider fail-closed (${result.provider_error?.code ?? 'NO_PLAN'}). No se ejecutó nada.`, 'SISTEMA');
+      renderPlanFailure(result);
+      return;
+    }
+
+    appendChat('assistant', `Nemotron propuso un plan de ${result.plan.actions?.length ?? 0} pasos. Phoenix lo evaluó sin ejecutar ninguna acción.`, 'NEMOTRON · PLAN');
+    renderPlanResult(result);
+  } catch (error) {
+    showPlanView();
+    setText(ui.sourceMetric, 'LIVE PLAN');
+    setText(ui.model, '—');
+    setText(ui.risk, 'R3');
+    setText(ui.decision, 'PROVIDER FAIL-CLOSED');
+    ui.decisionMetric.className = 'metric panel decision-metric provider-fail';
+    setText(ui.planDecisionTitle, 'PROVIDER FAIL-CLOSED');
+    setText(ui.planDecisionCopy, 'El panel no obtuvo un resultado de plan gobernado válido. No hubo ejecución.');
+    setText(ui.planReasonCodes, error.message);
+    setText(ui.planDispatch, 'NO');
+    appendChat('system', `La solicitud de plan se cerró: ${error.message}`, 'SISTEMA');
+    setStatus(`Plan cerrado: ${error.message}`, 'error');
   } finally {
     setBusy(false);
     ui.userMessage.focus();
@@ -306,7 +597,7 @@ async function runFixture(button) {
     if (!response.ok) throw new Error(result.error ?? `HTTP_${response.status}`);
     renderResult(result);
   } catch (error) {
-    renderFailClosedVisual('El fixture no produjo una decisión válida.');
+    renderTransportFailureVisual('El fixture no produjo una decisión válida.');
     setStatus(`Fixture cerrado: ${error.message}`, 'error');
   } finally {
     setBusy(false);
@@ -321,11 +612,23 @@ ui.chatForm.addEventListener('submit', (event) => {
   runConversation(message);
 });
 
+ui.planButton.addEventListener('click', () => {
+  const message = ui.userMessage.value.trim();
+  if (!message) return;
+  ui.userMessage.value = '';
+  runPlan(message);
+});
+
 for (const button of $$('.quick-prompts button')) {
   button.addEventListener('click', () => {
     ui.userMessage.value = button.dataset.prompt ?? '';
     ui.userMessage.focus();
-    setStatus('Ejemplo cargado. Puedes editarlo antes de enviarlo.', '');
+    setStatus(
+      button.dataset.planExample === 'true'
+        ? 'Demo multiacción cargada. Pulsa “Evaluar plan” para enviarla por el Plan Gate.'
+        : 'Ejemplo cargado. Puedes editarlo antes de enviarlo.',
+      ''
+    );
   });
 }
 

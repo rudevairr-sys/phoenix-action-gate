@@ -85,17 +85,21 @@ export async function runConversationPipeline(userMessage, options = {}) {
     const {
       mode,
       assistant_message: assistantMessage,
+      assistant_message_source: assistantMessageSource,
+      clarification_reason: clarificationReason,
       proposal,
       provider
     } = await requestConversationalProposal(userMessage, options);
 
-    if (mode === 'CHAT') {
+    if (mode === 'CHAT' || mode === 'CLARIFICATION') {
       return {
         ok: true,
-        state: 'CHAT_ONLY',
-        turn_mode: 'CHAT',
+        state: mode === 'CHAT' ? 'CHAT_ONLY' : 'CLARIFICATION_REQUIRED',
+        turn_mode: mode,
         user_message: userMessage.trim(),
         assistant_message: assistantMessage,
+        assistant_message_source: assistantMessageSource,
+        clarification_reason: clarificationReason ?? null,
         provider,
         proposal: null,
         decision: null,
@@ -111,6 +115,7 @@ export async function runConversationPipeline(userMessage, options = {}) {
       turn_mode: 'ACTION_PROPOSAL',
       user_message: userMessage.trim(),
       assistant_message: assistantMessage,
+      assistant_message_source: assistantMessageSource,
       provider,
       proposal,
       decision,
@@ -121,7 +126,8 @@ export async function runConversationPipeline(userMessage, options = {}) {
     if (!(error instanceof NebiusProposalError)) throw error;
     return failClosedResult(error, {
       user_message: typeof userMessage === 'string' ? userMessage.trim().slice(0, 2000) : null,
-      assistant_message: null
+      assistant_message: null,
+      assistant_message_source: null
     });
   }
 }

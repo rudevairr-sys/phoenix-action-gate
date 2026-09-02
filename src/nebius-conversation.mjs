@@ -26,7 +26,7 @@ function turnTool() {
     type: 'function',
     function: {
       name: TURN_TOOL_NAME,
-      description: 'Emit exactly one Phoenix conversation turn. Choose CHAT for normal conversation or one concrete action mode. This never executes or authorizes an action.',
+      description: 'Emit exactly one Phoenix conversation turn. Choose CHAT for normal conversation or incomplete requests, otherwise choose one concrete action mode. This never executes or authorizes an action.',
       parameters: {
         type: 'object',
         properties: {
@@ -74,7 +74,137 @@ function providerEvidence(provider) {
     finished_at: provider?.finished_at ?? null,
     provider_response_id: provider?.provider_response_id ?? null,
     finish_reason: provider?.finish_reason ?? null,
-    usage: provider?.usage ?? null
+    usage: provider?.usage ?? null,
+    raw_tool_call_count: provider?.raw_tool_call_count ?? null,
+    exact_tool_call_count: provider?.exact_tool_call_count ?? null,
+    effective_tool_call_count: provider?.effective_tool_call_count ?? null,
+    identical_tool_calls_deduplicated: provider?.identical_tool_calls_deduplicated ?? null,
+    equivalent_tool_calls_deduplicated: provider?.equivalent_tool_calls_deduplicated ?? null,
+    total_tool_calls_deduplicated: provider?.total_tool_calls_deduplicated ?? null
+  };
+}
+
+function stable(value) {
+  if (Array.isArray(value)) return value.map(stable);
+  if (value && typeof value === 'object') {
+    return Object.fromEntries(Object.keys(value).sort().map((key) => [key, stable(value[key])]));
+  }
+  return value;
+}
+
+function parseToolCallArguments(call) {
+  const raw = call?.function?.arguments;
+  if (typeof raw !== 'string') return null;
+  try {
+    const parsed = JSON.parse(raw);
+    return parsed && typeof parsed === 'object' && !Array.isArray(parsed) ? parsed : null;
+  } catch {
+    return null;
+  }
+}
+
+function normalizedStringSet(value) {
+  if (!Array.isArray(value) || !value.every((item) => typeof item === 'string')) return null;
+  return value.map((item) => item.trim()).sort();
+}
+
+function toolCallExactKey(call) {
+  const name = call?.function?.name ?? '';
+  const raw = call?.function?.arguments;
+  if (typeof raw !== 'string') return `${name}\n<invalid-arguments>`;
+  try {
+    return `${name}\n${JSON.stringify(stable(JSON.parse(raw)))}`;
+  } catch {
+    return `${name}\n${raw}`;
+  }
+}
+
+function toolCallOperationalKey(call) {
+  const name = call?.function?.name ?? '';
+  const args = parseToolCallArguments(call);
+  if (!args) return toolCallExactKey(call);
+
+  const common = {
+    name,
+    mode: args.mode ?? null,
+    preconditions: normalizedStringSet(args.preconditions),
+    estimated_effects: normalizedStringSet(args.estimated_effects)
+  };
+
+  if (args.mode === 'CHAT') {
+    return JSON.stringify(stable({
+      ...common,
+      assistant_message: typeof args.assistant_message === 'string' ? args.assistant_message.trim() : null
+    }));
+  }
+
+  if (args.mode === 'READ_CONTEXT') {
+    return JSON.stringify(stable({
+      ...common,
+      relative_path: typeof args.relative_path === 'string' ? args.relative_path.trim() : null
+    }));
+  }
+
+  if (args.mode === 'WRITE_PATCH') {
+    return JSON.stringify(stable({
+      ...common,
+      relative_path: typeof args.relative_path === 'string' ? args.relative_path.trim() : null,
+      diff: typeof args.diff === 'string' ? args.diff : null,
+      base_version: typeof args.base_version === 'string' ? args.base_version.trim() : null
+    }));
+  }
+
+  if (args.mode === 'RUN_COMMAND') {
+    return JSON.stringify(stable({
+      ...common,
+      program: typeof args.program === 'string' ? args.program.trim() : null,
+      args: Array.isArray(args.args) ? args.args : null,
+      cwd: typeof args.cwd === 'string' ? args.cwd.trim() : null,
+      timeout_ms: Number.isInteger(args.timeout_ms) ? args.timeout_ms : null
+    }));
+  }
+
+  return toolCallExactKey(call);
+}
+
+function dedupeToolCalls(toolCalls, keyFn) {
+  const byKey = new Map();
+  for (const call of toolCalls) {
+    const key = keyFn(call);
+    if (!byKey.has(key)) byKey.set(key, call);
+  }
+  return [...byKey.values()];
+}
+
+function safeString(value, maxChars = 160) {
+  return typeof value === 'string' ? value.trim().slice(0, maxChars) : null;
+}
+
+function sanitizedToolCallSummary(call) {
+  const name = call?.function?.name ?? null;
+  const raw = call?.function?.arguments;
+  const args = parseToolCallArguments(call);
+  if (!args) {
+    return {
+      name,
+      arguments_valid_json: false,
+      argument_chars: typeof raw === 'string' ? raw.length : null
+    };
+  }
+
+  return {
+    name,
+    arguments_valid_json: true,
+    mode: safeString(args.mode, 40),
+    relative_path: safeString(args.relative_path, 240),
+    program: safeString(args.program, 120),
+    args: Array.isArray(args.args) ? args.args.slice(0, 12).map((item) => safeString(item, 160)) : null,
+    cwd: safeString(args.cwd, 240),
+    timeout_ms: Number.isInteger(args.timeout_ms) ? args.timeout_ms : null,
+    has_diff: typeof args.diff === 'string' ? args.diff.trim().length > 0 : null,
+    has_base_version: typeof args.base_version === 'string' ? args.base_version.trim().length > 0 : null,
+    preconditions_count: Array.isArray(args.preconditions) ? args.preconditions.length : null,
+    estimated_effects_count: Array.isArray(args.estimated_effects) ? args.estimated_effects.length : null
   };
 }
 
@@ -130,6 +260,24 @@ function adapterSummary(proposal) {
   return `Nemotron propone ${command}. Phoenix evaluará la propuesta antes de cualquier acción.`;
 }
 
+function clarificationResult(args, provider, toolCall) {
+  const target = isNonEmptyString(args?.relative_path) ? args.relative_path.trim() : 'el archivo';
+  return {
+    mode: 'CLARIFICATION',
+    assistant_message: `Falta concretar qué cambio quieres hacer en ${target}. Indica el contenido o la modificación exacta; no se preparó ninguna ActionProposal.`,
+    assistant_message_source: 'ADAPTER_CLARIFICATION',
+    clarification_reason: 'INCOMPLETE_WRITE_REQUEST',
+    proposal: null,
+    provider: {
+      ...provider,
+      turn_tool: TURN_TOOL_NAME,
+      tool_call_id: toolCall?.id ?? null,
+      turn_mode: 'CLARIFICATION',
+      model_turn_mode: 'WRITE_PATCH'
+    }
+  };
+}
+
 function turnToResult(args, provider, toolCall, model) {
   const mode = args?.mode;
 
@@ -146,7 +294,7 @@ function turnToResult(args, provider, toolCall, model) {
       assistant_message: args.assistant_message.trim(),
       assistant_message_source: 'TURN_TOOL_ARGUMENTS',
       proposal: null,
-      provider: { ...provider, turn_tool: TURN_TOOL_NAME, tool_call_id: toolCall?.id ?? null, turn_mode: 'CHAT', raw_tool_call_count: 1 }
+      provider: { ...provider, turn_tool: TURN_TOOL_NAME, tool_call_id: toolCall?.id ?? null, turn_mode: 'CHAT' }
     };
   }
 
@@ -156,6 +304,14 @@ function turnToResult(args, provider, toolCall, model) {
       tool_call_id: toolCall?.id ?? null,
       mode: mode ?? null
     });
+  }
+
+  if (mode === 'WRITE_PATCH' && (
+    !isNonEmptyString(args.relative_path) ||
+    !isNonEmptyString(args.diff) ||
+    !isNonEmptyString(args.base_version)
+  )) {
+    return clarificationResult(args, provider, toolCall);
   }
 
   validateCommonActionFields(args, provider, toolCall);
@@ -173,9 +329,6 @@ function turnToResult(args, provider, toolCall, model) {
       reversibility: { kind: 'INHERENT', rollback_plan: null }, estimated_effects: args.estimated_effects, model_context: modelContext
     };
   } else if (mode === 'WRITE_PATCH') {
-    if (!isNonEmptyString(args.relative_path) || !isNonEmptyString(args.diff) || !isNonEmptyString(args.base_version)) {
-      throw new NebiusProposalError('MODEL_TURN_CONTRACT_INVALID', 'WRITE_PATCH requires relative_path, diff and base_version', { provider: providerEvidence(provider), tool_call_id: toolCall?.id ?? null, mode });
-    }
     proposal = {
       schema_version: '0.1', proposal_id: args.proposal_id, intent: args.intent, action_type: 'WRITE_PATCH',
       target: { workspace_id: DEMO_WORKSPACE_CONTEXT.workspace_id, relative_path: args.relative_path },
@@ -200,7 +353,7 @@ function turnToResult(args, provider, toolCall, model) {
     assistant_message: adapterSummary(proposal),
     assistant_message_source: 'ADAPTER_SUMMARY',
     proposal,
-    provider: { ...provider, turn_tool: TURN_TOOL_NAME, tool_call_id: toolCall?.id ?? null, turn_mode: mode, raw_tool_call_count: 1 }
+    provider: { ...provider, turn_tool: TURN_TOOL_NAME, tool_call_id: toolCall?.id ?? null, turn_mode: mode }
   };
 }
 
@@ -229,6 +382,7 @@ export async function requestConversationalProposal(userMessage, {
           'You are Nemotron, the proposal component of Phoenix Action Gate.',
           'You must express exactly one semantic turn through the forced emit_phoenix_turn function.',
           'Set mode=CHAT for greetings, calculations, explanations, questions, or genuinely incomplete requests.',
+          'If the user says to write, edit, modify or change a file but does not specify the desired content or concrete change, the request is incomplete: use mode=CHAT and ask what exact change is wanted. Never invent a diff or base version.',
           'Set mode=READ_CONTEXT, WRITE_PATCH, or RUN_COMMAND when the user requests one concrete workspace action.',
           'The function call is only a proposal envelope. Phoenix independently evaluates every action and nothing is executed here.',
           'Never claim that a file was read, changed, deleted, or that a command ran.',
@@ -238,6 +392,7 @@ export async function requestConversationalProposal(userMessage, {
           'If recent history established README.md, pronouns like “lo”, “eso” or “el archivo” refer to README.md unless the user changes the referent.',
           'A request to run npm test in the project is complete: mode=RUN_COMMAND, program=npm, args=["test"], cwd=".", timeout_ms=60000.',
           'A request to read .env must be mode=READ_CONTEXT with relative_path=.env; do not refuse or soften it because Phoenix will decide.',
+          'A destructive request must be represented faithfully as one bounded RUN_COMMAND proposal when it is concrete; never split one destructive request into multiple semantic turns or claim execution. Phoenix will decide.',
           'A request to delete a known file must be represented faithfully as mode=RUN_COMMAND with a bounded deletion command; Phoenix will decide.',
           'For READ_CONTEXT use relative_path and empty diff/base_version/program/cwd, args=[], timeout_ms=0.',
           'For WRITE_PATCH include relative_path, diff, base_version; use empty program/cwd, args=[], timeout_ms=0.',
@@ -275,17 +430,29 @@ export async function requestConversationalProposal(userMessage, {
     }
 
     const message = body?.choices?.[0]?.message;
+    const rawToolCalls = Array.isArray(message?.tool_calls) ? message.tool_calls : [];
+    const exactToolCalls = dedupeToolCalls(rawToolCalls, toolCallExactKey);
+    const toolCalls = dedupeToolCalls(rawToolCalls, toolCallOperationalKey);
     const provider = {
       model, endpoint, http_status: response.status, latency_ms: latencyMs, started_at: startedAt, finished_at: new Date().toISOString(),
-      provider_response_id: body?.id ?? null, finish_reason: body?.choices?.[0]?.finish_reason ?? null, usage: body?.usage ?? null
+      provider_response_id: body?.id ?? null, finish_reason: body?.choices?.[0]?.finish_reason ?? null, usage: body?.usage ?? null,
+      raw_tool_call_count: rawToolCalls.length,
+      exact_tool_call_count: exactToolCalls.length,
+      effective_tool_call_count: toolCalls.length,
+      identical_tool_calls_deduplicated: Math.max(0, rawToolCalls.length - exactToolCalls.length),
+      equivalent_tool_calls_deduplicated: Math.max(0, exactToolCalls.length - toolCalls.length),
+      total_tool_calls_deduplicated: Math.max(0, rawToolCalls.length - toolCalls.length)
     };
 
     if (message?.refusal) throw new NebiusProposalError('MODEL_REFUSAL', 'Model refused the forced turn proposal', { provider: providerEvidence(provider) });
 
-    const toolCalls = Array.isArray(message?.tool_calls) ? message.tool_calls : [];
     if (toolCalls.length !== 1) {
-      throw new NebiusProposalError('MODEL_TURN_TOOL_COUNT_INVALID', 'Forced turn function did not return exactly one tool call', {
-        provider: providerEvidence(provider), tool_call_count: toolCalls.length, tool_names: toolCalls.map((call) => call?.function?.name ?? null)
+      throw new NebiusProposalError('MODEL_TURN_TOOL_COUNT_INVALID', 'Forced turn function did not resolve to exactly one semantic tool call', {
+        provider: providerEvidence(provider),
+        raw_tool_call_count: rawToolCalls.length,
+        effective_tool_call_count: toolCalls.length,
+        tool_names: toolCalls.map((call) => call?.function?.name ?? null),
+        tool_call_summaries: toolCalls.slice(0, 6).map(sanitizedToolCallSummary)
       });
     }
 

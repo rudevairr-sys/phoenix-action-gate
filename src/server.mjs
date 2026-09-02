@@ -5,6 +5,8 @@ import { fileURLToPath, pathToFileURL } from 'node:url';
 import { evaluateActionProposal, POLICY_VERSION } from './gate.mjs';
 import { DEFAULT_MODEL } from './nebius.mjs';
 import { runConversationPipeline, runReadContextPipeline } from './pipeline.mjs';
+import { PLAN_POLICY_VERSION } from './plan-gate.mjs';
+import { runLivePlanPipeline } from './plan-pipeline.mjs';
 
 const WEB_ROOT = fileURLToPath(new URL('../web/', import.meta.url));
 const FIXTURE_ROOT = fileURLToPath(new URL('../fixtures/', import.meta.url));
@@ -107,6 +109,11 @@ function normalizeHistory(history) {
   return normalized;
 }
 
+function readBoundedMessage(body) {
+  const message = typeof body.message === 'string' ? body.message.trim() : '';
+  return message && message.length <= 2000 ? message : null;
+}
+
 async function readFixture(name) {
   const filename = FIXTURE_SCENARIOS.get(name);
   if (!filename) return null;
@@ -132,7 +139,10 @@ async function serveStatic(pathname, response) {
   response.end(body);
 }
 
-export function createPanelServer({ runConversation = runConversationPipeline } = {}) {
+export function createPanelServer({
+  runConversation = runConversationPipeline,
+  runPlan = runLivePlanPipeline
+} = {}) {
   return createServer(async (request, response) => {
     try {
       const url = new URL(request.url ?? '/', 'http://127.0.0.1');
@@ -142,8 +152,10 @@ export function createPanelServer({ runConversation = runConversationPipeline } 
           ok: true,
           product: 'Phoenix Action Gate',
           policy_version: POLICY_VERSION,
+          plan_policy_version: PLAN_POLICY_VERSION,
           default_model: DEFAULT_MODEL,
           chat_history_limit: MAX_HISTORY_ITEMS,
+          live_plan_available: true,
           dispatch_available: false
         });
         return;
@@ -151,8 +163,8 @@ export function createPanelServer({ runConversation = runConversationPipeline } 
 
       if (request.method === 'POST' && url.pathname === '/api/chat') {
         const body = await readJsonBody(request);
-        const message = typeof body.message === 'string' ? body.message.trim() : '';
-        if (!message || message.length > 2000) {
+        const message = readBoundedMessage(body);
+        if (!message) {
           sendJson(response, 400, {
             ok: false,
             state: 'FAIL_CLOSED',
@@ -166,6 +178,27 @@ export function createPanelServer({ runConversation = runConversationPipeline } 
         const result = await runConversation(message, { history });
         sendJson(response, 200, {
           source: 'LIVE_NEBIUS_NEMOTRON',
+          ...result
+        });
+        return;
+      }
+
+      if (request.method === 'POST' && url.pathname === '/api/plan') {
+        const body = await readJsonBody(request);
+        const message = readBoundedMessage(body);
+        if (!message) {
+          sendJson(response, 400, {
+            ok: false,
+            state: 'FAIL_CLOSED',
+            error: 'USER_MESSAGE_INVALID',
+            dispatch_attempted: false
+          });
+          return;
+        }
+
+        const result = await runPlan(message);
+        sendJson(response, 200, {
+          source: 'LIVE_NEBIUS_NEMOTRON_PLAN',
           ...result
         });
         return;

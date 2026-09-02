@@ -1,7 +1,7 @@
 {
   "schema_version": "1.0.0",
   "project": "Phoenix Action Gate",
-  "updated_at": "2026-09-01T15:26:00Z",
+  "updated_at": "2026-09-02T00:27:00Z",
   "hackathon": {
     "name": "Nebius x NVIDIA Global AI Hackathon",
     "rules_source": "https://nebiusglobalaihackathon.devpost.com/rules",
@@ -11,7 +11,8 @@
   "mavo": {
     "variant": "phoenix-safe-3",
     "state": "QUIESCENT",
-    "runtime_profile": "tool-assisted"
+    "runtime_profile": "tool-assisted",
+    "reason": "The panel/adapter validation block has satisfied its declared acceptance criteria: 58/58 regression, clean single-submit .env secret-boundary denial, destructive-command denial, provider-vs-policy separation, live plan-lineage view, and no dispatch."
   },
   "sources": [
     {
@@ -50,18 +51,25 @@
       "reason": "Referencia documental del modelo; disponibilidad y uso real observados en Token Factory."
     },
     {
-      "id": "legacy-mavo-neuron-local",
-      "ref": "user-provided mavo_neuron_local (2).zip inspected 2026-09-01",
-      "license": "unknown/private user-provided source; not for publication",
+      "id": "phoenix-neuron-reference",
+      "ref": "01_MESA_PRINCIPAL/PHOENIX_NEURON_LAB plus user-provided mavo_neuron_local (2).zip",
+      "license": "private/internal reference; not for publication or code transfer without a separate gate",
       "disposition": "reference_only",
-      "reason": "Antecedente histórico con ideas de causalidad, delta, veto y separación de planos. No se copió código ni se incorporó al runtime de Action Gate."
+      "reason": "Antecedente conceptual para model-governance, fail-closed, causal/state and traceability ideas. Phoenix Action Gate is not a canonical Phoenix Neuron integration."
+    },
+    {
+      "id": "phoenix-strategy-review",
+      "ref": "PHOENIX_OPPORTUNITY_RADAR/EVIDENCE/PHOENIX_PRODUCT_STRATEGY_REVIEW_2026-09-01.md and PHOENIX_PRODUCT_STRATEGY_REVIEW/STRATEGY_REVIEW_V1_2026-09-01.md",
+      "license": "private internal strategy source; not for publication verbatim",
+      "disposition": "reference_only",
+      "reason": "Governs the selective-embedding boundary: R&D kernel plus components that win product-specific trials against competent small baselines."
     },
     {
       "id": "sion-live-workspace",
-      "ref": "SION_TALLER_RUST_v0.7.0 / 01_MESA_PRINCIPAL/phoenix-action-gate branch review/g2-mvp-core; checkpoints through 6e0920a plus validated compact multi-action worktree",
+      "ref": "SION_TALLER_RUST_v0.7.0 / 01_MESA_PRINCIPAL/phoenix-action-gate / review/g2-mvp-core / validated panel cut",
       "license": "local governed workspace; not for publication",
       "disposition": "used",
-      "reason": "Workspace vivo; single-turn, gate, panel, Trials 001-003 y compact-plan/0.2 validados. Regresión 52/52 y un plan multiacción LIVE con discriminante de lineage observados sin dispatch."
+      "reason": "Workspace vivo. El corte actual tiene regresión 58/58 y rutas LIVE de secret boundary, destructive command, provider-boundary y plan-lineage observadas sin dispatch."
     }
   ],
   "claims": [
@@ -82,10 +90,11 @@
       "text": "Nebius Token Factory y nvidia/Nemotron-3_5-Lightning fueron usados en runtime para producir propuestas gobernables sin dispatch.",
       "state": "RUNTIME_OBSERVED",
       "evidence_refs": [
-        "cc97dd1",
         "docs/04-runtime/evidence/G1_ACTION_PROPOSAL_2026-08-31.json",
         "docs/04-runtime/evidence/G2_LIVE_EMIT_TURN_2026-09-01.json",
-        "docs/04-runtime/evidence/G2_LIVE_PLAN_SUCCESS_001_2026-09-01.json"
+        "docs/04-runtime/evidence/G2_LIVE_PLAN_SUCCESS_001_2026-09-01.json",
+        "docs/04-runtime/evidence/G2_PANEL_RUNTIME_OBSERVATIONS_2026-09-01.json",
+        "docs/04-runtime/evidence/G2_PANEL_SECRET_BOUNDARY_2026-09-02.json"
       ]
     },
     {
@@ -93,28 +102,60 @@
       "text": "Una llamada real de Nemotron puede alimentar el gate determinista y producir una decisión trazable sin dispatch.",
       "state": "RUNTIME_OBSERVED",
       "evidence_refs": [
-        "6d02f21",
         "docs/04-runtime/evidence/G2_E2E_NEMOTRON_GATE_2026-08-31.json",
-        "docs/04-runtime/evidence/G2_LIVE_EMIT_TURN_2026-09-01.json"
+        "docs/04-runtime/evidence/G2_LIVE_EMIT_TURN_2026-09-01.json",
+        "docs/04-runtime/evidence/G2_PANEL_RUNTIME_OBSERVATIONS_2026-09-01.json",
+        "docs/04-runtime/evidence/G2_PANEL_SECRET_BOUNDARY_2026-09-02.json"
       ]
     },
     {
-      "id": "C-G2-SINGLE-TURN",
-      "text": "La frontera emit_phoenix_turn fue observada LIVE para READ_CONTEXT seguro, READ_CONTEXT sobre .env y RUN_COMMAND npm test, con decisiones R0/PREPARED, R3/DENY y R1/PREPARED respectivamente y sin dispatch.",
+      "id": "C-G2-DESTRUCTIVE-PANEL",
+      "text": "En el panel actual, una propuesta LIVE de Nemotron para rm -f README.md alcanzó Phoenix como RUN_COMMAND y fue denegada R3/DESTRUCTIVE_COMMAND sin dispatch.",
       "state": "RUNTIME_OBSERVED",
-      "evidence_refs": ["docs/04-runtime/evidence/G2_LIVE_EMIT_TURN_2026-09-01.json"]
+      "evidence_refs": ["docs/04-runtime/evidence/G2_PANEL_RUNTIME_OBSERVATIONS_2026-09-01.json"]
     },
     {
-      "id": "C-G6-REGRESSION",
-      "text": "La regresión local ampliada pasa 52/52 tests.",
+      "id": "C-G2-SECRET-PANEL",
+      "text": "En el panel actual, una propuesta LIVE de Nemotron para leer .env alcanzó Phoenix como READ_CONTEXT y fue denegada R3/SECRET_BOUNDARY sin dispatch.",
+      "state": "RUNTIME_OBSERVED",
+      "evidence_refs": ["docs/04-runtime/evidence/G2_PANEL_SECRET_BOUNDARY_2026-09-02.json"]
+    },
+    {
+      "id": "C-G2-PROVIDER-BOUNDARY-PANEL",
+      "text": "El panel distingue visualmente un provider fail-closed sin ActionProposal de un Phoenix policy DENY sobre una propuesta válida.",
+      "state": "RUNTIME_OBSERVED",
+      "evidence_refs": [
+        "docs/04-runtime/evidence/G2_PANEL_RUNTIME_OBSERVATIONS_2026-09-01.json",
+        "docs/04-runtime/evidence/G2_PANEL_DESTRUCTIVE_SINGLE_TURN_COUNTEREXAMPLE_001_2026-09-01.json",
+        "docs/04-runtime/evidence/G2_PANEL_SECRET_BOUNDARY_2026-09-02.json"
+      ]
+    },
+    {
+      "id": "C-G6-REGRESSION-PREVIOUS-CUT",
+      "text": "El run completo inmediatamente anterior al cierre final pasó 56/56 tests.",
       "state": "TEST_EXECUTED",
-      "evidence_refs": ["docs/04-runtime/evidence/G2_SION_TESTS_2026-09-01_COMPACT_PLAN.json"]
+      "evidence_refs": ["docs/04-runtime/evidence/G2_SION_TESTS_2026-09-01_PANEL_VIEW.json"]
+    },
+    {
+      "id": "C-G6-CURRENT-REGRESSION",
+      "text": "El corte actual pasa el suite completo de 58 tests, incluyendo equivalencia operacional de tool calls y fail-closed de llamadas materialmente distintas.",
+      "state": "TEST_EXECUTED",
+      "evidence_refs": ["docs/04-runtime/evidence/G2_SION_TESTS_2026-09-02_PANEL_FINAL.json"]
     },
     {
       "id": "C-G6-LIVE-MULTIACTION",
-      "text": "En un plan multiacción LIVE generado por Nemotron, el baseline state-aware quedó en REVIEW y Phoenix quedó en DENY al detectar EVIDENCE_LINEAGE_INVALIDATED.",
+      "text": "En planes multiacción LIVE generados por Nemotron, el baseline state-aware quedó en REVIEW y Phoenix quedó en DENY al detectar EVIDENCE_LINEAGE_INVALIDATED.",
       "state": "RUNTIME_OBSERVED",
-      "evidence_refs": ["docs/04-runtime/evidence/G2_LIVE_PLAN_SUCCESS_001_2026-09-01.json"]
+      "evidence_refs": [
+        "docs/04-runtime/evidence/G2_LIVE_PLAN_SUCCESS_001_2026-09-01.json",
+        "docs/04-runtime/evidence/G2_PANEL_RUNTIME_OBSERVATIONS_2026-09-01.json"
+      ]
+    },
+    {
+      "id": "C-G5-PANEL-LINEAGE",
+      "text": "El panel local muestra un plan LIVE con baseline REVIEW, Phoenix DENY, una divergencia y el lineage conflict expected v2 / observed v1 / invalidated by s3.",
+      "state": "RUNTIME_OBSERVED",
+      "evidence_refs": ["docs/04-runtime/evidence/G2_PANEL_RUNTIME_OBSERVATIONS_2026-09-01.json"]
     },
     {
       "id": "C-H-PHX-05-TRIAL-001",
@@ -138,13 +179,19 @@
       "id": "C-H-PHX-05-GENERAL",
       "text": "Phoenix Action Gate supera de forma general a gates competentes.",
       "state": "INSUFFICIENT_EVIDENCE",
-      "evidence_refs": ["Trials 002/003 y un caso LIVE favorables bajo límites declarados; no autorizan superioridad general"]
+      "evidence_refs": ["Bounded fixtures and live runs support a narrow discriminant, not general superiority"]
+    },
+    {
+      "id": "C-PHOENIX-NEURON-INTEGRATION",
+      "text": "Phoenix Action Gate is canonically integrated with or powered by Phoenix Neuron.",
+      "state": "INSUFFICIENT_EVIDENCE",
+      "evidence_refs": ["Phoenix Neuron remains reference_only for this project"]
     },
     {
       "id": "C-MVP-PUBLIC",
-      "text": "Phoenix Action Gate dispone de un MVP público reproducible completo.",
+      "text": "Phoenix Action Gate dispone de un MVP público reproducible completo desde clon limpio.",
       "state": "INSUFFICIENT_EVIDENCE",
-      "evidence_refs": []
+      "evidence_refs": ["G7 pending"]
     }
   ],
   "integrations": [
@@ -154,27 +201,66 @@
       "centrality": "core",
       "required": true,
       "evidence_refs": [
-        "cc97dd1",
-        "6d02f21",
         "docs/04-runtime/evidence/G2_E2E_NEMOTRON_GATE_2026-08-31.json",
         "docs/04-runtime/evidence/G2_LIVE_EMIT_TURN_2026-09-01.json",
-        "docs/04-runtime/evidence/G2_LIVE_PLAN_SUCCESS_001_2026-09-01.json"
+        "docs/04-runtime/evidence/G2_LIVE_PLAN_SUCCESS_001_2026-09-01.json",
+        "docs/04-runtime/evidence/G2_PANEL_RUNTIME_OBSERVATIONS_2026-09-01.json",
+        "docs/04-runtime/evidence/G2_PANEL_SECRET_BOUNDARY_2026-09-02.json"
       ]
     }
   ],
   "gates": [
-    {"id":"G0","state":"WARN","reason":"Reglas oficiales revalidadas; discrepancia menor de fecha de judging registrada con prevalencia de Official Rules."},
-    {"id":"G1","state":"PASS","reason":"Integración obligatoria Nebius/NVIDIA observada y versionada con evidencia sanitizada."},
-    {"id":"G2","state":"PASS","reason":"Gate individual, pipeline live, single-turn y contrato compacto multiacción existen; regresión actual 52/52."},
-    {"id":"G3","state":"WARN","reason":"Diferenciación falsable observada en fixtures y un plan LIVE; narrativa pública y replicación adicional siguen acotadas."},
-    {"id":"G4","state":"WARN","reason":"Contratos y políticas existen; el contrato plan-level incluye estado y lineage y permanece versionado como experimental."},
-    {"id":"G5","state":"WARN","reason":"Panel local single-action existe; el resultado multiacción LIVE aún no está integrado visualmente en el panel."},
-    {"id":"G6","state":"PASS","reason":"Diferenciación acotada demostrada: Trials 002/003 pasan frente a baselines declarados y un plan multiacción LIVE generado por Nemotron produjo baseline REVIEW frente a Phoenix DENY por lineage invalidation. No implica superioridad general."},
-    {"id":"G7","state":"PENDING","reason":"Clon limpio, publicación del corte, tamper evidence y reproducción pública pendientes."},
-    {"id":"G8","state":"PENDING","reason":"Entrega y submission no autorizados."}
+    {
+      "id": "G0",
+      "state": "WARN",
+      "reason": "Reglas oficiales revalidadas previamente; repetir preflight antes de submission."
+    },
+    {
+      "id": "G1",
+      "state": "PASS",
+      "reason": "Integración Nebius/NVIDIA observada en runtime con evidencia sanitizada."
+    },
+    {
+      "id": "G2",
+      "state": "PASS",
+      "reason": "Gate individual, pipeline LIVE, compact plan y bloque panel/adaptador están implementados; el corte actual pasa 58/58 y mantiene dispatch deshabilitado."
+    },
+    {
+      "id": "G3",
+      "state": "WARN",
+      "reason": "Diferenciación acotada observada frente a baselines declarados; evitar file-gate perception trap y no convertirla en superioridad general."
+    },
+    {
+      "id": "G4",
+      "state": "WARN",
+      "reason": "Contratos y políticas existen; receipt/tamper binding visible sigue siendo brecha candidata no validada."
+    },
+    {
+      "id": "G5",
+      "state": "PASS",
+      "reason": "Panel actual observado LIVE con provider-vs-policy distinction, destructive denial, secret-boundary denial y plan-lineage divergence; regresión final 58/58."
+    },
+    {
+      "id": "G6",
+      "state": "PASS",
+      "reason": "Trials 002/003 y runs LIVE muestran baseline REVIEW vs Phoenix DENY por stale-state/lineage bajo límites declarados. No implica superioridad general."
+    },
+    {
+      "id": "G7",
+      "state": "PENDING",
+      "reason": "Clon limpio, publicación del corte, tamper evidence y reproducción pública pendientes."
+    },
+    {
+      "id": "G8",
+      "state": "PENDING",
+      "reason": "Entrega y submission no autorizados."
+    }
   ],
   "decision": {
     "status": "GO_WITH_EVIDENCE_BOUNDARY",
-    "next_step": "Congelar compact-plan/0.2 y Plan Gate; mejorar los dos bordes conversacionales observados y añadir al panel una vista Plan Gate que muestre pasos, baseline vs Phoenix y el lineage conflict. Sin executor ni dispatch; sin push/PR/deploy/submission sin autorización separada."
+    "differentiation_thesis": "Phoenix does not only ask whether an action is allowed; in bounded multi-action plans it can ask whether the action is still justified by current projected state and causally valid evidence.",
+    "observatory_report": "docs/02-research/OBSERVATORIO_DIFFERENTIATION_GAPS_2026-09-01.md",
+    "next_discriminant_candidate": "EVIDENCE_RECEIPT_TAMPER_TRIAL_001",
+    "next_step": "Keep the validated panel block closed. Next, either begin G7 clean-clone/public reproducibility or preregister EVIDENCE_RECEIPT_TAMPER_TRIAL_001 with a competent baseline. No push/PR/deploy/submission without separate human authorization."
   }
 }

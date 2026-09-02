@@ -79,3 +79,23 @@
 **Motivo:** preservar latencia, simplicidad y reproducibilidad. Los contraejemplos se conservan en E-023.
 
 **Estado:** vigente.
+
+## D-013 — Cierre del bloque panel/adaptador por evidencia separada
+
+**Decisión:** promover el bloque de panel/adaptador únicamente después de cumplir simultáneamente la regresión completa y las rutas LIVE previstas, distinguiendo de forma explícita fallos previos a ActionProposal de decisiones de política Phoenix.
+
+**Criterios satisfechos:**
+
+- regresión completa `58/58 PASS`;
+- escritura incompleta sin inventar ActionProposal;
+- provider fail-closed visible y separado de `PHOENIX DENY`;
+- destructivo LIVE `RUN_COMMAND` → `R3/DENY/DESTRUCTIVE_COMMAND`;
+- secreto LIVE `READ_CONTEXT .env` → `R3/DENY/SECRET_BOUNDARY`;
+- Plan Gate LIVE con baseline `REVIEW`, Phoenix `DENY` y `EVIDENCE_LINEAGE_INVALIDATED`;
+- `dispatch_attempted=false` en todas las rutas de aceptación.
+
+**Interpretación del doble envío:** el `MODEL_TURN_TOOL_COUNT_INVALID` observado inmediatamente antes del PASS limpio de `.env` fue atribuido por el operador a haber disparado la interacción dos veces. Se conserva como evidencia de que la UI cierra y etiqueta el fallo previo a propuesta, pero no se clasifica como regresión de la ruta `.env` de un solo envío.
+
+**Límite:** esto valida el corte local del panel y adaptador; no autoriza claims de producción, superioridad general, publicación, dispatch ni integración canónica con Phoenix Neuron.
+
+**Estado:** aceptada para checkpoint local. Sin push, PR, deploy ni submission.
