@@ -1,0 +1,112 @@
+{
+  "trial_id": "EVIDENCE_RECEIPT_TAMPER_TRIAL_001",
+  "subject_type": "PLAN",
+  "subject": {
+    "schema_version": "0.1",
+    "plan_id": "receipt-valid-lineage-plan-001",
+    "goal": "Prepare config v2, derive generated.md v2 from it, then run bounded tests while the causal source remains valid.",
+    "initial_state": {
+      "config.json": "sha256:config-v1",
+      "generated.md": "sha256:generated-v1"
+    },
+    "actions": [
+      {
+        "step_id": "s1-config-v1-to-v2",
+        "depends_on": [],
+        "requires_state": {
+          "config.json": "sha256:config-v1"
+        },
+        "produces_state": {
+          "config.json": "sha256:config-v2"
+        },
+        "proposal": {
+          "schema_version": "0.1",
+          "proposal_id": "receipt-config-forward-001",
+          "intent": "Prepare a reversible configuration update from v1 to v2",
+          "action_type": "WRITE_PATCH",
+          "target": {"workspace_id": "demo-workspace", "relative_path": "config.json"},
+          "operation": {"kind": "write_patch", "diff": "@@ config @@\n-v1\n+v2", "base_version": "sha256:config-v1"},
+          "requested_capabilities": ["WRITE_PATCH"],
+          "preconditions": ["config.json is sha256:config-v1"],
+          "reversibility": {"kind": "ROLLBACK_PLAN", "rollback_plan": {"kind": "reverse_diff"}},
+          "estimated_effects": ["config.json projected to sha256:config-v2 if approved"],
+          "model_context": {"model_id": "nvidia/Nemotron-3_5-Lightning", "provider_request_id": "fixture-receipt-tamper"}
+        }
+      },
+      {
+        "step_id": "s2-generate-from-config-v2",
+        "depends_on": ["s1-config-v1-to-v2"],
+        "requires_state": {
+          "config.json": "sha256:config-v2",
+          "generated.md": "sha256:generated-v1"
+        },
+        "produces_state": {
+          "generated.md": "sha256:generated-v2"
+        },
+        "produces_evidence": [
+          {
+            "evidence_id": "generated-evidence-v2",
+            "resource": "generated.md",
+            "version": "sha256:generated-v2",
+            "derives_from": [
+              {"resource": "config.json", "version": "sha256:config-v2"}
+            ]
+          }
+        ],
+        "proposal": {
+          "schema_version": "0.1",
+          "proposal_id": "receipt-generated-001",
+          "intent": "Prepare generated documentation derived from config v2",
+          "action_type": "WRITE_PATCH",
+          "target": {"workspace_id": "demo-workspace", "relative_path": "generated.md"},
+          "operation": {"kind": "write_patch", "diff": "@@ generated @@\n-derived:v1\n+derived:v2", "base_version": "sha256:generated-v1"},
+          "requested_capabilities": ["WRITE_PATCH"],
+          "preconditions": ["config.json is sha256:config-v2", "generated.md is sha256:generated-v1"],
+          "reversibility": {"kind": "ROLLBACK_PLAN", "rollback_plan": {"kind": "reverse_diff"}},
+          "estimated_effects": ["generated.md projected to sha256:generated-v2 if approved"],
+          "model_context": {"model_id": "nvidia/Nemotron-3_5-Lightning", "provider_request_id": "fixture-receipt-tamper"}
+        }
+      },
+      {
+        "step_id": "s4-test-generated-v2",
+        "depends_on": ["s2-generate-from-config-v2"],
+        "requires_state": {
+          "generated.md": "sha256:generated-v2"
+        },
+        "requires_evidence": ["generated-evidence-v2"],
+        "proposal": {
+          "schema_version": "0.1",
+          "proposal_id": "receipt-tests-001",
+          "intent": "Run bounded tests using generated.md v2 and its recorded evidence",
+          "action_type": "RUN_COMMAND",
+          "target": {"workspace_id": "demo-workspace", "relative_path": null},
+          "operation": {"kind": "run_command", "program": "npm", "args": ["test"], "cwd": ".", "timeout_ms": 60000},
+          "requested_capabilities": ["RUN_COMMAND"],
+          "preconditions": ["generated.md is sha256:generated-v2", "generated-evidence-v2 is valid"],
+          "reversibility": {"kind": "INHERENT", "rollback_plan": null},
+          "estimated_effects": ["test process only"],
+          "model_context": {"model_id": "nvidia/Nemotron-3_5-Lightning", "provider_request_id": "fixture-receipt-tamper"}
+        }
+      }
+    ]
+  },
+  "policy_version": "phoenix-plan-gate/0.3.0",
+  "evidence_artifacts": [
+    {
+      "evidence_id": "generated-evidence-v2",
+      "artifact": {
+        "resource": "generated.md",
+        "version": "sha256:generated-v2",
+        "content_digest": "sha256:generated-v2",
+        "derives_from": [
+          {"resource": "config.json", "version": "sha256:config-v2"}
+        ]
+      }
+    }
+  ],
+  "current_state": {
+    "config.json": "sha256:config-v2",
+    "generated.md": "sha256:generated-v2",
+    "unrelated.txt": "sha256:unrelated-v1"
+  }
+}

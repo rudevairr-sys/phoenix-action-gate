@@ -29,11 +29,12 @@ Estados permitidos: `DOCUMENTED`, `IMPLEMENTED`, `TEST_EXECUTED`, `RUNTIME_OBSER
 | C-029 | El bloque final de panel/adaptador pasa 58/58 tests, incluyendo colapso de tool calls operacionalmente equivalentes y fail-closed de llamadas materialmente distintas | TEST_EXECUTED | E-027; 58 tests, 58 PASS, 0 FAIL, 699.6452 ms |
 | C-030 | En el corte actual del panel, una petición LIVE de lectura de `.env` alcanza Phoenix como `READ_CONTEXT` y termina `R3/DENY/SECRET_BOUNDARY` sin dispatch | RUNTIME_OBSERVED | E-028; provider `chatcmpl-541f7c70`, 4427 ms, 2188 tokens; captura del operador |
 | C-031 | El panel distingue un fallo previo a ActionProposal de un `DENY` de política sobre una propuesta válida | RUNTIME_OBSERVED | E-026 y E-028; el fallo previo se etiqueta `PROVIDER FAIL-CLOSED`, mientras `.env` y destructivo llegan al gate y producen `PHOENIX DENY` |
-| C-032 | Un receipt Phoenix que vincule subject, decisión, política, evidencia y obligaciones causales detectará en T5 una invalidación post-decisión que `snapshot-receipt-baseline/0.1.0` no detecta sin traversal de lineage | HYPOTHESIS | `EVIDENCE_RECEIPT_TAMPER_TRIAL_001_PROTOCOL.md`; preregistrada y no ejecutada. Ningún claim positivo hasta ejecutar B0 y candidato; cualquier claim diferencial requiere después baseline B1 lineage-aware |
+| C-032 | Un receipt Phoenix que vincule subject, decisión, política, evidencia y obligaciones causales detectará en T5 una invalidación post-decisión que `snapshot-receipt-baseline/0.1.0` no detecta sin traversal de lineage | HYPOTHESIS | Protocolo preregistrado. B0 ya está cualificado, pero el candidato Phoenix todavía no ha sido implementado ni ejecutado; cualquier claim diferencial requiere además baseline B1 lineage-aware |
+| C-033 | `snapshot-receipt-baseline/0.1.0` es un baseline competente para Trial 001: detecta alteraciones de decisión, subject, policy artifact, evidencia explícita y receipt contract, conserva controles válidos y deja T5 en `VALID` por no hacer reasoning de estado/lineage | TEST_EXECUTED | E-029 y E-030; 68/68 regresión, todas las expectativas B0 cumplidas, receipt determinista, 0 dependencias, dispatch false |
 
 ## Formulación pública permitida hoy
 
-> Phoenix Action Gate is an experimental governed action pipeline for AI agents. Live NVIDIA Nemotron proposals can be evaluated without dispatch. The current panel distinguishes provider fail-closed from Phoenix policy decisions, blocks secret-like reads and destructive commands, and can display a bounded live multi-action case where a declared state-aware baseline remained at REVIEW while Phoenix changed the plan to DENY after detecting invalidated evidence lineage. Preregistered fixtures separately reproduce stale-state and evidence-lineage discriminants under declared baseline boundaries. A separate tamper-receipt trial has been preregistered but has not been executed and supports no positive claim yet.
+> Phoenix Action Gate is an experimental governed action pipeline for AI agents. Live NVIDIA Nemotron proposals can be evaluated without dispatch. The current panel distinguishes provider fail-closed from Phoenix policy decisions, blocks secret-like reads and destructive commands, and can display a bounded live multi-action case where a declared state-aware baseline remained at REVIEW while Phoenix changed the plan to DENY after detecting invalidated evidence lineage. A tamper-receipt trial is now preregistered and its competent snapshot baseline B0 has been executed successfully; the Phoenix causal receipt candidate has not yet been executed, so no positive receipt/tamper differentiation claim is supported yet.
 
 ## Formulaciones prohibidas hoy
 
@@ -42,6 +43,7 @@ Estados permitidos: `DOCUMENTED`, `IMPLEMENTED`, `TEST_EXECUTED`, `RUNTIME_OBSER
 - “Phoenix ha demostrado superioridad general.”
 - “Lineage de evidencia es exclusivo de Phoenix.”
 - “Phoenix ya detecta receipt tampering mejor que un baseline competente.”
+- “El Tamper Trial ya está corroborado.”
 - “La integración completa está lista para producción.”
 - “Está listo para producción.”
 - “H-PHX-05 está completamente validada end-to-end.”

@@ -117,3 +117,19 @@
 **Protocolo:** `docs/02-research/EVIDENCE_RECEIPT_TAMPER_TRIAL_001_PROTOCOL.md`.
 
 **Estado:** preregistrada / no ejecutada.
+
+## D-015 — Congelar B0 antes del candidato Phoenix
+
+**Decisión:** cualificar y congelar `snapshot-receipt-baseline/0.1.0` antes de implementar `phoenix-evidence-receipt/0.1.0`.
+
+**Resultado:** la regresión completa pasa `68/68`; el probe B0 cumple todas las expectativas preregistradas T0-T7; T5 permanece `VALID` porque B0 verifica integridad snapshot pero declara `current_state_reasoning=false` y `evidence_lineage_reasoning=false`.
+
+**Complejidad observada:** 203 LOC no blancas en el módulo B0, receipt de 724 bytes, 0 dependencias nuevas y mediana local de verificación de 0.14765 ms sobre 250 iteraciones del probe.
+
+**Interpretación:** B0 queda cualificado como baseline competente de snapshot. Esto NO corrobora H-TAMPER-001 porque el candidato Phoenix todavía no existe en este ensayo.
+
+**Siguiente frontera:** implementar el candidato en módulo separado, usando exactamente el mismo corpus y sin modificar `gate.mjs` ni `plan-gate.mjs`. Si aparece divergencia favorable, preregistrar B1 lineage-aware antes de cualquier claim diferencial.
+
+**Evidencia:** E-029 y E-030.
+
+**Estado:** aceptada / baseline congelado.
