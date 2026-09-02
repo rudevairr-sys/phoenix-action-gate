@@ -116,7 +116,7 @@
 
 **Protocolo:** `docs/02-research/EVIDENCE_RECEIPT_TAMPER_TRIAL_001_PROTOCOL.md`.
 
-**Estado:** preregistrada / no ejecutada.
+**Estado:** preregistrada; ejecutada posteriormente bajo D-016.
 
 ## D-015 — Congelar B0 antes del candidato Phoenix
 
@@ -126,10 +126,42 @@
 
 **Complejidad observada:** 203 LOC no blancas en el módulo B0, receipt de 724 bytes, 0 dependencias nuevas y mediana local de verificación de 0.14765 ms sobre 250 iteraciones del probe.
 
-**Interpretación:** B0 queda cualificado como baseline competente de snapshot. Esto NO corrobora H-TAMPER-001 porque el candidato Phoenix todavía no existe en este ensayo.
+**Interpretación:** B0 queda cualificado como baseline competente de snapshot. Esto NO corroboraba H-TAMPER-001 todavía porque el candidato Phoenix aún no había sido ejecutado.
 
 **Siguiente frontera:** implementar el candidato en módulo separado, usando exactamente el mismo corpus y sin modificar `gate.mjs` ni `plan-gate.mjs`. Si aparece divergencia favorable, preregistrar B1 lineage-aware antes de cualquier claim diferencial.
 
 **Evidencia:** E-029 y E-030.
 
 **Estado:** aceptada / baseline congelado.
+
+## D-016 — Congelar Trial 001 como corroboración acotada frente a B0
+
+**Decisión:** registrar `EVIDENCE_RECEIPT_TAMPER_TRIAL_001` como `CORROBORATED_BOUNDED_VS_B0`, sin elevarlo a diferenciador público.
+
+**Evidencia:** regresión `80/80 PASS` y probe B0↔Phoenix con todos los hard gates satisfechos.
+
+**Resultado principal:** la única divergencia de verdict fue T5: B0 `VALID`; Phoenix `INVALID / LINEAGE_BINDING_INVALIDATED`, con `config.json` esperado `sha256:config-v2` y observado `sha256:config-v1`.
+
+**Controles:** T0-T4/T6/T7 coincidieron; T6 permaneció `VALID` en ambos; ambos receipts deterministas; dispatch false.
+
+**Complejidad:** Phoenix 296 LOC frente a B0 203 (`1.4581x`), 872 frente a 724 bytes; mediana verify 0.163 ms frente a 0.15215 ms; 0 dependencias nuevas.
+
+**Límite:** esta decisión solo afirma la diferencia observada frente a B0 y a este corpus. No demuestra superioridad frente a un baseline lineage-aware ni superioridad general.
+
+**Evidencia:** E-031 y E-032.
+
+**Estado:** aceptada / resultado congelado.
+
+## D-017 — Preregistrar B1 antes de implementarlo
+
+**Decisión:** abrir `EVIDENCE_RECEIPT_TAMPER_TRIAL_002` con `lineage-aware-receipt-baseline/0.2.0` como baseline competente de un salto.
+
+**Contrato:** B1 conserva todo B0 y añade binding/verificación de `derives_from` de un salto, comprobación de current state al emitir/verificar, fail-closed si la fuente no está disponible, explicación expected/observed y control de cambios irrelevantes.
+
+**Objetivo adversarial:** comprobar si un baseline pequeño puede igualar T5 y los controles sin reconstruir arquitectura Phoenix. Si lo hace con menor o similar complejidad, receipt/tamper se clasifica `USEFUL_G7_CAPABILITY` pero no diferenciador.
+
+**Fronteras:** candidato Phoenix congelado; T5 congelado; no tocar `gate.mjs`, `plan-gate.mjs`, B0 ni Phoenix Neuron; no red/LLM/dispatch.
+
+**Protocolo:** `docs/02-research/EVIDENCE_RECEIPT_TAMPER_TRIAL_002_B1_PROTOCOL.md`.
+
+**Estado:** preregistrada / B1 no implementado.

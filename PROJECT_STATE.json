@@ -1,7 +1,7 @@
 {
   "schema_version": "1.0.0",
   "project": "Phoenix Action Gate",
-  "updated_at": "2026-09-02T20:40:00Z",
+  "updated_at": "2026-09-02T21:09:00Z",
   "hackathon": {
     "name": "Nebius x NVIDIA Global AI Hackathon",
     "rules_source": "https://nebiusglobalaihackathon.devpost.com/rules",
@@ -12,7 +12,7 @@
     "variant": "phoenix-safe-3",
     "state": "RUNNING",
     "runtime_profile": "tool-assisted",
-    "reason": "EVIDENCE_RECEIPT_TAMPER_TRIAL_001 has a qualified and frozen B0 snapshot baseline. The next allowed implementation is the separate Phoenix causal receipt candidate only."
+    "reason": "Receipt Trial 001 is frozen as CORROBORATED_BOUNDED_VS_B0. Trial 002 with the preregistered one-hop lineage-aware B1 is the next research gate; B1 is not implemented."
   },
   "sources": [
     {
@@ -66,10 +66,10 @@
     },
     {
       "id": "sion-live-workspace",
-      "ref": "SION_TALLER_RUST_v0.7.0 / 01_MESA_PRINCIPAL/phoenix-action-gate / review/g2-mvp-core / preregistered tamper trial at 9ba5435",
+      "ref": "SION_TALLER_RUST_v0.7.0 / 01_MESA_PRINCIPAL/phoenix-action-gate / review/g2-mvp-core",
       "license": "local governed workspace; not for publication",
       "disposition": "used",
-      "reason": "Validated panel cut plus executed B0 snapshot receipt baseline."
+      "reason": "Validated panel cut, frozen B0 and executed isolated Phoenix receipt candidate with Trial 001 result."
     }
   ],
   "claims": [
@@ -131,18 +131,6 @@
       ]
     },
     {
-      "id": "C-G6-REGRESSION-PREVIOUS-CUT",
-      "text": "El run completo inmediatamente anterior al cierre final pasó 56/56 tests.",
-      "state": "TEST_EXECUTED",
-      "evidence_refs": ["docs/04-runtime/evidence/G2_SION_TESTS_2026-09-01_PANEL_VIEW.json"]
-    },
-    {
-      "id": "C-G6-CURRENT-REGRESSION",
-      "text": "El corte panel/adaptador pasa el suite completo de 58 tests, incluyendo equivalencia operacional de tool calls y fail-closed de llamadas materialmente distintas.",
-      "state": "TEST_EXECUTED",
-      "evidence_refs": ["docs/04-runtime/evidence/G2_SION_TESTS_2026-09-02_PANEL_FINAL.json"]
-    },
-    {
       "id": "C-G6-LIVE-MULTIACTION",
       "text": "En planes multiacción LIVE generados por Nemotron, el baseline state-aware quedó en REVIEW y Phoenix quedó en DENY al detectar EVIDENCE_LINEAGE_INVALIDATED.",
       "state": "RUNTIME_OBSERVED",
@@ -152,40 +140,10 @@
       ]
     },
     {
-      "id": "C-G5-PANEL-LINEAGE",
-      "text": "El panel local muestra un plan LIVE con baseline REVIEW, Phoenix DENY, una divergencia y el lineage conflict expected v2 / observed v1 / invalidated by s3.",
-      "state": "RUNTIME_OBSERVED",
-      "evidence_refs": ["docs/04-runtime/evidence/G2_PANEL_RUNTIME_OBSERVATIONS_2026-09-01.json"]
-    },
-    {
-      "id": "C-H-PHX-05-TRIAL-001",
-      "text": "Phoenix propaga bloqueos causales que el baseline independiente no propaga, aunque ambos agregados acabaron en DENY.",
-      "state": "TEST_EXECUTED",
-      "evidence_refs": ["docs/04-runtime/evidence/H_PHOENIX_05_CAUSAL_PLAN_TRIAL_001_2026-09-01.json"]
-    },
-    {
-      "id": "C-H-PHX-05-TRIAL-002",
-      "text": "Phoenix detecta stale-state cross-step en un fixture preregistrado y cambia la decisión global de REVIEW a DENY frente al baseline independiente.",
-      "state": "TEST_EXECUTED",
-      "evidence_refs": ["docs/04-runtime/evidence/H_PHOENIX_05_CAUSAL_PLAN_TRIAL_002_2026-09-01.json"]
-    },
-    {
-      "id": "C-H-PHX-05-TRIAL-003",
-      "text": "Phoenix detecta evidencia derivada causalmente invalidada y cambia la decisión global de REVIEW a DENY frente a un baseline state-aware preregistrado sin lineage reasoning.",
-      "state": "TEST_EXECUTED",
-      "evidence_refs": ["docs/04-runtime/evidence/H_PHOENIX_05_CAUSAL_PLAN_TRIAL_003_2026-09-01.json"]
-    },
-    {
       "id": "C-H-PHX-05-GENERAL",
       "text": "Phoenix Action Gate supera de forma general a gates competentes.",
       "state": "INSUFFICIENT_EVIDENCE",
-      "evidence_refs": ["Bounded fixtures and live runs support a narrow discriminant, not general superiority"]
-    },
-    {
-      "id": "C-TAMPER-001",
-      "text": "Un receipt Phoenix con causal evidence binding detecta una invalidación post-decisión que el baseline snapshot B0 no detecta.",
-      "state": "HYPOTHESIS",
-      "evidence_refs": ["docs/02-research/EVIDENCE_RECEIPT_TAMPER_TRIAL_001_PROTOCOL.md; B0 qualified; Phoenix candidate not implemented"]
+      "evidence_refs": ["Bounded fixtures and live runs support narrow properties, not general superiority"]
     },
     {
       "id": "C-TAMPER-B0",
@@ -195,6 +153,21 @@
         "docs/04-runtime/evidence/G2_SION_TESTS_2026-09-02_TAMPER_B0.json",
         "docs/04-runtime/evidence/G2_RECEIPT_TAMPER_B0_BASELINE_2026-09-02.json"
       ]
+    },
+    {
+      "id": "C-TAMPER-TRIAL-001",
+      "text": "En el corpus preregistrado Trial 001, el candidato Phoenix detecta T5 como LINEAGE_BINDING_INVALIDATED mientras B0 permanece VALID; todos los hard gates pasan.",
+      "state": "TEST_EXECUTED",
+      "evidence_refs": [
+        "docs/04-runtime/evidence/G2_SION_TESTS_2026-09-02_TAMPER_PHOENIX.json",
+        "docs/04-runtime/evidence/G2_RECEIPT_TAMPER_TRIAL_001_RESULT_2026-09-02.json"
+      ]
+    },
+    {
+      "id": "C-TAMPER-B1-DIFFERENTIATION",
+      "text": "Receipt/tamper diferencia a Phoenix frente a un baseline lineage-aware competente.",
+      "state": "INSUFFICIENT_EVIDENCE",
+      "evidence_refs": ["docs/02-research/EVIDENCE_RECEIPT_TAMPER_TRIAL_002_B1_PROTOCOL.md; preregistered, not implemented or executed"]
     },
     {
       "id": "C-PHOENIX-NEURON-INTEGRATION",
@@ -238,32 +211,32 @@
     {
       "id": "G2",
       "state": "PASS",
-      "reason": "Gate individual, pipeline LIVE, compact plan y panel/adaptador validados; el bloque tamper añade un baseline separado sin alterar gate.mjs ni plan-gate.mjs."
+      "reason": "Gate individual, pipeline LIVE, compact plan y panel/adaptador validados; receipt candidate remains separable from Gate/Plan Gate."
     },
     {
       "id": "G3",
       "state": "WARN",
-      "reason": "Diferenciación acotada observada frente a baselines declarados; evitar file-gate perception trap y no convertirla en superioridad general."
+      "reason": "Diferenciación acotada observada; evitar claims generales y bloquear receipt/tamper como moat hasta B1."
     },
     {
       "id": "G4",
       "state": "WARN",
-      "reason": "B0 snapshot receipt está cualificado y congelado. El candidato Phoenix causal receipt todavía no ha sido implementado ni ejecutado."
+      "reason": "Trial 001 favorable vs B0; stronger one-hop B1 preregistered and pending."
     },
     {
       "id": "G5",
       "state": "PASS",
-      "reason": "Panel observado LIVE con provider-vs-policy distinction, destructive denial, secret-boundary denial y plan-lineage divergence."
+      "reason": "Panel LIVE validado con provider-vs-policy distinction, destructive denial, secret boundary and lineage view."
     },
     {
       "id": "G6",
-      "state": "PASS",
-      "reason": "Trials 002/003 muestran stale-state/lineage bajo límites declarados; B0 del nuevo tamper trial está cualificado, pero H-TAMPER-001 permanece abierta."
+      "state": "PASS_WITH_BOUNDARY",
+      "reason": "Receipt Trial 001 is CORROBORATED_BOUNDED_VS_B0; differentiation vs lineage-aware B1 remains untested."
     },
     {
       "id": "G7",
       "state": "PENDING",
-      "reason": "Clon limpio y reproducción pública pendientes; tamper evidence final depende del candidato y del escalado B1 si aparece divergencia."
+      "reason": "Clon limpio y reproducción pública pendientes; final tamper mechanism choice depends on B1 comparison."
     },
     {
       "id": "G8",
@@ -275,20 +248,42 @@
     "status": "GO_WITH_EVIDENCE_BOUNDARY",
     "differentiation_thesis": "Phoenix does not only ask whether an action is allowed; in bounded multi-action plans it can ask whether the action is still justified by current projected state and causally valid evidence.",
     "observatory_report": "docs/02-research/OBSERVATORIO_DIFFERENTIATION_GAPS_2026-09-01.md",
-    "active_trial": "EVIDENCE_RECEIPT_TAMPER_TRIAL_001",
-    "trial_protocol": "docs/02-research/EVIDENCE_RECEIPT_TAMPER_TRIAL_001_PROTOCOL.md",
-    "trial_state": "BASELINE_B0_QUALIFIED_PHOENIX_CANDIDATE_PENDING",
-    "baseline_b0": {
-      "version": "snapshot-receipt-baseline/0.1.0",
-      "state": "TEST_EXECUTED_QUALIFIED_FROZEN",
-      "regression": "68/68 PASS",
-      "t5_result": "VALID",
-      "receipt_bytes": 724,
-      "module_nonblank_loc": 203,
-      "verify_median_ms_250_local_iterations": 0.14765,
-      "dependencies_added": 0,
-      "dispatch_attempted": false
+    "receipt_trial_001": {
+      "protocol": "docs/02-research/EVIDENCE_RECEIPT_TAMPER_TRIAL_001_PROTOCOL.md",
+      "state": "TEST_EXECUTED_RESULT_FROZEN",
+      "verdict": "CORROBORATED_BOUNDED_VS_B0",
+      "regression": "80/80 PASS",
+      "divergence_cases": ["T5"],
+      "t5": {
+        "baseline": "VALID",
+        "phoenix": "INVALID",
+        "reason": "LINEAGE_BINDING_INVALIDATED",
+        "source_resource": "config.json",
+        "expected_source_version": "sha256:config-v2",
+        "observed_source_version": "sha256:config-v1"
+      },
+      "complexity": {
+        "baseline_loc": 203,
+        "phoenix_loc": 296,
+        "loc_ratio": 1.4581,
+        "baseline_receipt_bytes": 724,
+        "phoenix_receipt_bytes": 872,
+        "baseline_verify_median_ms": 0.15215,
+        "phoenix_verify_median_ms": 0.163,
+        "candidate_dependencies_added": 0
+      },
+      "dispatch_attempted": false,
+      "evidence_refs": [
+        "docs/04-runtime/evidence/G2_SION_TESTS_2026-09-02_TAMPER_PHOENIX.json",
+        "docs/04-runtime/evidence/G2_RECEIPT_TAMPER_TRIAL_001_RESULT_2026-09-02.json"
+      ]
     },
-    "next_step": "Implement phoenix-evidence-receipt/0.1.0 as a separate module, run the exact preregistered T0-T7 corpus against it, and preserve gate.mjs/plan-gate.mjs unchanged. If T5 diverges as predicted, preregister lineage-aware-receipt-baseline/0.2.0 before any public differentiation claim. No push/PR/deploy/submission."
+    "receipt_trial_002": {
+      "protocol": "docs/02-research/EVIDENCE_RECEIPT_TAMPER_TRIAL_002_B1_PROTOCOL.md",
+      "baseline": "lineage-aware-receipt-baseline/0.2.0",
+      "state": "PREREGISTERED_NOT_IMPLEMENTED_NOT_EXECUTED",
+      "claim_boundary": "No receipt/tamper differentiation claim until B1 is executed. If B1 matches Phoenix at lower or similar complexity, classify as NOT_DIFFERENTIATING_VS_B1 / USEFUL_G7_CAPABILITY."
+    },
+    "next_step": "Create a local checkpoint containing the frozen Trial 001 result and preregistered B1 protocol. Do not implement B1 until that checkpoint is clean. After explicit continuation, implement only lineage-aware-receipt-baseline/0.2.0 against the frozen corpus. No Gate/Plan Gate changes, no Phoenix Neuron import, no push/PR/deploy/submission."
   }
 }

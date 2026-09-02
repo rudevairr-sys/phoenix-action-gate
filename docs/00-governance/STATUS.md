@@ -1,117 +1,116 @@
 # Estado retomable
 
 Fecha: 2026-09-02  
-Estado: `G6_BOUNDED_RUNTIME_PASS / PANEL_BLOCK_PASS / TAMPER_B0_QUALIFIED`
+Estado: `G6_TAMPER_TRIAL001_CORROBORATED_VS_B0 / B1_PREREGISTERED`
 
 ## Reentrada
 
 Proyecto: `01_MESA_PRINCIPAL/phoenix-action-gate`  
 Rama: `review/g2-mvp-core`
 
-Checkpoint limpio anterior al bloque B0:
+Último checkpoint limpio anterior a este cierre:
 
-`9ba5435 docs(g6): preregister evidence receipt tamper trial`
+`d089e8a test(g6): qualify snapshot receipt baseline`
 
 No hay autorización para push, PR, deploy, dispatch ni submission.
 
 ## Corte panel previo
 
-El corte `092d987` permanece validado:
-
-- 58/58 tests;
-- `PROVIDER FAIL-CLOSED` separado de `PHOENIX DENY`;
-- destructivo LIVE → `R3/DENY/DESTRUCTIVE_COMMAND`;
-- `.env` LIVE → `R3/DENY/SECRET_BOUNDARY`;
-- Plan Gate LIVE → baseline state-aware `REVIEW`, Phoenix `DENY`, `EVIDENCE_LINEAGE_INVALIDATED`;
-- dispatch false.
+El corte `092d987` permanece validado con 58/58, rutas LIVE de secreto/destructivo, provider fail-closed separado de Phoenix DENY, Plan Gate lineage y dispatch false.
 
 ## EVIDENCE_RECEIPT_TAMPER_TRIAL_001
 
-Protocolo:
+Estado:
 
-`docs/02-research/EVIDENCE_RECEIPT_TAMPER_TRIAL_001_PROTOCOL.md`
+`CORROBORATED_BOUNDED_VS_B0 / RESULT_FROZEN`
 
-Estado general del ensayo:
-
-`PREREGISTERED / BASELINE_B0_EXECUTED / PHOENIX_CANDIDATE_NOT_IMPLEMENTED`
-
-### Baseline B0
-
-Versión:
+Baseline:
 
 `snapshot-receipt-baseline/0.1.0`
 
-Capacidades ejecutadas:
+Candidato:
 
-- canonical hashing;
-- subject binding;
-- decision binding;
-- policy artifact binding;
-- explicit evidence binding;
-- fail-closed de receipt inválido;
-- determinismo;
-- sin state reasoning;
-- sin evidence-lineage reasoning;
-- sin dispatch.
+`phoenix-evidence-receipt/0.1.0`
 
-### Regresión real en SION
+### Regresión actual
 
 `npm test`
 
-- tests: 68;
-- PASS: 68;
-- FAIL: 0;
-- duración: 593.0824 ms.
+- 80 tests;
+- 80 PASS;
+- 0 FAIL;
+- 529.5486 ms.
 
-Evidencia:
+### Probe B0 ↔ Phoenix
 
-`docs/04-runtime/evidence/G2_SION_TESTS_2026-09-02_TAMPER_B0.json`
+Todos los hard gates preregistrados pasan.
 
-### Probe B0 real
+- T0: B0 VALID / Phoenix VALID;
+- T1: ambos INVALID por decision binding;
+- T2: ambos INVALID por subject binding;
+- T3: ambos INVALID por policy binding;
+- T4: ambos INVALID por evidence binding;
+- T5: **B0 VALID / Phoenix INVALID `LINEAGE_BINDING_INVALIDATED`**;
+- T6: ambos VALID;
+- T7: ambos INVALID por receipt contract.
 
-Comando ejecutado por el operador:
+Única divergencia: `T5`.
 
-`node tools/g2_receipt_baseline_probe.mjs`
+Detalle T5:
 
-Resultado:
+- evidence: `generated-evidence-v2`;
+- source: `config.json`;
+- expected: `sha256:config-v2`;
+- observed: `sha256:config-v1`.
 
-- T0 `VALID` — PASS;
-- T1 `INVALID / DECISION_BINDING_MISMATCH` — PASS;
-- T2 `INVALID / SUBJECT_BINDING_MISMATCH` — PASS;
-- T3 `INVALID / POLICY_BINDING_MISMATCH` — PASS;
-- T4 `INVALID / EVIDENCE_BINDING_MISMATCH` — PASS;
-- T5 `VALID / SNAPSHOT_BINDINGS_VALID` — PASS;
-- T6 `VALID / SNAPSHOT_BINDINGS_VALID` — PASS;
-- T7 `INVALID / RECEIPT_CONTRACT_INVALID` — PASS;
-- `all_preregistered_expectations_met=true`;
-- receipt determinista;
-- receipt: 724 bytes;
-- módulo B0: 203 LOC no blancas;
-- verificación mediana: 0.14765 ms / 250 iteraciones locales;
-- dependencias añadidas: 0;
+Complejidad observada:
+
+- B0 receipt: 724 bytes;
+- Phoenix receipt: 872 bytes;
+- B0: 203 LOC no blancas;
+- Phoenix: 296 LOC no blancas;
+- ratio LOC: 1.4581x;
+- mediana verify B0: 0.15215 ms;
+- mediana verify Phoenix: 0.163 ms;
+- dependencias nuevas Phoenix: 0;
 - dispatch false.
 
 Evidencia:
 
-`docs/04-runtime/evidence/G2_RECEIPT_TAMPER_B0_BASELINE_2026-09-02.json`
+- `docs/04-runtime/evidence/G2_SION_TESTS_2026-09-02_TAMPER_PHOENIX.json`;
+- `docs/04-runtime/evidence/G2_RECEIPT_TAMPER_TRIAL_001_RESULT_2026-09-02.json`.
 
-## Interpretación
+## Interpretación permitida
 
-B0 queda `QUALIFIED / FROZEN` como baseline competente de integridad snapshot.
+Trial 001 corrobora de forma acotada que el candidato causal detecta T5 frente al B0 snapshot congelado.
 
-T5 ha hecho exactamente lo preregistrado para B0: el cambio de `config.json@v2` a `config.json@v1` no altera subject, decisión, policy artifact ni evidencia explícita, por lo que B0 mantiene el receipt como `VALID`.
+Esto NO autoriza afirmar que receipt/tamper sea exclusivo de Phoenix, un moat, una ventaja general o superior a un baseline lineage-aware.
 
-Esto NO es todavía una victoria de Phoenix. H-TAMPER-001 permanece `HYPOTHESIS` porque `phoenix-evidence-receipt/0.1.0` todavía no ha sido implementado ni ejecutado.
+Nivel probatorio: `TEST_EXECUTED`, no `RUNTIME_OBSERVED`.
 
-## Salvaguarda anti-baseline-débil
+## Trial 002 — B1
 
-Si el candidato Phoenix produce la divergencia T5 prevista, no se publicará aún como diferenciador. Antes debe preregistrarse y ejecutarse `lineage-aware-receipt-baseline/0.2.0`.
+Protocolo:
 
-Si B1 iguala la detección con menor complejidad, receipt/tamper se conservará como capacidad útil para G7, no como moat.
+`docs/02-research/EVIDENCE_RECEIPT_TAMPER_TRIAL_002_B1_PROTOCOL.md`
+
+Estado:
+
+`PREREGISTERED / NOT_IMPLEMENTED / NOT_EXECUTED`
+
+Baseline congelado a construir después:
+
+`lineage-aware-receipt-baseline/0.2.0`
+
+B1 debe conservar B0 y añadir one-hop `derives_from`, current-state verification, fail-closed si la fuente no está disponible y explicación expected/observed.
+
+Resultado que puede eliminar la diferenciación:
+
+si B1 iguala T5 y controles con menor o similar complejidad, la conclusión será `NOT_DIFFERENTIATING_VS_B1 / USEFUL_G7_CAPABILITY`.
 
 ## Phoenix Neuron
 
-Permanece `reference_only`. No se ha importado código, RTM, OVAM ni CX_PLANE. Artifact binding y DecisionTrace son únicamente referencias conceptuales.
+Permanece `reference_only`. No se ha importado core, RTM, OVAM ni CX_PLANE.
 
 ## Gates
 
@@ -119,20 +118,20 @@ Permanece `reference_only`. No se ha importado código, RTM, OVAM ni CX_PLANE. A
 - G1: PASS — Nebius/NVIDIA runtime observado.
 - G2: PASS — gate, plan y panel/adaptador validados.
 - G3: WARN — diferenciación acotada; evitar superioridad general.
-- G4: WARN / ACTIVE_RESEARCH — B0 cualificado; candidato Phoenix pendiente.
+- G4: WARN / ACTIVE_RESEARCH — Trial 001 favorable vs B0; B1 preregistrado pendiente.
 - G5: PASS — panel LIVE validado.
-- G6: PASS — stale-state/lineage acotados y B0 tamper baseline cualificado.
-- G7: PENDING — clean clone + tamper evidence final + reproducibilidad.
+- G6: PASS_WITH_BOUNDARY — Trial 001 `CORROBORATED_BOUNDED_VS_B0`; claim receipt/tamper frente a B1 bloqueado.
+- G7: PENDING — clean clone + elección final de tamper solution + reproducibilidad.
 - G8: PENDING — submission no autorizado.
 
 ## Estado MAVO
 
 `phoenix-safe-3 / RUNNING`
 
-Razón: B0 está ejecutado y congelado; el ensayo sigue abierto hasta evaluar el candidato Phoenix y, si procede, B1.
+Razón: Trial 001 está congelado, pero Trial 002 B1 está preregistrado y todavía no ejecutado.
 
 ## Único siguiente paso seguro
 
-Crear `phoenix-evidence-receipt/0.1.0` como módulo separado y ejecutar exactamente T0-T7 contra el mismo fixture preregistrado.
+Antes de implementar B1, cerrar checkpoint local del resultado Trial 001 + protocolo B1. Después, y solo con continuidad humana, implementar únicamente `lineage-aware-receipt-baseline/0.2.0` contra el corpus congelado.
 
-No modificar `gate.mjs` ni `plan-gate.mjs`. No cambiar T5. No importar Phoenix Neuron. No push/PR/deploy/submission.
+No modificar `gate.mjs`, `plan-gate.mjs`, B0, candidato Phoenix ni T5. No push/PR/deploy/submission.
