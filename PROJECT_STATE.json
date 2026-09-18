@@ -1,8 +1,8 @@
 {
   "schema_version": "1.0.0",
   "project": "Phoenix Action Gate",
-  "updated_at": "2026-09-18T10:34:20Z",
-  "mode": "PR_DRAFT_CREATED",
+  "updated_at": "2026-09-18T10:40:10Z",
+  "mode": "PR_DRAFT_CREATED_CLEANCLONE_STRUCTURAL_PASS",
   "authorization": {
     "decision_ids": [
       "USER-20260918-HAZLO-CONTEST-PREP",
@@ -12,10 +12,12 @@
       "USER-20260918-DALEE-CREATE-REVIEW-BRANCH",
       "USER-20260918-DALEE-COMMIT-CONTEST-SURFACE",
       "USER-20260918-DALEE-PUSH-REVIEW-BRANCH",
-      "USER-20260918-DALEE-CREATE-DRAFT-PR"
+      "USER-20260918-DALEE-CREATE-DRAFT-PR",
+      "USER-20260918-SI-CLEANCLONE-PR7",
+      "USER-20260918-SI-RECORD-CLEANCLONE"
     ],
     "source": "human_bridge",
-    "scope": "Prepare the hackathon candidacy inside phoenix-action-gate; register current-cut test evidence; create review branch, local commit, push without force and draft PR. No merge, deploy, dispatch or Devpost submission."
+    "scope": "Prepare contest candidacy, create PR draft, and perform structural clean clone validation. No merge, deploy, dispatch activation or Devpost submission."
   },
   "hackathon": {
     "name": "Nebius x NVIDIA Global AI Hackathon",
@@ -31,9 +33,19 @@
     "local_branch": "review/contest-surface-20260918",
     "remote_branch": "origin/review/contest-surface-20260918",
     "base_branch": "main",
-    "commit": "cebec0de5d83dfcd4ced093aa626b7f7bfd0c3a1",
-    "commit_short": "cebec0d",
-    "commit_message": "prepare contest surface and evidence gate"
+    "current_head": "4459f3ef46c92662b0be8b42b3116b0fa8dbee46",
+    "commits_this_cut": [
+      {
+        "sha": "cebec0de5d83dfcd4ced093aa626b7f7bfd0c3a1",
+        "short": "cebec0d",
+        "message": "prepare contest surface and evidence gate"
+      },
+      {
+        "sha": "4459f3ef46c92662b0be8b42b3116b0fa8dbee46",
+        "short": "4459f3e",
+        "message": "record draft PR handoff"
+      }
+    ]
   },
   "pull_request": {
     "number": 7,
@@ -44,83 +56,55 @@
     "base": "main",
     "base_sha": "a06291a616a96f8dd861db2dc291dd8548ee5f83",
     "head": "review/contest-surface-20260918",
-    "head_sha_at_creation": "cebec0de5d83dfcd4ced093aa626b7f7bfd0c3a1",
-    "changed_files_at_creation": 127,
-    "additions_at_creation": 15452,
-    "deletions_at_creation": 2,
+    "head_sha_current": "4459f3ef46c92662b0be8b42b3116b0fa8dbee46",
+    "changed_files_latest_observed": 128,
+    "additions_latest_observed": 15507,
+    "deletions_latest_observed": 2,
     "local_record": "BUILDER_OMEGA_CONTEST_PREP_20260918/PR_DRAFT_RECORD_20260918.md"
+  },
+  "clean_clone": {
+    "state": "STRUCTURAL_PASS_TEST_PENDING",
+    "repository": "rudevairr-sys/phoenix-action-gate",
+    "ref": "review/contest-surface-20260918",
+    "relative_path": "02_CANDIDATOS/phoenix-action-gate-cleanclone-pr7-20260918",
+    "intake_decision": "ALLOW",
+    "files": 128,
+    "bytes": 638114,
+    "fingerprint": "ca36715e5ac793004041b1db175a11a418a8d2b20c32f0a0c7a558252ba7d41c",
+    "git_status": "HEAD (no branch)",
+    "markers": ["package.json", "README.md"],
+    "verified_paths": [
+      "package.json",
+      "README.md",
+      "BUILDER_OMEGA_CONTEST_PREP_20260918/"
+    ],
+    "record": "BUILDER_OMEGA_CONTEST_PREP_20260918/CLEAN_CLONE_RECORD_20260918.md"
   },
   "mavo": {
     "variant": "phoenix-safe-3",
     "state": "RUNNING",
     "runtime_profile": "tool-assisted",
-    "decision": "Continue Phoenix Action Gate as the primary hackathon candidate. Keep Phoenix Neuron and Mathematical Assurance Kit as reference-only sources."
+    "decision": "Continue Phoenix Action Gate as primary hackathon candidate. Keep Phoenix Neuron, MAK and Action Assurance Lab reference-only."
   },
   "public_thesis": {
     "short": "A justification firewall for AI coding agents.",
-    "full": "Before an AI agent acts, Phoenix Action Gate checks whether the reason for acting is still valid.",
-    "positioning": "Nemotron proposes actions or compact plans through Nebius Token Factory; Phoenix Action Gate deterministically checks contract, risk, state, evidence lineage and reversibility before anything can advance. The MVP has no automatic dispatcher."
+    "full": "Before an AI agent acts, Phoenix Action Gate checks whether the reason for acting is still valid."
   },
-  "sources": [
-    {
-      "id": "phoenix-action-gate-local",
-      "ref": "01_MESA_PRINCIPAL/phoenix-action-gate on local branch review/contest-surface-20260918",
-      "disposition": "used",
-      "reason": "Primary hackathon project workspace."
-    },
-    {
-      "id": "public-product-repo",
-      "ref": "rudevairr-sys/phoenix-action-gate",
-      "disposition": "used",
-      "reason": "Public repository and draft PR created for review."
-    },
-    {
-      "id": "devpost-official",
-      "ref": "Nebius x NVIDIA Global AI Hackathon via Devpost connector, fetched 2026-09-18",
-      "disposition": "used",
-      "reason": "Authority for current requirements, dates, tracks and deliverables."
-    },
-    {
-      "id": "phoenix-neuron-reference",
-      "ref": "01_MESA_PRINCIPAL/PHOENIX_NEURON_LAB",
-      "disposition": "reference_only",
-      "reason": "Conceptual governance lineage only; no code import, no canonical integration claim."
-    },
-    {
-      "id": "mathematical-assurance-kit",
-      "ref": "01_MESA_PRINCIPAL/MATHEMATICAL_ASSURANCE_KIT",
-      "disposition": "reference_only",
-      "reason": "Conceptual assurance reference only; not the primary hackathon product and not copied into public submission."
-    },
-    {
-      "id": "phoenix-action-assurance-lab",
-      "ref": "01_MESA_PRINCIPAL/PHOENIX_ACTION_ASSURANCE_LAB",
-      "disposition": "reference_only",
-      "reason": "Related research/lab source; not the public product repo."
-    }
-  ],
   "test_gate_current_cut": {
-    "desired_command": "npm test",
-    "node_available": true,
-    "node_version_observed": "v24.12.0",
-    "sion_action_attempted": "npm_test",
-    "sion_action_result": "action_not_found",
-    "human_terminal_execution": {
-      "observed": true,
-      "shell": "PowerShell",
-      "node_version": "v24.12.0",
-      "command": "npm test",
-      "resolved_command": "node --test",
-      "tests": 122,
-      "pass": 122,
-      "fail": 0,
-      "cancelled": 0,
-      "skipped": 0,
-      "todo": 0,
-      "duration_ms": 737.3368
-    },
     "state": "TEST_EXECUTED_PASS",
-    "evidence_ref": "docs/04-runtime/evidence/G2_CURRENT_CUT_NPM_TEST_2026-09-18.json"
+    "live_project_path": "01_MESA_PRINCIPAL/phoenix-action-gate",
+    "node_version": "v24.12.0",
+    "command": "npm test",
+    "resolved_command": "node --test",
+    "tests": 122,
+    "pass": 122,
+    "fail": 0,
+    "cancelled": 0,
+    "skipped": 0,
+    "todo": 0,
+    "duration_ms": 737.3368,
+    "evidence_ref": "docs/04-runtime/evidence/G2_CURRENT_CUT_NPM_TEST_2026-09-18.json",
+    "clone_test_state": "PENDING"
   },
   "blocked_claims": [
     "production-ready",
@@ -136,68 +120,42 @@
   "gates": [
     {
       "id": "G0_DEVPOST_RULES",
-      "state": "PASS_STALE_RECHECK_BEFORE_SUBMISSION",
-      "reason": "Devpost connector returned current requirements and deadline on 2026-09-18."
+      "state": "PASS_STALE_RECHECK_BEFORE_SUBMISSION"
     },
     {
       "id": "G1_NEBIUS_NVIDIA",
-      "state": "RUNTIME_OBSERVED_PREVIOUSLY_REVALIDATE",
-      "reason": "Prior evidence exists; final cut must repeat or clearly classify evidence as previous."
+      "state": "RUNTIME_OBSERVED_PREVIOUSLY_REVALIDATE"
     },
     {
       "id": "G2_PRODUCT_SURFACE",
-      "state": "CURRENT_CUT_TEST_PASS",
-      "reason": "Human terminal execution observed Node v24.12.0 and npm test 122/122 PASS."
+      "state": "CURRENT_CUT_TEST_PASS"
     },
     {
       "id": "G3_DIFFERENTIATION",
-      "state": "WARN_BOUNDARY_REQUIRED",
-      "reason": "Main differentiation should be product experience and justification firewall, not general baseline superiority."
+      "state": "WARN_BOUNDARY_REQUIRED"
     },
     {
       "id": "G4_B1_RECEIPT_TAMPER",
-      "state": "NOT_DIFFERENTIATING_VS_B1_USEFUL_CAPABILITY",
-      "reason": "B1 matched Phoenix on Trial 002 with smaller implementation."
+      "state": "NOT_DIFFERENTIATING_VS_B1_USEFUL_CAPABILITY"
     },
     {
       "id": "G5_JURY_SURFACE",
-      "state": "TEST_EXECUTED_LOCAL_PASS_VISUAL_REVALIDATION_PENDING",
-      "reason": "Jury surface tests pass in current cut; final video still needs visual runtime confirmation."
+      "state": "TEST_EXECUTED_LOCAL_PASS_VISUAL_REVALIDATION_PENDING"
     },
     {
       "id": "G6_PUBLICATION_BOUNDARY",
-      "state": "ACTIVE",
-      "reason": "Phoenix Neuron, MAK and Action Assurance Lab remain reference-only."
+      "state": "ACTIVE"
     },
     {
       "id": "G7_CLEAN_CLONE",
-      "state": "PENDING",
-      "reason": "Draft PR exists; clean clone from pushed branch not executed yet."
+      "state": "STRUCTURAL_PASS_TEST_PENDING"
     },
     {
       "id": "G8_DEVPOST_SUBMISSION",
-      "state": "PENDING_HUMAN_AUTHORIZATION",
-      "reason": "No submission performed or authorized."
+      "state": "PENDING_HUMAN_AUTHORIZATION"
     }
   ],
-  "generated_this_cut": [
-    "BUILDER_OMEGA_CONTEST_PREP_20260918/README.md",
-    "BUILDER_OMEGA_CONTEST_PREP_20260918/CLAIM_BOUNDARY.md",
-    "BUILDER_OMEGA_CONTEST_PREP_20260918/DEVPOST_SUBMISSION_DRAFT.md",
-    "BUILDER_OMEGA_CONTEST_PREP_20260918/VIDEO_SCRIPT_3MIN.md",
-    "BUILDER_OMEGA_CONTEST_PREP_20260918/CLEAN_CLONE_CHECKLIST.md",
-    "BUILDER_OMEGA_CONTEST_PREP_20260918/PUBLICATION_PLAN.md",
-    "BUILDER_OMEGA_CONTEST_PREP_20260918/TCC_MAVO_GATE.md",
-    "BUILDER_OMEGA_CONTEST_PREP_20260918/SIGMA_TEST_BLOCKER_20260918.md",
-    "BUILDER_OMEGA_CONTEST_PREP_20260918/PR_DRAFT_RECORD_20260918.md",
-    "docs/04-runtime/evidence/G2_CURRENT_CUT_NPM_TEST_2026-09-18.json",
-    "docs/00-governance/STATUS.md",
-    "docs/01-hackathon/RTM_HACKATHON.md",
-    "docs/00-governance/CLAIMS_LEDGER.md",
-    "docs/00-governance/EVIDENCE_LEDGER.md",
-    "PROJECT_STATE.json"
-  ],
-  "next_safe_step": "Validate clean clone from PR #7 branch. Keep PR as draft until clean clone, live revalidation/classification, demo/video and human review are complete. Do not merge, deploy or submit without separate human authorization.",
+  "next_safe_step": "Run npm test inside 02_CANDIDATOS/phoenix-action-gate-cleanclone-pr7-20260918, then record CLEAN_CLONE_TEST_PASS if successful. Keep PR #7 draft; no merge, deploy or Devpost submission without separate authorization.",
   "truthcore": {
     "designed": true,
     "generated": true,
@@ -207,10 +165,11 @@
     "tests_failed": 0,
     "branch_created": true,
     "committed": true,
-    "commit_sha": "cebec0de5d83dfcd4ced093aa626b7f7bfd0c3a1",
     "pushed": true,
     "draft_pr_created": true,
     "pr_number": 7,
+    "clean_clone_structural_pass": true,
+    "clean_clone_test_pass": false,
     "runtime_observed_this_cut": false,
     "production_validated": false,
     "merged": false,
