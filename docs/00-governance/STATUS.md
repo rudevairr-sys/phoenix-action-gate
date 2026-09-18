@@ -1,7 +1,7 @@
 # Estado retomable
 
 Fecha: 2026-09-18  
-Estado: `PR_DRAFT_CREATED / CURRENT_CUT_TEST_PASS / CLEAN_CLONE_STRUCTURAL_PASS / SPECIALIZED_AGENT_CONTRACT_EVIDENCE_RECORDED / SUBMISSION_BLOCKED_UNTIL_VALIDATION`
+Estado: `PR_DRAFT_CREATED / CURRENT_CUT_TEST_PASS / CLEAN_CLONE_STRUCTURAL_PASS / SPECIALIZED_AGENT_CONTRACT_DEMO_DESIGNED / N_VCLS_EVIDENCE_RECORDED / SUBMISSION_BLOCKED_UNTIL_VALIDATION`
 
 ## Reentrada
 
@@ -9,11 +9,11 @@ Proyecto: `01_MESA_PRINCIPAL/phoenix-action-gate`
 Rama local actual: `review/contest-surface-20260918`  
 Repo público: `rudevairr-sys/phoenix-action-gate`
 
-No hay autorización para merge, deploy, dispatch productivo ni submission Devpost. La autorización humana permitió rama de revisión, commit local, push sin force, PR draft, clean clone estructural y registro de la evidencia externa Ferrum Rust como posible línea de demo.
+No hay autorización para merge, deploy, dispatch productivo ni submission Devpost. La autorización humana permitió rama de revisión, commit local, push sin force, PR draft, clean clone estructural, registro de evidencia Ferrum Rust/N_VCLS y creación de la spec de demo `Specialized Agent Contract Demo`.
 
 ## Pull Request
 
-PR draft creado:
+PR draft:
 
 `https://github.com/rudevairr-sys/phoenix-action-gate/pull/7`
 
@@ -25,13 +25,15 @@ Datos:
 - Base: `main`.
 - Base SHA: `a06291a616a96f8dd861db2dc291dd8548ee5f83`.
 - Head: `review/contest-surface-20260918`.
-- Head SHA último observado antes de registros locales nuevos: `1098e1490dc25bd556ace172b9ff23359109f852`.
+- Head SHA último observado antes de este registro: `919ae9468be32f4ff190ae3f131ce8fe46493ee0`.
 
 Registros locales:
 
 - `BUILDER_OMEGA_CONTEST_PREP_20260918/PR_DRAFT_RECORD_20260918.md`
 - `BUILDER_OMEGA_CONTEST_PREP_20260918/CLEAN_CLONE_RECORD_20260918.md`
 - `BUILDER_OMEGA_CONTEST_PREP_20260918/SPECIALIZED_AGENT_CONTRACT_EVIDENCE_20260918.md`
+- `BUILDER_OMEGA_CONTEST_PREP_20260918/N_VCLS_CONTRACT_EVIDENCE_20260918.md`
+- `docs/03-product/SPECIALIZED_AGENT_CONTRACT_DEMO.md`
 
 ## Clean clone estructural
 
@@ -59,9 +61,32 @@ Estado:
 
 `CLEAN_CLONE_STRUCTURAL_PASS / CLEAN_CLONE_TEST_PENDING`
 
-## Ferrum Rust / microagentes especializados
+## Specialized Agent Contract Demo
 
-El usuario aportó conversaciones y archivos de configuración de un GPT especializado llamado `Ferrum Rust`.
+Spec creada:
+
+`docs/03-product/SPECIALIZED_AGENT_CONTRACT_DEMO.md`
+
+Tesis:
+
+> Specialized agents should not become general assistants under pressure. Phoenix Action Gate verifies that each agent stays inside its contract.
+
+Versión española:
+
+> Un agente especializado no debería convertirse en asistente general solo porque el usuario insista. Phoenix Action Gate comprueba que cada agente se mantiene dentro de su contrato.
+
+Microagentes candidatos:
+
+- `MONO_SI_NO`: contrato de vocabulario cerrado.
+- `FERRUM_RUST`: contrato de dominio cerrado.
+- `N_VCLS`: contrato formal de salida sin vocales.
+- `ACTION_PROPOSER`: contrato sin dispatch.
+
+Estado:
+
+`SPEC_CREATED / NOT_IMPLEMENTED`
+
+## Ferrum Rust
 
 Clasificación:
 
@@ -71,31 +96,29 @@ Hallazgo:
 
 Ferrum Rust funciona como ejemplo de agente de dominio cerrado: solo Rust o tecnologías directamente conectadas con Rust, salida `SAFE_NOOP` para fuera de alcance y redirección útil hacia herramientas Rust cuando procede.
 
-Tesis estratégica nueva:
+## N_VCLS
 
-> Specialized agents should not become general assistants under pressure. Phoenix Action Gate verifies that each agent stays inside its contract.
+Fuente:
 
-Versión española:
+`n-vcls_phoenix.zip`, aportado por el usuario.
 
-> Un agente especializado no debería convertirse en asistente general solo porque el usuario insista. Phoenix Action Gate comprueba que cada agente se mantiene dentro de su contrato.
+Clasificación:
 
-Demo candidata:
+`EXTERNAL_AGENT_FACTORY_OUTPUT_RECORDED / DOCUMENTED_NOT_IMPLEMENTED / DEMO_CASE_CANDIDATE`
 
-`Specialized Agent Contract Demo`
+Hallazgo:
 
-Microagentes:
+`N_VCLS` documenta un contrato formal de salida: no usar vocales y responder `/` si no puede cumplir. La inspección fue estática y no ejecutó código. El Rust generado todavía es plantilla no conforme porque emite textos con vocales y repite input del usuario.
 
-- `MONO_SI_NO`: solo `SI`, `NO`, `SAFE_NOOP`.
-- `FERRUM_RUST`: solo Rust o tecnologías conectadas directamente con Rust.
-- `ACTION_PROPOSER`: solo propone acciones, no ejecuta.
+Lectura estratégica:
 
-Estado:
-
-`DESIGNED_FROM_EXTERNAL_EVIDENCE / NOT_IMPLEMENTED`
+> Un contrato declarado no basta. Phoenix Action Gate debe verificar la salida.
 
 ## Decisión de candidatura
 
 Se mantiene `Phoenix Action Gate` como candidato principal del Nebius x NVIDIA Global AI Hackathon.
+
+La herramienta creadora de agentes del usuario se considera fuente de casos/fixtures y línea futura, no producto principal terminado.
 
 No se pivota a `MATHEMATICAL_ASSURANCE_KIT` como producto principal del concurso. MAK queda como referencia conceptual/controlada.
 
@@ -176,12 +199,12 @@ Estado:
 - G6 publication boundary: `ACTIVE`.
 - G7 clean clone: `STRUCTURAL_PASS / CLONE_TEST_PENDING`.
 - G8 Devpost submission: `PENDING_HUMAN_AUTHORIZATION`.
-- G9 specialized-agent-contract demo: `DESIGNED_FROM_EXTERNAL_EVIDENCE / NOT_IMPLEMENTED`.
+- G9 specialized-agent-contract demo: `SPEC_CREATED / NOT_IMPLEMENTED`.
 
 ## Bloqueos antes de submission-ready
 
 1. Ejecutar `npm test` dentro del clean clone.
-2. Crear spec pequeña para `Specialized Agent Contract Demo` o decidir video-only.
+2. Decidir si `Specialized Agent Contract Demo` se implementa con fixtures/checkers mínimos o se usa solo como narrativa de vídeo.
 3. Confirmar live Nebius/Nemotron actual o declarar evidencia previa con honestidad.
 4. Preparar demo URL/test build.
 5. Grabar vídeo <= 3 minutos.
@@ -198,7 +221,7 @@ node --version
 npm test
 ```
 
-Después, crear `docs/03-product/SPECIALIZED_AGENT_CONTRACT_DEMO.md` si se decide implementar o documentar la demo.
+Después, decidir si implementamos checkers mínimos para la demo o si la dejamos como narrativa de vídeo.
 
 Mantener PR en draft hasta completar clean clone test, live revalidation o clasificación explícita de evidencia previa, vídeo y revisión humana.
 
