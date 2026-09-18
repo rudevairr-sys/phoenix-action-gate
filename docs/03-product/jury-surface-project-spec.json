@@ -1,0 +1,49 @@
+{
+  "objective": "Convertir la vista de plan de Phoenix Action Gate en una superficie de jurado que muestre de forma inmediata la cadena estado → evidencia → acción y el punto donde la justificación deja de ser válida, sin modificar la lógica del Gate ni habilitar dispatch.",
+  "actors": [
+    {"id":"hackathon_judge","role":"Evalúa en pocos segundos qué propuso Nemotron, qué cambió y por qué Phoenix bloqueó el avance."},
+    {"id":"operator","role":"Lanza una petición o demo multiacción y revisa la explicación."},
+    {"id":"nemotron","role":"Propone el plan; no decide ni ejecuta."},
+    {"id":"phoenix_gate","role":"Evalúa determinísticamente estado, evidencia y lineage."}
+  ],
+  "journeys": [
+    {"id":"jury_lineage_demo","summary":"Nemotron propone un plan; una fuente causal cambia; el mapa visual muestra esperado frente a observado, la relación rota y la decisión DENY sin ejecución."}
+  ],
+  "functional_requirements": [
+    {"id":"FR-J1","requirement":"Mostrar un Mapa de Justificación con fuente causal, evidencia derivada, acción propuesta y decisión global."},
+    {"id":"FR-J2","requirement":"Resaltar esperado y observado cuando exista invalidación de lineage."},
+    {"id":"FR-J3","requirement":"Mantener visibles el modelo, riesgo, decisión y NO DISPATCH."},
+    {"id":"FR-J4","requirement":"Reutilizar los datos ya entregados por /api/plan sin añadir endpoints ni modificar el evaluador."}
+  ],
+  "non_functional_requirements": [
+    {"id":"NFR-J1","requirement":"No alterar decisiones, hashes, políticas ni resultados del Gate."},
+    {"id":"NFR-J2","requirement":"La vista debe ser comprensible sin conocer Phoenix, RTM, OVAM ni los nombres internos de los trials."},
+    {"id":"NFR-J3","requirement":"No introducir dependencias nuevas."},
+    {"id":"NFR-J4","requirement":"La regresión npm test debe permanecer completamente verde."}
+  ],
+  "assumptions": [
+    {"id":"A-J1","assumption":"La demo principal seguirá usando el plan multiacción existente con lineage conflict observable."},
+    {"id":"A-J2","assumption":"Los datos discriminant.lineage_conflict existentes son suficientes para la visualización."}
+  ],
+  "architecture": {
+    "style":"existing_modular_monolith_ui_only_change",
+    "modules":[
+      {"id":"web_index","responsibility":"Estructura semántica del Mapa de Justificación."},
+      {"id":"existing_styles","responsibility":"Reutilizar flow, flow-node y tarjetas actuales sin introducir una capa visual nueva."}
+    ],
+    "unchanged":["src/server.mjs","src/plan-gate.mjs","src/plan-pipeline.mjs","web/app.js","web/styles.css"],
+    "external_boundary":"Sin cambios de red ni proveedor."
+  },
+  "acceptance_criteria": [
+    {"id":"AC-J1","criterion":"En la vista de plan se identifican fuente causal, evidencia y acción sin abrir detalles técnicos."},
+    {"id":"AC-J2","criterion":"Cuando lineage está invalidado, la UI muestra esperado y observado."},
+    {"id":"AC-J3","criterion":"La UI muestra que Phoenix DENY y que dispatch no fue intentado."},
+    {"id":"AC-J4","criterion":"El cambio no requiere modificación de JavaScript ni servidor."},
+    {"id":"AC-J5","criterion":"npm test continúa con cero fallos."}
+  ],
+  "risks": [
+    {"id":"RISK-J1","risk":"La visualización añade ruido en lugar de claridad.","mitigation":"Mantener cuatro nodos principales y relegar hashes/metadatos a tarjetas existentes."},
+    {"id":"RISK-J2","risk":"Se sobreafirma diferenciación técnica del context witness.","mitigation":"Usarlo solo como apoyo explicativo; no como claim de superioridad."}
+  ],
+  "status":"specified_with_assumptions"
+}

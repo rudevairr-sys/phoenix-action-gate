@@ -1,0 +1,38 @@
+{
+  "schema_version": "1.0",
+  "captured_at": "2026-09-03",
+  "evidence_type": "user_supplied_panel_screenshot_observation",
+  "surface": "JURY_SURFACE_V0_1",
+  "scenario": "final_visual_recheck_after_jury_css_serving_fix",
+  "observed_runtime": {
+    "origin": "LIVE PLAN",
+    "reference_outcome": "REVIEW",
+    "phoenix_outcome": "DENY",
+    "difference_count": 1,
+    "lineage_status": "INVALIDATED",
+    "lineage_source": "config.json",
+    "expected_version": "sha256:config-v2",
+    "observed_version": "sha256:config-v1",
+    "evidence_id": "generated-evidence-v2",
+    "invalidated_by_step": "s3",
+    "dispatch_attempted": false,
+    "justification_map_nodes_visible": [
+      "FUENTE CAUSAL",
+      "EVIDENCIA",
+      "ACCIÓN POSTERIOR",
+      "PHOENIX"
+    ],
+    "right_edge_clipping_observed": false
+  },
+  "visual_acceptance": {
+    "four_node_map_complete": true,
+    "phoenix_node_visible": true,
+    "expected_vs_observed_visible": true,
+    "review_to_deny_visible": true,
+    "no_dispatch_visible": true
+  },
+  "verdict": "PASS / JURY_SURFACE_V0_1_VISUALLY_VALIDATED",
+  "evidence_level": "E4_BOUNDED",
+  "claim_boundary": "This validates the final visual layout and bounded live demo narrative in the observed local panel. It does not establish public deployment, production readiness, general superiority or a unique lineage moat versus all competent baselines.",
+  "evidence_origin": "user_supplied_runtime_screenshot"
+}

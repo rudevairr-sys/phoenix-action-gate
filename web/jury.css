@@ -1,0 +1,43 @@
+@media (min-width: 761px) {
+  .plan-steps-card,
+  .lineage-card {
+    grid-column: 1 / -1;
+    min-height: auto;
+  }
+
+  .lineage-card .flow {
+    width: 100%;
+    min-width: 0;
+    grid-template-columns:
+      minmax(0, 1fr) 18px
+      minmax(0, 1fr) 18px
+      minmax(0, 1fr) 18px
+      minmax(0, 1fr);
+    gap: 8px;
+    margin: 8px 0 20px;
+  }
+
+  .lineage-card .flow-node {
+    min-width: 0;
+    min-height: 118px;
+    padding: 12px 13px;
+  }
+
+  .lineage-card .flow-arrow {
+    min-width: 0;
+    font-size: 1.05rem;
+    text-align: center;
+  }
+}
+
+.lineage-card .flow-node strong,
+.lineage-card .flow-node small,
+.lineage-card .flow-node b {
+  min-width: 0;
+  overflow-wrap: anywhere;
+  word-break: break-word;
+}
+
+.lineage-card .flow-node b {
+  color: var(--text);
+}

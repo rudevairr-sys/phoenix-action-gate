@@ -1,0 +1,59 @@
+{
+  "schema_version": "1.0",
+  "captured_at": "2026-09-03",
+  "evidence_type": "operator_observed_trial_result",
+  "trial_id": "EVIDENCE_RECEIPT_TAMPER_TRIAL_002",
+  "protocol": "docs/02-research/EVIDENCE_RECEIPT_TAMPER_TRIAL_002_B1_PROTOCOL.md",
+  "stage": "B1_VS_PHOENIX_FROZEN_0_1_0",
+  "commands": [
+    "npm test",
+    "node tools/g2_b1_receipt_probe.mjs"
+  ],
+  "regression": {
+    "tests": 92,
+    "pass": 92,
+    "fail": 0,
+    "cancelled": 0,
+    "skipped": 0,
+    "todo": 0,
+    "duration_ms": 695.3649
+  },
+  "systems": {
+    "b1": "lineage-aware-receipt-baseline/0.2.0",
+    "phoenix": "phoenix-evidence-receipt/0.1.0"
+  },
+  "comparison": {
+    "hard_gates_passed": true,
+    "divergence_cases": [],
+    "t5": {
+      "b1": "INVALID / CAUSAL_SOURCE_MISMATCH",
+      "phoenix": "INVALID / LINEAGE_BINDING_INVALIDATED",
+      "semantic_divergence": false
+    },
+    "c2_unsatisfied_issuance_refused": {
+      "b1": true,
+      "phoenix": true
+    },
+    "c3_deterministic": {
+      "b1": true,
+      "phoenix": true
+    }
+  },
+  "complexity": {
+    "b1_receipt_bytes": 843,
+    "phoenix_receipt_bytes": 872,
+    "b1_module_nonblank_loc": 198,
+    "phoenix_module_nonblank_loc": 296,
+    "b1_to_phoenix_loc_ratio": 0.6689,
+    "dependencies_added_by_b1": 0
+  },
+  "local_verify_median_ms_250_iterations": {
+    "b1": 0.193,
+    "phoenix": 0.17785
+  },
+  "dispatch_attempted": false,
+  "preregistered_interpretation": "NOT_DIFFERENTIATING_VS_B1 / USEFUL_G7_CAPABILITY",
+  "claim_boundary": "One-hop causal evidence lineage is retained as a useful capability but is not a demonstrated Phoenix differentiator versus a small competent lineage-aware baseline.",
+  "evidence_origin": "console_output_supplied_directly_by_operator",
+  "notes": "This record preserves the adverse-to-Phoenix result exactly as required by the preregistered protocol. It is not evidence of production readiness or general superiority."
+}

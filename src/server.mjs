@@ -122,7 +122,7 @@ async function readFixture(name) {
 
 async function serveStatic(pathname, response) {
   const requested = pathname === '/' ? 'index.html' : pathname.replace(/^\/+/, '');
-  if (!['index.html', 'app.js', 'styles.css'].includes(requested)) {
+  if (!['index.html', 'app.js', 'styles.css', 'jury.css'].includes(requested)) {
     sendText(response, 404, 'Not found');
     return;
   }
