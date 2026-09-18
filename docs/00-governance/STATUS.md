@@ -1,15 +1,15 @@
 # Estado retomable
 
 Fecha: 2026-09-18  
-Estado: `CONTEST_SURFACE_PREP_GENERATED / B1_RESULT_RECONCILED / CURRENT_CUT_TEST_PASS / SUBMISSION_BLOCKED_UNTIL_VALIDATION`
+Estado: `PR_DRAFT_CREATED / CURRENT_CUT_TEST_PASS / SUBMISSION_BLOCKED_UNTIL_VALIDATION`
 
 ## Reentrada
 
 Proyecto: `01_MESA_PRINCIPAL/phoenix-action-gate`  
-Rama local observada: `review/g2-mvp-core`  
+Rama local actual: `review/contest-surface-20260918`  
 Repo público: `rudevairr-sys/phoenix-action-gate`
 
-No hay autorización para merge, deploy, dispatch productivo ni submission Devpost. La autorización humana de este corte fue para preparar la candidatura dentro de la carpeta del hackathon, corregir continuidad local e intentar el siguiente gate de test gobernado. La ejecución directa por SION quedó bloqueada, pero el operador ejecutó `npm test` en PowerShell y aportó salida completa.
+No hay autorización para merge, deploy, dispatch productivo ni submission Devpost. La autorización humana de este tramo permitió rama de revisión, commit local, push sin force y PR draft.
 
 Autorizaciones / evidencias de este corte:
 
@@ -17,6 +17,32 @@ Autorizaciones / evidencias de este corte:
 - `USER-20260918-SIGUR-NPM-TEST`
 - `USER-20260918-SIGUR-REGISTER-TEST-BLOCKER`
 - `USER-20260918-MIRA-REGISTER-NPM-TEST`
+- `USER-20260918-DALEE-CREATE-REVIEW-BRANCH`
+- `USER-20260918-DALEE-COMMIT-CONTEST-SURFACE`
+- `USER-20260918-DALEE-PUSH-REVIEW-BRANCH`
+- `USER-20260918-DALEE-CREATE-DRAFT-PR`
+
+## Pull Request
+
+PR draft creado:
+
+`https://github.com/rudevairr-sys/phoenix-action-gate/pull/7`
+
+Datos:
+
+- PR: `#7`.
+- Estado: `open`.
+- Draft: `true`.
+- Base: `main`.
+- Base SHA: `a06291a616a96f8dd861db2dc291dd8548ee5f83`.
+- Head: `review/contest-surface-20260918`.
+- Head SHA inicial: `cebec0de5d83dfcd4ced093aa626b7f7bfd0c3a1`.
+- Commit local inicial: `cebec0d prepare contest surface and evidence gate`.
+- Changed files reportado por GitHub en creación de PR: `127`.
+
+Registro local:
+
+`BUILDER_OMEGA_CONTEST_PREP_20260918/PR_DRAFT_RECORD_20260918.md`
 
 ## Decisión de candidatura
 
@@ -66,26 +92,7 @@ Interpretación obligatoria:
 
 One-hop causal evidence lineage remains useful, but it is not a demonstrated Phoenix differentiator versus a small competent lineage-aware baseline.
 
-## Pack de preparación creado
-
-Carpeta:
-
-`BUILDER_OMEGA_CONTEST_PREP_20260918/`
-
-Archivos:
-
-- `README.md`
-- `CLAIM_BOUNDARY.md`
-- `DEVPOST_SUBMISSION_DRAFT.md`
-- `VIDEO_SCRIPT_3MIN.md`
-- `CLEAN_CLONE_CHECKLIST.md`
-- `PUBLICATION_PLAN.md`
-- `TCC_MAVO_GATE.md`
-- `SIGMA_TEST_BLOCKER_20260918.md`
-
 ## Evidencia de test actual
-
-La ejecución directa por acción SION quedó bloqueada porque `npm_test` no existe como acción gobernada. Node sí estaba disponible (`v24.12.0`).
 
 El operador ejecutó en PowerShell:
 
@@ -115,14 +122,6 @@ Estado correcto:
 
 `TEST_EXECUTED_PASS`
 
-## Documentos reconciliados en este corte
-
-- `docs/00-governance/STATUS.md`
-- `docs/00-governance/CLAIMS_LEDGER.md`
-- `docs/00-governance/EVIDENCE_LEDGER.md`
-- `docs/01-hackathon/RTM_HACKATHON.md`
-- `PROJECT_STATE.json`
-
 ## Gates actuales
 
 - G0 reglas Devpost: `PASS_STALE_RECHECK_BEFORE_SUBMISSION`.
@@ -137,16 +136,15 @@ Estado correcto:
 
 ## Bloqueos antes de submission-ready
 
-1. Decidir corte público y rama/PR.
-2. Validar clean clone.
-3. Confirmar live Nebius/Nemotron actual o declarar evidencia previa con honestidad.
-4. Preparar demo URL/test build.
-5. Grabar vídeo <= 3 minutos.
-6. Completar formulario Devpost.
-7. Enviar solo con autorización humana separada.
+1. Validar clean clone desde `review/contest-surface-20260918`.
+2. Confirmar live Nebius/Nemotron actual o declarar evidencia previa con honestidad.
+3. Preparar demo URL/test build.
+4. Grabar vídeo <= 3 minutos.
+5. Completar formulario Devpost.
+6. Enviar solo con autorización humana separada.
 
 ## Siguiente paso seguro
 
-Crear una rama local de revisión para congelar el contest surface y preparar un commit/PR draft, sin merge ni submission. Antes de publicar, revisar que no entren secretos, rutas privadas ni material de Phoenix Neuron/MAK.
+Validar clean clone del PR draft. Mantener PR en draft hasta completar clean clone, live revalidation o clasificación explícita de evidencia previa, vídeo y revisión humana.
 
-No tocar Phoenix Neuron. No mover MAK. No habilitar dispatch. No publicar claims de superioridad. No enviar Devpost automáticamente.
+No tocar Phoenix Neuron. No mover MAK. No habilitar dispatch. No publicar claims de superioridad. No hacer merge. No enviar Devpost automáticamente.

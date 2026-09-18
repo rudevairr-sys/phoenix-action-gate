@@ -1,17 +1,21 @@
 {
   "schema_version": "1.0.0",
   "project": "Phoenix Action Gate",
-  "updated_at": "2026-09-18T10:31:30Z",
-  "mode": "CONTEST_SURFACE_PREPARATION",
+  "updated_at": "2026-09-18T10:34:20Z",
+  "mode": "PR_DRAFT_CREATED",
   "authorization": {
     "decision_ids": [
       "USER-20260918-HAZLO-CONTEST-PREP",
       "USER-20260918-SIGUR-NPM-TEST",
       "USER-20260918-SIGUR-REGISTER-TEST-BLOCKER",
-      "USER-20260918-MIRA-REGISTER-NPM-TEST"
+      "USER-20260918-MIRA-REGISTER-NPM-TEST",
+      "USER-20260918-DALEE-CREATE-REVIEW-BRANCH",
+      "USER-20260918-DALEE-COMMIT-CONTEST-SURFACE",
+      "USER-20260918-DALEE-PUSH-REVIEW-BRANCH",
+      "USER-20260918-DALEE-CREATE-DRAFT-PR"
     ],
     "source": "human_bridge",
-    "scope": "Prepare the hackathon candidacy inside phoenix-action-gate; register current-cut test evidence; do not touch Phoenix Neuron or MAK; no merge, deploy, dispatch or Devpost submission."
+    "scope": "Prepare the hackathon candidacy inside phoenix-action-gate; register current-cut test evidence; create review branch, local commit, push without force and draft PR. No merge, deploy, dispatch or Devpost submission."
   },
   "hackathon": {
     "name": "Nebius x NVIDIA Global AI Hackathon",
@@ -21,6 +25,30 @@
     "deadline_observed_utc": "2026-10-30T17:00:00Z",
     "track_candidate": "Coding and agentic engineering",
     "submission_state": "not_submitted"
+  },
+  "git": {
+    "repository": "rudevairr-sys/phoenix-action-gate",
+    "local_branch": "review/contest-surface-20260918",
+    "remote_branch": "origin/review/contest-surface-20260918",
+    "base_branch": "main",
+    "commit": "cebec0de5d83dfcd4ced093aa626b7f7bfd0c3a1",
+    "commit_short": "cebec0d",
+    "commit_message": "prepare contest surface and evidence gate"
+  },
+  "pull_request": {
+    "number": 7,
+    "url": "https://github.com/rudevairr-sys/phoenix-action-gate/pull/7",
+    "state": "open",
+    "draft": true,
+    "merged": false,
+    "base": "main",
+    "base_sha": "a06291a616a96f8dd861db2dc291dd8548ee5f83",
+    "head": "review/contest-surface-20260918",
+    "head_sha_at_creation": "cebec0de5d83dfcd4ced093aa626b7f7bfd0c3a1",
+    "changed_files_at_creation": 127,
+    "additions_at_creation": 15452,
+    "deletions_at_creation": 2,
+    "local_record": "BUILDER_OMEGA_CONTEST_PREP_20260918/PR_DRAFT_RECORD_20260918.md"
   },
   "mavo": {
     "variant": "phoenix-safe-3",
@@ -36,7 +64,7 @@
   "sources": [
     {
       "id": "phoenix-action-gate-local",
-      "ref": "01_MESA_PRINCIPAL/phoenix-action-gate on local branch review/g2-mvp-core",
+      "ref": "01_MESA_PRINCIPAL/phoenix-action-gate on local branch review/contest-surface-20260918",
       "disposition": "used",
       "reason": "Primary hackathon project workspace."
     },
@@ -44,7 +72,7 @@
       "id": "public-product-repo",
       "ref": "rudevairr-sys/phoenix-action-gate",
       "disposition": "used",
-      "reason": "Public repository exists but is behind the local contest surface cut."
+      "reason": "Public repository and draft PR created for review."
     },
     {
       "id": "devpost-official",
@@ -69,62 +97,6 @@
       "ref": "01_MESA_PRINCIPAL/PHOENIX_ACTION_ASSURANCE_LAB",
       "disposition": "reference_only",
       "reason": "Related research/lab source; not the public product repo."
-    }
-  ],
-  "claims": [
-    {
-      "id": "C-G1-INTEGRATION",
-      "text": "Nebius Token Factory and an NVIDIA Nemotron model were previously observed producing governable proposals without dispatch.",
-      "state": "RUNTIME_OBSERVED_PREVIOUSLY",
-      "evidence_refs": [
-        "docs/04-runtime/evidence/G1_ACTION_PROPOSAL_2026-08-31.json",
-        "docs/04-runtime/evidence/G2_LIVE_PLAN_SUCCESS_001_2026-09-01.json",
-        "docs/04-runtime/evidence/G2_PANEL_SECRET_BOUNDARY_2026-09-02.json"
-      ],
-      "boundary": "Revalidate live before submission and state the final model id exactly as observed."
-    },
-    {
-      "id": "C-JUSTIFICATION-FIREWALL",
-      "text": "Phoenix Action Gate can demonstrate a bounded scenario where evidence lineage invalidation changes the decision to DENY while keeping dispatch disabled.",
-      "state": "TEST_EXECUTED_AND_RUNTIME_OBSERVED_PREVIOUSLY",
-      "evidence_refs": [
-        "docs/04-runtime/evidence/G2_LIVE_PLAN_SUCCESS_001_2026-09-01.json",
-        "docs/04-runtime/evidence/G2_JURY_SURFACE_LIVE_DISCRIMINANT_002_2026-09-03.json",
-        "docs/04-runtime/evidence/G2_JURY_SURFACE_FINAL_VISUAL_004_2026-09-03.json",
-        "docs/04-runtime/evidence/G2_CURRENT_CUT_NPM_TEST_2026-09-18.json"
-      ],
-      "boundary": "Bounded demo only; not production readiness or general superiority."
-    },
-    {
-      "id": "C-TAMPER-B0",
-      "text": "Trial 001 showed Phoenix detecting T5 against a frozen snapshot receipt baseline B0.",
-      "state": "TEST_EXECUTED",
-      "evidence_refs": [
-        "docs/04-runtime/evidence/G2_RECEIPT_TAMPER_TRIAL_001_RESULT_2026-09-02.json",
-        "docs/04-runtime/evidence/G2_CURRENT_CUT_NPM_TEST_2026-09-18.json"
-      ],
-      "boundary": "Only versus B0, not versus a competent lineage-aware baseline."
-    },
-    {
-      "id": "C-TAMPER-B1",
-      "text": "Trial 002 B1 matched Phoenix on the one-hop causal source mismatch with less LOC and no new dependencies.",
-      "state": "TEST_EXECUTED",
-      "evidence_refs": [
-        "docs/04-runtime/evidence/G2_RECEIPT_TAMPER_TRIAL_002_B1_RESULT_2026-09-03.json",
-        "docs/04-runtime/evidence/G2_CURRENT_CUT_NPM_TEST_2026-09-18.json"
-      ],
-      "boundary": "Interpretation is NOT_DIFFERENTIATING_VS_B1 / USEFUL_G7_CAPABILITY."
-    },
-    {
-      "id": "C-PUBLIC-READY",
-      "text": "Phoenix Action Gate is ready for public Devpost submission.",
-      "state": "INSUFFICIENT_EVIDENCE",
-      "evidence_refs": [
-        "BUILDER_OMEGA_CONTEST_PREP_20260918/CLEAN_CLONE_CHECKLIST.md",
-        "BUILDER_OMEGA_CONTEST_PREP_20260918/SIGMA_TEST_BLOCKER_20260918.md",
-        "docs/04-runtime/evidence/G2_CURRENT_CUT_NPM_TEST_2026-09-18.json"
-      ],
-      "boundary": "Current local tests pass, but clean clone, live revalidation/classification, demo URL/test build, video and human submission authorization remain pending."
     }
   ],
   "test_gate_current_cut": {
@@ -200,7 +172,7 @@
     {
       "id": "G7_CLEAN_CLONE",
       "state": "PENDING",
-      "reason": "Public repo cut is behind local worktree; clean clone not executed."
+      "reason": "Draft PR exists; clean clone from pushed branch not executed yet."
     },
     {
       "id": "G8_DEVPOST_SUBMISSION",
@@ -217,6 +189,7 @@
     "BUILDER_OMEGA_CONTEST_PREP_20260918/PUBLICATION_PLAN.md",
     "BUILDER_OMEGA_CONTEST_PREP_20260918/TCC_MAVO_GATE.md",
     "BUILDER_OMEGA_CONTEST_PREP_20260918/SIGMA_TEST_BLOCKER_20260918.md",
+    "BUILDER_OMEGA_CONTEST_PREP_20260918/PR_DRAFT_RECORD_20260918.md",
     "docs/04-runtime/evidence/G2_CURRENT_CUT_NPM_TEST_2026-09-18.json",
     "docs/00-governance/STATUS.md",
     "docs/01-hackathon/RTM_HACKATHON.md",
@@ -224,7 +197,7 @@
     "docs/00-governance/EVIDENCE_LEDGER.md",
     "PROJECT_STATE.json"
   ],
-  "next_safe_step": "Create a local review branch and commit the contest surface after one more static intake/git diff review; do not merge, deploy or submit without separate human authorization.",
+  "next_safe_step": "Validate clean clone from PR #7 branch. Keep PR as draft until clean clone, live revalidation/classification, demo/video and human review are complete. Do not merge, deploy or submit without separate human authorization.",
   "truthcore": {
     "designed": true,
     "generated": true,
@@ -232,9 +205,15 @@
     "test_executed_this_cut": true,
     "tests_passed": 122,
     "tests_failed": 0,
+    "branch_created": true,
+    "committed": true,
+    "commit_sha": "cebec0de5d83dfcd4ced093aa626b7f7bfd0c3a1",
+    "pushed": true,
+    "draft_pr_created": true,
+    "pr_number": 7,
     "runtime_observed_this_cut": false,
     "production_validated": false,
-    "pushed": false,
+    "merged": false,
     "submitted": false
   }
 }
