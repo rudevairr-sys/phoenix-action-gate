@@ -1,8 +1,8 @@
 {
   "schema_version": "1.0.0",
   "project": "Phoenix Action Gate",
-  "updated_at": "2026-09-18T10:40:10Z",
-  "mode": "PR_DRAFT_CREATED_CLEANCLONE_STRUCTURAL_PASS",
+  "updated_at": "2026-09-18T17:24:00Z",
+  "mode": "PR_DRAFT_CREATED_CLEANCLONE_STRUCTURAL_PASS_SPECIALIZED_AGENT_CONTRACT_EVIDENCE",
   "authorization": {
     "decision_ids": [
       "USER-20260918-HAZLO-CONTEST-PREP",
@@ -14,10 +14,11 @@
       "USER-20260918-DALEE-PUSH-REVIEW-BRANCH",
       "USER-20260918-DALEE-CREATE-DRAFT-PR",
       "USER-20260918-SI-CLEANCLONE-PR7",
-      "USER-20260918-SI-RECORD-CLEANCLONE"
+      "USER-20260918-SI-RECORD-CLEANCLONE",
+      "USER-20260918-REGISTER-SPECIALIZED-AGENT-EVIDENCE-PAG"
     ],
     "source": "human_bridge",
-    "scope": "Prepare contest candidacy, create PR draft, and perform structural clean clone validation. No merge, deploy, dispatch activation or Devpost submission."
+    "scope": "Prepare contest candidacy, create PR draft, perform structural clean clone validation, and record Ferrum Rust specialized-agent contract evidence. No merge, deploy, dispatch activation or Devpost submission."
   },
   "hackathon": {
     "name": "Nebius x NVIDIA Global AI Hackathon",
@@ -33,19 +34,8 @@
     "local_branch": "review/contest-surface-20260918",
     "remote_branch": "origin/review/contest-surface-20260918",
     "base_branch": "main",
-    "current_head": "4459f3ef46c92662b0be8b42b3116b0fa8dbee46",
-    "commits_this_cut": [
-      {
-        "sha": "cebec0de5d83dfcd4ced093aa626b7f7bfd0c3a1",
-        "short": "cebec0d",
-        "message": "prepare contest surface and evidence gate"
-      },
-      {
-        "sha": "4459f3ef46c92662b0be8b42b3116b0fa8dbee46",
-        "short": "4459f3e",
-        "message": "record draft PR handoff"
-      }
-    ]
+    "current_head_last_pushed": "1098e1490dc25bd556ace172b9ff23359109f852",
+    "local_has_uncommitted_updates": true
   },
   "pull_request": {
     "number": 7,
@@ -56,10 +46,7 @@
     "base": "main",
     "base_sha": "a06291a616a96f8dd861db2dc291dd8548ee5f83",
     "head": "review/contest-surface-20260918",
-    "head_sha_current": "4459f3ef46c92662b0be8b42b3116b0fa8dbee46",
-    "changed_files_latest_observed": 128,
-    "additions_latest_observed": 15507,
-    "deletions_latest_observed": 2,
+    "head_sha_latest_observed": "1098e1490dc25bd556ace172b9ff23359109f852",
     "local_record": "BUILDER_OMEGA_CONTEST_PREP_20260918/PR_DRAFT_RECORD_20260918.md"
   },
   "clean_clone": {
@@ -73,22 +60,32 @@
     "fingerprint": "ca36715e5ac793004041b1db175a11a418a8d2b20c32f0a0c7a558252ba7d41c",
     "git_status": "HEAD (no branch)",
     "markers": ["package.json", "README.md"],
-    "verified_paths": [
-      "package.json",
-      "README.md",
-      "BUILDER_OMEGA_CONTEST_PREP_20260918/"
-    ],
     "record": "BUILDER_OMEGA_CONTEST_PREP_20260918/CLEAN_CLONE_RECORD_20260918.md"
+  },
+  "specialized_agent_contract_evidence": {
+    "state": "EXTERNAL_EVIDENCE_RECORDED_NOT_INTEGRATED",
+    "record": "BUILDER_OMEGA_CONTEST_PREP_20260918/SPECIALIZED_AGENT_CONTRACT_EVIDENCE_20260918.md",
+    "example_agent": "Ferrum Rust",
+    "classification": "EVIDENCIA_EXTERNA_UTIL / NO_AUTORIDAD_OPERATIVA / NO_INTEGRADO_AUN",
+    "observed_pattern": "Strict Rust-only domain gate with SAFE_NOOP and useful redirect back into Rust tooling.",
+    "strategic_thesis": "Phoenix Action Gate can be explained as verifying that specialized agents stay inside their contract before responding or acting.",
+    "candidate_demo": "Specialized Agent Contract Demo",
+    "microagents": [
+      "MONO_SI_NO",
+      "FERRUM_RUST",
+      "ACTION_PROPOSER"
+    ]
   },
   "mavo": {
     "variant": "phoenix-safe-3",
     "state": "RUNNING",
     "runtime_profile": "tool-assisted",
-    "decision": "Continue Phoenix Action Gate as primary hackathon candidate. Keep Phoenix Neuron, MAK and Action Assurance Lab reference-only."
+    "decision": "Continue Phoenix Action Gate as primary hackathon candidate. Use Ferrum Rust as external evidence for a specialized-agent contract demo, not as integrated authority."
   },
   "public_thesis": {
     "short": "A justification firewall for AI coding agents.",
-    "full": "Before an AI agent acts, Phoenix Action Gate checks whether the reason for acting is still valid."
+    "full": "Before an AI agent acts, Phoenix Action Gate checks whether the reason for acting is still valid.",
+    "specialized_agent_angle": "Specialized agents should not become general assistants under pressure. Phoenix Action Gate verifies that each agent stays inside its contract."
   },
   "test_gate_current_cut": {
     "state": "TEST_EXECUTED_PASS",
@@ -115,47 +112,23 @@
     "receipt/tamper is a Phoenix moat",
     "secure AI agent execution without qualification",
     "automatic execution or dispatch",
-    "submission-ready"
+    "submission-ready",
+    "Ferrum Rust integrated in Phoenix Action Gate",
+    "Phoenix Action Gate runtime-validates Ferrum Rust"
   ],
   "gates": [
-    {
-      "id": "G0_DEVPOST_RULES",
-      "state": "PASS_STALE_RECHECK_BEFORE_SUBMISSION"
-    },
-    {
-      "id": "G1_NEBIUS_NVIDIA",
-      "state": "RUNTIME_OBSERVED_PREVIOUSLY_REVALIDATE"
-    },
-    {
-      "id": "G2_PRODUCT_SURFACE",
-      "state": "CURRENT_CUT_TEST_PASS"
-    },
-    {
-      "id": "G3_DIFFERENTIATION",
-      "state": "WARN_BOUNDARY_REQUIRED"
-    },
-    {
-      "id": "G4_B1_RECEIPT_TAMPER",
-      "state": "NOT_DIFFERENTIATING_VS_B1_USEFUL_CAPABILITY"
-    },
-    {
-      "id": "G5_JURY_SURFACE",
-      "state": "TEST_EXECUTED_LOCAL_PASS_VISUAL_REVALIDATION_PENDING"
-    },
-    {
-      "id": "G6_PUBLICATION_BOUNDARY",
-      "state": "ACTIVE"
-    },
-    {
-      "id": "G7_CLEAN_CLONE",
-      "state": "STRUCTURAL_PASS_TEST_PENDING"
-    },
-    {
-      "id": "G8_DEVPOST_SUBMISSION",
-      "state": "PENDING_HUMAN_AUTHORIZATION"
-    }
+    { "id": "G0_DEVPOST_RULES", "state": "PASS_STALE_RECHECK_BEFORE_SUBMISSION" },
+    { "id": "G1_NEBIUS_NVIDIA", "state": "RUNTIME_OBSERVED_PREVIOUSLY_REVALIDATE" },
+    { "id": "G2_PRODUCT_SURFACE", "state": "CURRENT_CUT_TEST_PASS" },
+    { "id": "G3_DIFFERENTIATION", "state": "IMPROVED_BY_SPECIALIZED_AGENT_CONTRACT_ANGLE / WARN_BOUNDARY_REQUIRED" },
+    { "id": "G4_B1_RECEIPT_TAMPER", "state": "NOT_DIFFERENTIATING_VS_B1_USEFUL_CAPABILITY" },
+    { "id": "G5_JURY_SURFACE", "state": "TEST_EXECUTED_LOCAL_PASS_VISUAL_REVALIDATION_PENDING" },
+    { "id": "G6_PUBLICATION_BOUNDARY", "state": "ACTIVE" },
+    { "id": "G7_CLEAN_CLONE", "state": "STRUCTURAL_PASS_TEST_PENDING" },
+    { "id": "G8_DEVPOST_SUBMISSION", "state": "PENDING_HUMAN_AUTHORIZATION" },
+    { "id": "G9_SPECIALIZED_AGENT_CONTRACT_DEMO", "state": "DESIGNED_FROM_EXTERNAL_EVIDENCE / NOT_IMPLEMENTED" }
   ],
-  "next_safe_step": "Run npm test inside 02_CANDIDATOS/phoenix-action-gate-cleanclone-pr7-20260918, then record CLEAN_CLONE_TEST_PASS if successful. Keep PR #7 draft; no merge, deploy or Devpost submission without separate authorization.",
+  "next_safe_step": "Run npm test inside the clean clone, then create a small docs/03-product spec for Specialized Agent Contract Demo. Keep PR #7 draft; no merge, deploy or Devpost submission without separate authorization.",
   "truthcore": {
     "designed": true,
     "generated": true,
@@ -170,6 +143,8 @@
     "pr_number": 7,
     "clean_clone_structural_pass": true,
     "clean_clone_test_pass": false,
+    "specialized_agent_contract_evidence_recorded": true,
+    "specialized_agent_contract_demo_implemented": false,
     "runtime_observed_this_cut": false,
     "production_validated": false,
     "merged": false,

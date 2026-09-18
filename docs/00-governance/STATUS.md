@@ -1,7 +1,7 @@
 # Estado retomable
 
 Fecha: 2026-09-18  
-Estado: `PR_DRAFT_CREATED / CURRENT_CUT_TEST_PASS / CLEAN_CLONE_STRUCTURAL_PASS / SUBMISSION_BLOCKED_UNTIL_VALIDATION`
+Estado: `PR_DRAFT_CREATED / CURRENT_CUT_TEST_PASS / CLEAN_CLONE_STRUCTURAL_PASS / SPECIALIZED_AGENT_CONTRACT_EVIDENCE_RECORDED / SUBMISSION_BLOCKED_UNTIL_VALIDATION`
 
 ## Reentrada
 
@@ -9,7 +9,7 @@ Proyecto: `01_MESA_PRINCIPAL/phoenix-action-gate`
 Rama local actual: `review/contest-surface-20260918`  
 Repo público: `rudevairr-sys/phoenix-action-gate`
 
-No hay autorización para merge, deploy, dispatch productivo ni submission Devpost. La autorización humana de este tramo permitió rama de revisión, commit local, push sin force, PR draft y clean clone estructural.
+No hay autorización para merge, deploy, dispatch productivo ni submission Devpost. La autorización humana permitió rama de revisión, commit local, push sin force, PR draft, clean clone estructural y registro de la evidencia externa Ferrum Rust como posible línea de demo.
 
 ## Pull Request
 
@@ -25,13 +25,13 @@ Datos:
 - Base: `main`.
 - Base SHA: `a06291a616a96f8dd861db2dc291dd8548ee5f83`.
 - Head: `review/contest-surface-20260918`.
-- Head SHA actual registrado: `4459f3ef46c92662b0be8b42b3116b0fa8dbee46`.
-- Commit inicial: `cebec0d prepare contest surface and evidence gate`.
-- Commit de handoff PR: `4459f3e record draft PR handoff`.
+- Head SHA último observado antes de registros locales nuevos: `1098e1490dc25bd556ace172b9ff23359109f852`.
 
-Registro local:
+Registros locales:
 
-`BUILDER_OMEGA_CONTEST_PREP_20260918/PR_DRAFT_RECORD_20260918.md`
+- `BUILDER_OMEGA_CONTEST_PREP_20260918/PR_DRAFT_RECORD_20260918.md`
+- `BUILDER_OMEGA_CONTEST_PREP_20260918/CLEAN_CLONE_RECORD_20260918.md`
+- `BUILDER_OMEGA_CONTEST_PREP_20260918/SPECIALIZED_AGENT_CONTRACT_EVIDENCE_20260918.md`
 
 ## Clean clone estructural
 
@@ -55,19 +55,43 @@ Resultado:
 - markers: `package.json`, `README.md`.
 - git status del clone: `## HEAD (no branch)` por ref exacta/detached HEAD.
 
-Archivos clave leídos en clone:
-
-- `package.json`.
-- `README.md`.
-- `BUILDER_OMEGA_CONTEST_PREP_20260918/`.
-
-Registro:
-
-`BUILDER_OMEGA_CONTEST_PREP_20260918/CLEAN_CLONE_RECORD_20260918.md`
-
 Estado:
 
 `CLEAN_CLONE_STRUCTURAL_PASS / CLEAN_CLONE_TEST_PENDING`
+
+## Ferrum Rust / microagentes especializados
+
+El usuario aportó conversaciones y archivos de configuración de un GPT especializado llamado `Ferrum Rust`.
+
+Clasificación:
+
+`EVIDENCIA_EXTERNA_UTIL / NO_AUTORIDAD_OPERATIVA / NO_INTEGRADO_AUN`
+
+Hallazgo:
+
+Ferrum Rust funciona como ejemplo de agente de dominio cerrado: solo Rust o tecnologías directamente conectadas con Rust, salida `SAFE_NOOP` para fuera de alcance y redirección útil hacia herramientas Rust cuando procede.
+
+Tesis estratégica nueva:
+
+> Specialized agents should not become general assistants under pressure. Phoenix Action Gate verifies that each agent stays inside its contract.
+
+Versión española:
+
+> Un agente especializado no debería convertirse en asistente general solo porque el usuario insista. Phoenix Action Gate comprueba que cada agente se mantiene dentro de su contrato.
+
+Demo candidata:
+
+`Specialized Agent Contract Demo`
+
+Microagentes:
+
+- `MONO_SI_NO`: solo `SI`, `NO`, `SAFE_NOOP`.
+- `FERRUM_RUST`: solo Rust o tecnologías conectadas directamente con Rust.
+- `ACTION_PROPOSER`: solo propone acciones, no ejecuta.
+
+Estado:
+
+`DESIGNED_FROM_EXTERNAL_EVIDENCE / NOT_IMPLEMENTED`
 
 ## Decisión de candidatura
 
@@ -84,6 +108,10 @@ No se pivota a `MATHEMATICAL_ASSURANCE_KIT` como producto principal del concurso
 Formulación corta:
 
 > A justification firewall for AI coding agents.
+
+Ángulo de demo adicional:
+
+> Phoenix Action Gate verifies that specialized agents stay inside their contract before responding or acting.
 
 ## Estado Devpost observado
 
@@ -129,7 +157,7 @@ Resultado aportado:
 - Todo: `0`.
 - Duration: `737.3368 ms`.
 
-Registro creado:
+Registro:
 
 `docs/04-runtime/evidence/G2_CURRENT_CUT_NPM_TEST_2026-09-18.json`
 
@@ -142,21 +170,23 @@ Estado:
 - G0 reglas Devpost: `PASS_STALE_RECHECK_BEFORE_SUBMISSION`.
 - G1 Nebius/NVIDIA: `RUNTIME_OBSERVED_PREVIOUSLY / REVALIDATE_BEFORE_SUBMISSION`.
 - G2 gate/panel: `CURRENT_CUT_TEST_PASS`.
-- G3 diferenciación: `WARN_BOUNDARY_REQUIRED`.
+- G3 diferenciación: `IMPROVED_BY_SPECIALIZED_AGENT_CONTRACT_ANGLE / WARN_BOUNDARY_REQUIRED`.
 - G4 receipt/tamper: `USEFUL_CAPABILITY_NOT_DIFFERENTIATOR_VS_B1`.
 - G5 jury surface: `TEST_EXECUTED_LOCAL_PASS / VISUAL_REVALIDATION_PENDING`.
 - G6 publication boundary: `ACTIVE`.
 - G7 clean clone: `STRUCTURAL_PASS / CLONE_TEST_PENDING`.
 - G8 Devpost submission: `PENDING_HUMAN_AUTHORIZATION`.
+- G9 specialized-agent-contract demo: `DESIGNED_FROM_EXTERNAL_EVIDENCE / NOT_IMPLEMENTED`.
 
 ## Bloqueos antes de submission-ready
 
 1. Ejecutar `npm test` dentro del clean clone.
-2. Confirmar live Nebius/Nemotron actual o declarar evidencia previa con honestidad.
-3. Preparar demo URL/test build.
-4. Grabar vídeo <= 3 minutos.
-5. Completar formulario Devpost.
-6. Enviar solo con autorización humana separada.
+2. Crear spec pequeña para `Specialized Agent Contract Demo` o decidir video-only.
+3. Confirmar live Nebius/Nemotron actual o declarar evidencia previa con honestidad.
+4. Preparar demo URL/test build.
+5. Grabar vídeo <= 3 minutos.
+6. Completar formulario Devpost.
+7. Enviar solo con autorización humana separada.
 
 ## Siguiente paso seguro
 
@@ -167,6 +197,8 @@ cd C:\Users\Usuario\.chatgpt\Gobernanza_Phoenix\SION_TALLER_RUST\SION_WORKSPACE\
 node --version
 npm test
 ```
+
+Después, crear `docs/03-product/SPECIALIZED_AGENT_CONTRACT_DEMO.md` si se decide implementar o documentar la demo.
 
 Mantener PR en draft hasta completar clean clone test, live revalidation o clasificación explícita de evidencia previa, vídeo y revisión humana.
 
