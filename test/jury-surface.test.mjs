@@ -57,3 +57,19 @@ test('jury surface keeps no-dispatch and existing application wiring visible', (
   assert.equal(occurrences(html, '<script type="module" src="/app.js"></script>'), 1);
   assert.equal(occurrences(html, 'id="plan-dispatch"'), 1);
 });
+
+test('jury surface exposes the specialized agent contract demo strip', () => {
+  assert.match(html, /SPECIALIZED AGENT CONTRACT DEMO/);
+  assert.match(html, /Agentes pequeños, contratos claros, puerta de salida Phoenix/);
+  assert.match(html, /Un agente especializado no debería convertirse en asistente general/);
+  assert.match(html, /MONO_SI_NO/);
+  assert.match(html, /Solo SI \/ NO \/ SAFE_NOOP/);
+  assert.match(html, /FERRUM_RUST/);
+  assert.match(html, /Solo dominio Rust/);
+  assert.match(html, /N_VCLS/);
+  assert.match(html, /Sin vocales/);
+  assert.match(html, /ACTION_PROPOSER/);
+  assert.match(html, /Propone, no ejecuta/);
+  assert.match(juryCss, /\.contract-grid\s*\{/);
+  assert.match(juryCss, /\.contract-card\s*\{/);
+});

@@ -1,0 +1,41 @@
+{
+  "schema_version": "1.0.0",
+  "evidence_id": "G5_JURY_CONTRACT_STRIP_TEST_2026-09-19",
+  "created_at": "2026-09-19T13:31:00Z",
+  "project": "Phoenix Action Gate",
+  "state": "CURRENT_LIVE_CUT_TEST_PASS_WITH_JURY_CONTRACT_STRIP_ASSERTION",
+  "path": "01_MESA_PRINCIPAL/phoenix-action-gate",
+  "runtime": {
+    "executor": "Remote Desktop Commander",
+    "device": "DESKTOP-M7OQOC5",
+    "shell": "powershell",
+    "node_version": "v24.12.0"
+  },
+  "command": "npm test",
+  "resolved_command": "node --test",
+  "validated_scope": [
+    "Devpost draft updated for specialized-agent contract demo",
+    "jury surface structural assertion for Specialized Agent Contract Demo strip",
+    "existing action/plan/evidence gate regression suite",
+    "specialized-agent contract checker regression suite"
+  ],
+  "result": {
+    "tests": 129,
+    "suites": 0,
+    "pass": 129,
+    "fail": 0,
+    "cancelled": 0,
+    "skipped": 0,
+    "todo": 0,
+    "duration_ms": 706.0295
+  },
+  "truthcore": {
+    "test_executed": true,
+    "runtime_observed": true,
+    "current_live_cut_test_pass": true,
+    "visual_revalidation_structural": true,
+    "visual_revalidation_screenshot": false,
+    "production_validated": false,
+    "devpost_submitted": false
+  }
+}

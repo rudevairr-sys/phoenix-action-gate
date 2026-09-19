@@ -1,7 +1,7 @@
 # Estado retomable
 
 Fecha: 2026-09-19  
-Estado: `CONTRACT_CHECKERS_IMPLEMENTED / CURRENT_LIVE_TEST_PASS_128 / FRESH_CLEAN_CLONE_TEST_PASS_128 / SUBMISSION_BLOCKED_UNTIL_VALIDATION`
+Estado: `PR_UPDATED / DEVPOST_DRAFT_UPDATED / JURY_CONTRACT_STRIP_STRUCTURAL_TEST_PASS_129 / SUBMISSION_BLOCKED_UNTIL_VALIDATION`
 
 ## Reentrada
 
@@ -9,7 +9,7 @@ Proyecto: `01_MESA_PRINCIPAL/phoenix-action-gate`
 Rama local actual: `review/contest-surface-20260918`  
 Repo público: `rudevairr-sys/phoenix-action-gate`
 
-No hay autorización para merge, deploy, dispatch productivo ni submission Devpost. La autorización humana permitió continuar el desarrollo de concurso, usar Remote Desktop para tests locales, implementar checkers mínimos de contratos de agentes, actualizar la superficie de demo, crear clean clone fresco y registrar evidencia.
+No hay autorización para merge, deploy, dispatch productivo ni submission Devpost. La autorización humana permitió continuar el desarrollo de concurso, usar Remote Desktop para tests locales, actualizar PR, actualizar Devpost draft, añadir validación estructural de UI y registrar evidencia.
 
 ## Pull Request
 
@@ -17,26 +17,29 @@ PR draft:
 
 `https://github.com/rudevairr-sys/phoenix-action-gate/pull/7`
 
-Datos:
+Datos observados antes del commit local de este corte:
 
 - PR: `#7`.
-- Estado esperado: `open / draft / not merged`.
-- Base: `main`.
-- Head: `review/contest-surface-20260918`.
-- Commit del corte de checkers: `7ebb91c implement specialized agent contract checkers`.
+- Estado: `open`.
+- Draft: `true`.
+- Merged: `false`.
+- Mergeable: `true`.
+- Head observado: `0860d782bce6133d5645bc064ea7f018ae9f3c72`.
+- PR body actualizado con el estado `128/128 PASS` y la historia de `Specialized Agent Contract Demo`.
+- Comentario de progreso publicado: `5742270244`.
 
-## Implementación nueva — Specialized Agent Contract Demo
+## Implementación actual — Specialized Agent Contract Demo
 
-Archivos nuevos/modificados:
+Archivos relevantes:
 
 - `src/agent-contracts.mjs`.
 - `test/agent-contracts.test.mjs`.
+- `test/jury-surface.test.mjs`.
 - `web/index.html`.
 - `web/jury.css`.
+- `docs/03-product/SPECIALIZED_AGENT_CONTRACT_DEMO.md`.
 - `BUILDER_OMEGA_CONTEST_PREP_20260918/VIDEO_SCRIPT_3MIN.md`.
-- `docs/04-runtime/evidence/G7_CLEAN_CLONE_NPM_TEST_2026-09-19.json`.
-- `docs/04-runtime/evidence/G9_SPECIALIZED_AGENT_CONTRACT_CHECKERS_TEST_2026-09-19.json`.
-- `docs/04-runtime/evidence/G7_FRESH_CLEAN_CLONE_CONTRACTS_TEST_2026-09-19.json`.
+- `BUILDER_OMEGA_CONTEST_PREP_20260918/DEVPOST_SUBMISSION_DRAFT.md`.
 
 Checkers implementados:
 
@@ -47,7 +50,7 @@ Checkers implementados:
 
 Estado:
 
-`IMPLEMENTED_MINIMAL_CHECKERS / LIVE_AND_FRESH_CLEAN_CLONE_TEST_PASS`
+`IMPLEMENTED_MINIMAL_CHECKERS / LIVE_TEST_PASS_129 / STRUCTURAL_UI_REVALIDATION_PASS`
 
 ## Evidencia de test — proyecto vivo actual
 
@@ -62,63 +65,56 @@ npm test
 Resultado:
 
 - Node: `v24.12.0`.
-- Tests: `128`.
-- Pass: `128`.
+- Tests: `129`.
+- Pass: `129`.
 - Fail: `0`.
 - Cancelled: `0`.
 - Skipped: `0`.
 - Todo: `0`.
-- Duration: `649.6845 ms`.
+- Duration: `706.0295 ms`.
 
 Registro:
 
-`docs/04-runtime/evidence/G9_SPECIALIZED_AGENT_CONTRACT_CHECKERS_TEST_2026-09-19.json`
+`docs/04-runtime/evidence/G5_JURY_CONTRACT_STRIP_TEST_2026-09-19.json`
 
-## Evidencia de test — clean clone fresco del corte actual
+## Clean clone
 
-Clone fresco:
+Clean clone fresco anterior del corte de checkers:
 
 `02_CANDIDATOS/phoenix-action-gate-cleanclone-pr7-contracts-20260919`
 
-Intake:
+Resultado anterior:
 
-- Decision: `ALLOW`.
-- Files: `136`.
-- Bytes: `672706`.
-- Fingerprint: `eff114b321121dec541a7538e0c482b4f3c0b9057d357135bce01b472333d18b`.
-
-Remote Desktop ejecutó:
-
-```powershell
-cd C:\Users\Usuario\.chatgpt\Gobernanza_Phoenix\SION_TALLER_RUST\SION_WORKSPACE\02_CANDIDATOS\phoenix-action-gate-cleanclone-pr7-contracts-20260919
-node --version
-npm test
-```
-
-Resultado:
-
-- Node: `v24.12.0`.
 - Tests: `128`.
 - Pass: `128`.
 - Fail: `0`.
-- Cancelled: `0`.
-- Skipped: `0`.
-- Todo: `0`.
-- Duration: `763.5268 ms`.
 
 Registro:
 
 `docs/04-runtime/evidence/G7_FRESH_CLEAN_CLONE_CONTRACTS_TEST_2026-09-19.json`
 
+Nota: tras el cambio de Devpost draft y test estructural de UI, falta clean clone fresco de este corte si se quiere máxima evidencia de paquete final.
+
+## Devpost draft
+
+Actualizado:
+
+`BUILDER_OMEGA_CONTEST_PREP_20260918/DEVPOST_SUBMISSION_DRAFT.md`
+
 Estado:
 
-`FRESH_CLEAN_CLONE_TEST_PASS_128`
+`DRAFT_NOT_SUBMITTED / UPDATED_FOR_SPECIALIZED_AGENT_CONTRACT_DEMO`
+
+Incluye:
+
+- resumen del producto;
+- uso previsto de Nebius/Nemotron;
+- demo de agentes especializados;
+- evidencia `128/128 PASS`;
+- limitaciones;
+- boundaries de no producción, no dispatch, no Phoenix Neuron, no ZIPs integrados.
 
 ## Specialized Agent Contract Demo
-
-Spec:
-
-`docs/03-product/SPECIALIZED_AGENT_CONTRACT_DEMO.md`
 
 Tesis:
 
@@ -135,34 +131,6 @@ Microagentes candidatos:
 - `N_VCLS`: contrato formal de salida sin vocales.
 - `ACTION_PROPOSER`: contrato sin dispatch.
 
-## Ferrum Rust
-
-Clasificación:
-
-`EVIDENCIA_EXTERNA_UTIL / NO_AUTORIDAD_OPERATIVA / NO_INTEGRADO_AUN`
-
-Hallazgo:
-
-Ferrum Rust funciona como ejemplo de agente de dominio cerrado: solo Rust o tecnologías directamente conectadas con Rust, salida `SAFE_NOOP` para fuera de alcance y redirección útil hacia herramientas Rust cuando procede.
-
-## N_VCLS
-
-Fuente:
-
-`n-vcls_phoenix.zip`, aportado por el usuario.
-
-Clasificación:
-
-`EXTERNAL_AGENT_FACTORY_OUTPUT_RECORDED / DOCUMENTED_NOT_IMPLEMENTED / DEMO_CASE_CANDIDATE`
-
-Hallazgo:
-
-`N_VCLS` documenta un contrato formal de salida: no usar vocales y responder `/` si no puede cumplir. La inspección fue estática y no ejecutó código. El Rust generado todavía es plantilla no conforme porque emite textos con vocales y repite input del usuario.
-
-Lectura estratégica:
-
-> Un contrato declarado no basta. Phoenix Action Gate debe verificar la salida.
-
 ## Decisión de candidatura
 
 Se mantiene `Phoenix Action Gate` como candidato principal del Nebius x NVIDIA Global AI Hackathon.
@@ -173,42 +141,30 @@ No se pivota a `MATHEMATICAL_ASSURANCE_KIT` como producto principal del concurso
 
 `PHOENIX_NEURON_LAB` permanece `reference_only`. No importar ni publicar su código.
 
-## Tesis pública activa
-
-> Before an AI agent acts, Phoenix Action Gate checks whether the reason for acting is still valid.
-
-Formulación corta:
-
-> A justification firewall for AI coding agents.
-
-Ángulo de demo adicional:
-
-> Phoenix Action Gate verifies that specialized agents stay inside their contract before responding or acting.
-
 ## Gates actuales
 
-- G0 reglas Devpost: `PASS_STALE_RECHECK_BEFORE_SUBMISSION`.
+- G0 reglas Devpost: `DRAFT_UPDATED / RECHECK_BEFORE_SUBMISSION`.
 - G1 Nebius/NVIDIA: `RUNTIME_OBSERVED_PREVIOUSLY / REVALIDATE_BEFORE_SUBMISSION`.
-- G2 gate/panel: `CURRENT_LIVE_CUT_TEST_PASS_128`.
+- G2 gate/panel: `CURRENT_LIVE_CUT_TEST_PASS_129`.
 - G3 diferenciación: `IMPROVED_BY_SPECIALIZED_AGENT_CONTRACT_CHECKERS`.
 - G4 receipt/tamper: `USEFUL_CAPABILITY_NOT_DIFFERENTIATOR_VS_B1`.
-- G5 jury surface: `UPDATED_WITH_CONTRACT_DEMO / VISUAL_REVALIDATION_PENDING`.
+- G5 jury surface: `STRUCTURAL_REVALIDATION_PASS / SCREENSHOT_PENDING`.
 - G6 publication boundary: `ACTIVE`.
-- G7 clean clone: `FRESH_CLEAN_CLONE_TEST_PASS_128`.
+- G7 clean clone: `FRESH_CLEAN_CLONE_TEST_PASS_128_BEFORE_DEVPOST_DRAFT_UPDATE`.
 - G8 Devpost submission: `PENDING_HUMAN_AUTHORIZATION`.
-- G9 specialized-agent-contract demo: `MINIMAL_CHECKERS_IMPLEMENTED / LIVE_AND_FRESH_CLONE_TEST_PASS`.
+- G9 specialized-agent-contract demo: `MINIMAL_CHECKERS_IMPLEMENTED / LIVE_TEST_PASS_129`.
 
 ## Bloqueos antes de submission-ready
 
-1. Visual revalidation de la superficie actualizada.
-2. Confirmar live Nebius/Nemotron actual o declarar evidencia previa con honestidad.
-3. Preparar demo URL/test build.
-4. Grabar vídeo <= 3 minutos.
-5. Completar formulario Devpost.
-6. Enviar solo con autorización humana separada.
+1. Commit/push del corte Devpost/UI structural assertion.
+2. Clean clone fresco del nuevo head y `npm test` allí si se exige cierre máximo.
+3. Confirmar live Nebius/Nemotron actual o declarar evidencia previa con honestidad.
+4. Preparar demo URL/test build.
+5. Grabar vídeo <= 3 minutos.
+6. Enviar Devpost solo con autorización humana separada.
 
 ## Siguiente paso seguro
 
-Visual revalidation de la UI actualizada con la franja `Specialized Agent Contract Demo`, después Nebius/Nemotron live revalidation o clasificación explícita como evidencia previa.
+Commit/push del corte Devpost/UI structural assertion; después clean clone fresco del nuevo head o Nebius/Nemotron live revalidation.
 
 No tocar Phoenix Neuron. No mover MAK. No habilitar dispatch. No publicar claims de superioridad. No hacer merge. No enviar Devpost automáticamente.
