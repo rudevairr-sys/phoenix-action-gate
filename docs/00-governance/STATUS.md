@@ -1,7 +1,7 @@
 # Estado retomable
 
 Fecha: 2026-09-19  
-Estado: `CONTRACT_CHECKERS_IMPLEMENTED / CURRENT_LIVE_TEST_PASS_128 / EXISTING_CLEAN_CLONE_TEST_PASS_122 / FRESH_CLEAN_CLONE_PENDING_AFTER_COMMIT`
+Estado: `CONTRACT_CHECKERS_IMPLEMENTED / CURRENT_LIVE_TEST_PASS_128 / FRESH_CLEAN_CLONE_TEST_PASS_128 / SUBMISSION_BLOCKED_UNTIL_VALIDATION`
 
 ## Reentrada
 
@@ -9,7 +9,7 @@ Proyecto: `01_MESA_PRINCIPAL/phoenix-action-gate`
 Rama local actual: `review/contest-surface-20260918`  
 Repo público: `rudevairr-sys/phoenix-action-gate`
 
-No hay autorización para merge, deploy, dispatch productivo ni submission Devpost. La autorización humana permitió continuar el desarrollo de concurso, usar Remote Desktop para tests locales, implementar checkers mínimos de contratos de agentes, actualizar la superficie de demo y registrar evidencia.
+No hay autorización para merge, deploy, dispatch productivo ni submission Devpost. La autorización humana permitió continuar el desarrollo de concurso, usar Remote Desktop para tests locales, implementar checkers mínimos de contratos de agentes, actualizar la superficie de demo, crear clean clone fresco y registrar evidencia.
 
 ## Pull Request
 
@@ -17,14 +17,13 @@ PR draft:
 
 `https://github.com/rudevairr-sys/phoenix-action-gate/pull/7`
 
-Datos anteriores al commit de este corte:
+Datos:
 
 - PR: `#7`.
-- Estado: `open`.
-- Draft: `true`.
+- Estado esperado: `open / draft / not merged`.
 - Base: `main`.
-- Base SHA: `a06291a616a96f8dd861db2dc291dd8548ee5f83`.
-- Head antes del corte actual: `345b139aaf8f6298064649effd8e08489b7d1e97`.
+- Head: `review/contest-surface-20260918`.
+- Commit del corte de checkers: `7ebb91c implement specialized agent contract checkers`.
 
 ## Implementación nueva — Specialized Agent Contract Demo
 
@@ -37,6 +36,7 @@ Archivos nuevos/modificados:
 - `BUILDER_OMEGA_CONTEST_PREP_20260918/VIDEO_SCRIPT_3MIN.md`.
 - `docs/04-runtime/evidence/G7_CLEAN_CLONE_NPM_TEST_2026-09-19.json`.
 - `docs/04-runtime/evidence/G9_SPECIALIZED_AGENT_CONTRACT_CHECKERS_TEST_2026-09-19.json`.
+- `docs/04-runtime/evidence/G7_FRESH_CLEAN_CLONE_CONTRACTS_TEST_2026-09-19.json`.
 
 Checkers implementados:
 
@@ -47,31 +47,7 @@ Checkers implementados:
 
 Estado:
 
-`IMPLEMENTED_MINIMAL_CHECKERS / CURRENT_LIVE_TEST_PASS`
-
-## Evidencia de test — clean clone existente
-
-Remote Desktop ejecutó:
-
-```powershell
-cd C:\Users\Usuario\.chatgpt\Gobernanza_Phoenix\SION_TALLER_RUST\SION_WORKSPACE\02_CANDIDATOS\phoenix-action-gate-cleanclone-pr7-20260918
-node --version
-npm test
-```
-
-Resultado:
-
-- Node: `v24.12.0`.
-- Tests: `122`.
-- Pass: `122`.
-- Fail: `0`.
-- Duration: `636.8734 ms`.
-
-Registro:
-
-`docs/04-runtime/evidence/G7_CLEAN_CLONE_NPM_TEST_2026-09-19.json`
-
-Nota: este clean clone valida el clone existente. Como el proyecto vivo fue modificado después con checkers nuevos, hace falta un clean clone fresco tras commit/push del corte actual.
+`IMPLEMENTED_MINIMAL_CHECKERS / LIVE_AND_FRESH_CLEAN_CLONE_TEST_PASS`
 
 ## Evidencia de test — proyecto vivo actual
 
@@ -98,9 +74,45 @@ Registro:
 
 `docs/04-runtime/evidence/G9_SPECIALIZED_AGENT_CONTRACT_CHECKERS_TEST_2026-09-19.json`
 
+## Evidencia de test — clean clone fresco del corte actual
+
+Clone fresco:
+
+`02_CANDIDATOS/phoenix-action-gate-cleanclone-pr7-contracts-20260919`
+
+Intake:
+
+- Decision: `ALLOW`.
+- Files: `136`.
+- Bytes: `672706`.
+- Fingerprint: `eff114b321121dec541a7538e0c482b4f3c0b9057d357135bce01b472333d18b`.
+
+Remote Desktop ejecutó:
+
+```powershell
+cd C:\Users\Usuario\.chatgpt\Gobernanza_Phoenix\SION_TALLER_RUST\SION_WORKSPACE\02_CANDIDATOS\phoenix-action-gate-cleanclone-pr7-contracts-20260919
+node --version
+npm test
+```
+
+Resultado:
+
+- Node: `v24.12.0`.
+- Tests: `128`.
+- Pass: `128`.
+- Fail: `0`.
+- Cancelled: `0`.
+- Skipped: `0`.
+- Todo: `0`.
+- Duration: `763.5268 ms`.
+
+Registro:
+
+`docs/04-runtime/evidence/G7_FRESH_CLEAN_CLONE_CONTRACTS_TEST_2026-09-19.json`
+
 Estado:
 
-`CURRENT_LIVE_CUT_TEST_PASS_128`
+`FRESH_CLEAN_CLONE_TEST_PASS_128`
 
 ## Specialized Agent Contract Demo
 
@@ -182,22 +194,21 @@ Formulación corta:
 - G4 receipt/tamper: `USEFUL_CAPABILITY_NOT_DIFFERENTIATOR_VS_B1`.
 - G5 jury surface: `UPDATED_WITH_CONTRACT_DEMO / VISUAL_REVALIDATION_PENDING`.
 - G6 publication boundary: `ACTIVE`.
-- G7 clean clone: `EXISTING_CLONE_TEST_PASS / FRESH_CLONE_PENDING_AFTER_COMMIT`.
+- G7 clean clone: `FRESH_CLEAN_CLONE_TEST_PASS_128`.
 - G8 Devpost submission: `PENDING_HUMAN_AUTHORIZATION`.
-- G9 specialized-agent-contract demo: `MINIMAL_CHECKERS_IMPLEMENTED / CURRENT_LIVE_TEST_PASS`.
+- G9 specialized-agent-contract demo: `MINIMAL_CHECKERS_IMPLEMENTED / LIVE_AND_FRESH_CLONE_TEST_PASS`.
 
 ## Bloqueos antes de submission-ready
 
-1. Commit/push del corte actual.
-2. Crear clean clone fresco desde el nuevo head y ejecutar `npm test` allí.
-3. Confirmar live Nebius/Nemotron actual o declarar evidencia previa con honestidad.
-4. Preparar demo URL/test build.
-5. Grabar vídeo <= 3 minutos.
-6. Completar formulario Devpost.
-7. Enviar solo con autorización humana separada.
+1. Visual revalidation de la superficie actualizada.
+2. Confirmar live Nebius/Nemotron actual o declarar evidencia previa con honestidad.
+3. Preparar demo URL/test build.
+4. Grabar vídeo <= 3 minutos.
+5. Completar formulario Devpost.
+6. Enviar solo con autorización humana separada.
 
 ## Siguiente paso seguro
 
-Commit/push del corte actual, clean clone fresco del nuevo head y `npm test` en ese clone.
+Visual revalidation de la UI actualizada con la franja `Specialized Agent Contract Demo`, después Nebius/Nemotron live revalidation o clasificación explícita como evidencia previa.
 
 No tocar Phoenix Neuron. No mover MAK. No habilitar dispatch. No publicar claims de superioridad. No hacer merge. No enviar Devpost automáticamente.

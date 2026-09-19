@@ -1,8 +1,8 @@
 {
   "schema_version": "1.0.0",
   "project": "Phoenix Action Gate",
-  "updated_at": "2026-09-19T12:23:00Z",
-  "mode": "CONTRACT_CHECKERS_IMPLEMENTED_CURRENT_LIVE_TEST_PASS",
+  "updated_at": "2026-09-19T12:25:00Z",
+  "mode": "CONTRACT_CHECKERS_IMPLEMENTED_LIVE_AND_FRESH_CLEANCLONE_TEST_PASS",
   "authorization": {
     "decision_ids": [
       "USER-20260918-HAZLO-CONTEST-PREP",
@@ -22,10 +22,11 @@
       "USER-20260919-ADD-CONTRACT-CHECKER-TESTS",
       "USER-20260919-UPDATE-JURY-CONTRACT-DEMO-SURFACE",
       "USER-20260919-UPDATE-VIDEO-SCRIPT-CONTRACT-DEMO",
-      "USER-20260919-USE-REMOTE-DESKTOP-FOR-TESTS"
+      "USER-20260919-USE-REMOTE-DESKTOP-FOR-TESTS",
+      "USER-20260919-FRESH-CLEANCLONE-CONTRACTS"
     ],
     "source": "human_bridge",
-    "scope": "Continue contest development, implement minimal specialized-agent contract checkers, update jury/demo surface, execute local tests via Remote Desktop, and record evidence. No merge, deploy, dispatch activation or Devpost submission."
+    "scope": "Continue contest development, implement minimal specialized-agent contract checkers, update jury/demo surface, execute tests via Remote Desktop, create fresh clean clone, and record evidence. No merge, deploy, dispatch activation or Devpost submission."
   },
   "hackathon": {
     "name": "Nebius x NVIDIA Global AI Hackathon",
@@ -41,7 +42,7 @@
     "local_branch": "review/contest-surface-20260918",
     "remote_branch": "origin/review/contest-surface-20260918",
     "base_branch": "main",
-    "current_head_last_observed_before_this_cut": "345b139aaf8f6298064649effd8e08489b7d1e97",
+    "current_head_last_pushed_before_final_record": "7ebb91c",
     "local_has_uncommitted_updates": true
   },
   "pull_request": {
@@ -52,28 +53,31 @@
     "merged": false,
     "base": "main",
     "base_sha": "a06291a616a96f8dd861db2dc291dd8548ee5f83",
-    "head": "review/contest-surface-20260918",
-    "head_sha_latest_observed_before_this_cut": "345b139aaf8f6298064649effd8e08489b7d1e97"
+    "head": "review/contest-surface-20260918"
   },
   "clean_clone": {
-    "state": "TEST_PASS_FOR_EXISTING_CLONE / REFRESH_NEEDED_AFTER_NEW_COMMIT",
+    "state": "FRESH_CLEAN_CLONE_TEST_PASS",
     "repository": "rudevairr-sys/phoenix-action-gate",
     "ref": "review/contest-surface-20260918",
-    "relative_path": "02_CANDIDATOS/phoenix-action-gate-cleanclone-pr7-20260918",
-    "test_evidence_ref": "docs/04-runtime/evidence/G7_CLEAN_CLONE_NPM_TEST_2026-09-19.json",
+    "relative_path": "02_CANDIDATOS/phoenix-action-gate-cleanclone-pr7-contracts-20260919",
+    "intake_decision": "ALLOW",
+    "files": 136,
+    "bytes": 672706,
+    "fingerprint": "eff114b321121dec541a7538e0c482b4f3c0b9057d357135bce01b472333d18b",
+    "test_evidence_ref": "docs/04-runtime/evidence/G7_FRESH_CLEAN_CLONE_CONTRACTS_TEST_2026-09-19.json",
     "node_version": "v24.12.0",
-    "tests": 122,
-    "pass": 122,
+    "tests": 128,
+    "pass": 128,
     "fail": 0,
-    "duration_ms": 636.8734,
-    "scope_note": "Existing clean clone passed before specialized contract checker changes. A fresh clone of the new PR head is still needed after commit/push."
+    "duration_ms": 763.5268
   },
   "specialized_agent_contract_demo": {
-    "state": "IMPLEMENTED_MINIMAL_CHECKERS_CURRENT_LIVE_TEST_PASS",
+    "state": "IMPLEMENTED_MINIMAL_CHECKERS_LIVE_AND_FRESH_CLEANCLONE_TEST_PASS",
     "spec": "docs/03-product/SPECIALIZED_AGENT_CONTRACT_DEMO.md",
     "implementation": "src/agent-contracts.mjs",
     "tests": "test/agent-contracts.test.mjs",
-    "evidence_ref": "docs/04-runtime/evidence/G9_SPECIALIZED_AGENT_CONTRACT_CHECKERS_TEST_2026-09-19.json",
+    "live_evidence_ref": "docs/04-runtime/evidence/G9_SPECIALIZED_AGENT_CONTRACT_CHECKERS_TEST_2026-09-19.json",
+    "fresh_clone_evidence_ref": "docs/04-runtime/evidence/G7_FRESH_CLEAN_CLONE_CONTRACTS_TEST_2026-09-19.json",
     "strategic_thesis": "Phoenix Action Gate verifies that specialized agents stay inside their contract before responding or acting.",
     "microagents": [
       { "id": "MONO_SI_NO", "contract_type": "CLOSED_VOCABULARY_CONTRACT", "state": "CHECKER_IMPLEMENTED" },
@@ -102,7 +106,7 @@
     "variant": "phoenix-safe-3",
     "state": "RUNNING",
     "runtime_profile": "tool-assisted",
-    "decision": "Continue Phoenix Action Gate as primary hackathon candidate. Minimal specialized-agent contract checkers are now implemented and locally tested; clean clone must be refreshed after commit/push."
+    "decision": "Continue Phoenix Action Gate as primary hackathon candidate. Minimal specialized-agent contract checkers are implemented and validated in live project and fresh clean clone."
   },
   "public_thesis": {
     "short": "A justification firewall for AI coding agents.",
@@ -132,11 +136,11 @@
     { "id": "G4_B1_RECEIPT_TAMPER", "state": "NOT_DIFFERENTIATING_VS_B1_USEFUL_CAPABILITY" },
     { "id": "G5_JURY_SURFACE", "state": "UPDATED_WITH_CONTRACT_DEMO / VISUAL_REVALIDATION_PENDING" },
     { "id": "G6_PUBLICATION_BOUNDARY", "state": "ACTIVE" },
-    { "id": "G7_CLEAN_CLONE", "state": "EXISTING_CLONE_TEST_PASS / REFRESH_NEEDED_AFTER_NEW_COMMIT" },
+    { "id": "G7_CLEAN_CLONE", "state": "FRESH_CLEAN_CLONE_TEST_PASS_128" },
     { "id": "G8_DEVPOST_SUBMISSION", "state": "PENDING_HUMAN_AUTHORIZATION" },
-    { "id": "G9_SPECIALIZED_AGENT_CONTRACT_DEMO", "state": "MINIMAL_CHECKERS_IMPLEMENTED / CURRENT_LIVE_TEST_PASS" }
+    { "id": "G9_SPECIALIZED_AGENT_CONTRACT_DEMO", "state": "MINIMAL_CHECKERS_IMPLEMENTED / LIVE_AND_FRESH_CLONE_TEST_PASS" }
   ],
-  "next_safe_step": "Commit and push the current cut, create a fresh clean clone from the new PR head, and run npm test there. No merge, deploy or Devpost submission without separate authorization.",
+  "next_safe_step": "Visual revalidation of the updated jury surface, then Nebius/Nemotron live revalidation or explicit prior-evidence classification. No merge, deploy or Devpost submission without separate authorization.",
   "truthcore": {
     "designed": true,
     "generated": true,
@@ -145,12 +149,11 @@
     "tests_passed": 128,
     "tests_failed": 0,
     "branch_created": true,
-    "committed": false,
-    "pushed": false,
+    "committed_contract_checkers": true,
+    "pushed_contract_checkers": true,
     "draft_pr_created": true,
     "pr_number": 7,
-    "clean_clone_existing_test_pass": true,
-    "fresh_clean_clone_for_current_cut_pass": false,
+    "fresh_clean_clone_for_current_cut_pass": true,
     "specialized_agent_contract_evidence_recorded": true,
     "specialized_agent_contract_demo_designed": true,
     "specialized_agent_contract_demo_implemented": true,
