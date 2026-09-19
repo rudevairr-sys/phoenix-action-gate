@@ -1,7 +1,7 @@
 # Estado retomable
 
 Fecha: 2026-09-19  
-Estado: `CONTRACT_LAB_RUNTIME_TEST_PASS_130 / VISUAL_SCREENSHOT_REVALIDATION_PASS / SUBMISSION_BLOCKED_UNTIL_VALIDATION`
+Estado: `LIVE_NEBIUS_NEMOTRON_CHAT_REVALIDATED / CONTRACT_LAB_RUNTIME_TEST_PASS_130 / VISUAL_SCREENSHOT_REVALIDATION_PASS / SUBMISSION_BLOCKED_UNTIL_VALIDATION`
 
 ## Reentrada
 
@@ -9,52 +9,102 @@ Proyecto: `01_MESA_PRINCIPAL/phoenix-action-gate`
 Rama local actual: `review/contest-surface-20260918`  
 Repo público: `rudevairr-sys/phoenix-action-gate`
 
-No hay autorización para merge, deploy, dispatch productivo ni submission Devpost. La autorización humana permitió implementar un banco de prueba local para evaluar salidas reales de otros GPTs contra contratos de agente.
+No hay autorización para merge, deploy, dispatch productivo ni submission Devpost. La autorización humana permitió recuperar el panel tras reinicio, verificar que `NEBIUS_API_KEY` está cargada en la terminal local y confirmar chat real con Nemotron desde Phoenix Action Gate.
 
 ## Panel local
 
-Puerto `4173` estaba ocupado por otro proyecto: `Show Drag Factory`.
-
-Phoenix Action Gate está en:
-
-`http://127.0.0.1:4183`
-
-Servidor observado:
+Tras reinicio de Windows, el servidor se volvió a levantar desde:
 
 ```text
-Phoenix Action Gate panel: http://127.0.0.1:4183
+C:\Users\Usuario\.chatgpt\Gobernanza_Phoenix\SION_TALLER_RUST\SION_WORKSPACE\01_MESA_PRINCIPAL\phoenix-action-gate
+```
+
+Comando observado:
+
+```powershell
+npm run panel
+```
+
+Salida observada:
+
+```text
+Phoenix Action Gate panel: http://127.0.0.1:4173
 Dispatch capability: disabled
 ```
 
+Aclaración crítica:
+
+`Dispatch capability: disabled` significa que Phoenix no ejecuta acciones reales. No significa que Nemotron esté desconectado.
+
+## G1 — Nebius/Nemotron live chat
+
+Evidencia:
+
+`docs/04-runtime/evidence/G1_LIVE_NEBIUS_NEMOTRON_CHAT_REVALIDATION_2026-09-19.md`
+
+Fuente:
+
+Transcripción aportada por el usuario desde el panel local.
+
+Precondición observada sin exponer secreto:
+
+```powershell
+[bool]$env:NEBIUS_API_KEY
+True
+```
+
+Conversación observada:
+
+```text
+TÚ:
+Hola Nemotron. Responde en una frase corta quién eres dentro de Phoenix Action Gate.
+
+NEMOTRON:
+Soy Nemotron, el componente de propuestas de Phoenix Action Gate, listo para ayudarte.
+```
+
+Segundo turno observado:
+
+```text
+TÚ:
+Quien es Phoenix Action Gate
+
+NEMOTRON:
+Phoenix Action Gate es una plataforma de automatización y gestión de propuestas que coordina acciones técnicas y de desarrollo de software de manera segura y rastreable.
+```
+
+Resultado:
+
+`G1_NEBIUS_NVIDIA = LIVE_CHAT_REVALIDATED`
+
+Alcance:
+
+- Chat live básico con Nemotron: validado.
+- Variable `NEBIUS_API_KEY` presente en entorno local: validado por booleano.
+- Secreto expuesto: no.
+- Dispatch: no intentado.
+- Plan multiacción live en este corte: pendiente.
+- Provider response id/latencia/tokens de estos turnos: no registrado porque el usuario aportó transcripción visible, no JSON de respuesta.
+
 ## Contract Lab
 
-Nuevo banco de prueba:
-
-- endpoint: `POST /api/contract/evaluate`.
-- UI: formulario en la franja `Specialized Agent Contract Demo`.
-- propósito: pegar salidas reales de otros GPTs y verificar si cumplen el contrato.
-- contratos disponibles:
-  - `MONO_SI_NO` / `CLOSED_VOCABULARY_CONTRACT`.
-  - `N_VCLS` / `OUTPUT_SHAPE_CONTRACT`.
-  - `FERRUM_RUST` / `DOMAIN_BOUNDARY_CONTRACT`.
-  - `ACTION_PROPOSER` / `NO_DISPATCH_ACTION_CONTRACT`.
+Existe un banco de prueba local añadido previamente para evaluar salidas contra contratos de agente.
 
 Evidencia:
 
 `docs/04-runtime/evidence/G9_CONTRACT_LAB_REAL_OUTPUT_TEST_2026-09-19.json`
 
-Pruebas runtime observadas:
+Estado:
 
-- `Crrct. Sn vcls.` bajo `OUTPUT_SHAPE_CONTRACT` -> `PREPARED / OUTPUT_SHAPE_OK`.
-- `Correcto, sin vocales.` bajo `OUTPUT_SHAPE_CONTRACT` -> `DENY / OUTPUT_SHAPE_VIOLATION`.
+`CONTRACT_LAB_RUNTIME_TEST_PASS_130`
 
-Ambas con:
+Nota de foco:
 
-`dispatch_attempted=false`
+La prioridad actual para la demo del concurso vuelve a ser conversación real con Nemotron dentro de Phoenix Action Gate. El Contract Lab queda como capacidad secundaria, no como flujo principal de prueba del usuario.
 
-## Test actual
+## Test actual previo
 
-Remote Desktop ejecutó:
+Remote Desktop ejecutó en el corte anterior:
 
 ```powershell
 cd C:\Users\Usuario\.chatgpt\Gobernanza_Phoenix\SION_TALLER_RUST\SION_WORKSPACE\01_MESA_PRINCIPAL\phoenix-action-gate
@@ -68,9 +118,6 @@ Resultado:
 - Tests: `130`.
 - Pass: `130`.
 - Fail: `0`.
-- Cancelled: `0`.
-- Skipped: `0`.
-- Todo: `0`.
 - Duration: `719.9257 ms`.
 
 ## Validación visual previa
@@ -78,10 +125,6 @@ Resultado:
 Evidencia:
 
 `docs/04-runtime/evidence/G5_VISUAL_SCREENSHOT_REVALIDATION_2026-09-19.md`
-
-Fuente:
-
-Captura aportada por el usuario desde `127.0.0.1:4183`.
 
 Resultado:
 
@@ -101,7 +144,7 @@ Estado conocido:
 
 ## Gates actuales
 
-- G1 Nebius/NVIDIA: `RUNTIME_OBSERVED_PREVIOUSLY / REVALIDATE_BEFORE_SUBMISSION`.
+- G1 Nebius/NVIDIA: `LIVE_CHAT_REVALIDATED / PLAN_LIVE_REVALIDATION_PENDING`.
 - G2 gate/panel: `LIVE_TEST_PASS_130`.
 - G5 jury surface: `VISUAL_SCREENSHOT_REVALIDATION_PASS / CONTRACT_LAB_STRUCTURAL_PASS`.
 - G7 clean clone: `FRESH_CLEAN_CLONE_TEST_PASS_129_BEFORE_CONTRACT_LAB`.
@@ -110,14 +153,14 @@ Estado conocido:
 
 ## Bloqueos antes de submission-ready
 
-1. Clean clone fresco del corte con Contract Lab si se quiere cierre máximo.
-2. Confirmar live Nebius/Nemotron actual o declarar evidencia previa con honestidad.
+1. Plan multiacción live con Nemotron en este corte, o clasificación honesta como evidencia previa.
+2. Clean clone fresco del corte con Contract Lab/live-chat evidence si se quiere cierre máximo.
 3. Preparar demo URL/test build.
 4. Grabar vídeo <= 3 minutos.
 5. Enviar Devpost solo con autorización humana separada.
 
 ## Siguiente paso seguro
 
-Probar en navegador salidas reales del otro GPT usando el Contract Lab. Después registrar los casos reales útiles como evidencia de demo.
+Probar desde el panel un plan multiacción live con Nemotron, por ejemplo el botón `Evaluar plan` o el prompt guiado de demo. Registrar la decisión de Phoenix y confirmar que `dispatch_attempted=false`.
 
 No tocar Phoenix Neuron. No mover MAK. No habilitar dispatch. No publicar claims de superioridad. No hacer merge. No enviar Devpost automáticamente.
