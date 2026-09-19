@@ -1,0 +1,51 @@
+{
+  "schema_version": "1.0.0",
+  "evidence_id": "G7_FRESH_CLEAN_CLONE_DEVPOST_CUT_TEST_2026-09-19",
+  "created_at": "2026-09-19T13:33:00Z",
+  "project": "Phoenix Action Gate",
+  "state": "FRESH_CLEAN_CLONE_TEST_PASS_FOR_DEVPOST_PR_ALIGNMENT_CUT",
+  "repository": "rudevairr-sys/phoenix-action-gate",
+  "ref": "review/contest-surface-20260918",
+  "path": "02_CANDIDATOS/phoenix-action-gate-cleanclone-pr7-devpost-20260919",
+  "clone_intake": {
+    "decision": "ALLOW",
+    "files": 138,
+    "bytes": 677848,
+    "fingerprint": "d6bb869d55d0dc84a543b92ee3c2023c90b335f1e462076206e1066d19d9b41d"
+  },
+  "runtime": {
+    "executor": "Remote Desktop Commander",
+    "device": "DESKTOP-M7OQOC5",
+    "shell": "powershell",
+    "node_version": "v24.12.0"
+  },
+  "command": "npm test",
+  "resolved_command": "node --test",
+  "result": {
+    "tests": 129,
+    "suites": 0,
+    "pass": 129,
+    "fail": 0,
+    "cancelled": 0,
+    "skipped": 0,
+    "todo": 0,
+    "duration_ms": 713.0547
+  },
+  "validated_scope": [
+    "Devpost draft alignment",
+    "PR-facing specialized-agent contract demo narrative",
+    "jury surface structural assertion",
+    "specialized-agent contract checker regression suite",
+    "existing action/plan/evidence gate regression suite"
+  ],
+  "truthcore": {
+    "test_executed": true,
+    "runtime_observed": true,
+    "fresh_clean_clone_for_current_cut_pass": true,
+    "current_live_cut_test_pass": true,
+    "visual_revalidation_structural": true,
+    "visual_revalidation_screenshot": false,
+    "production_validated": false,
+    "devpost_submitted": false
+  }
+}

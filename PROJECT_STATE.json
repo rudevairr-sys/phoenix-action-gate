@@ -1,50 +1,23 @@
 {
   "schema_version": "1.0.0",
   "project": "Phoenix Action Gate",
-  "updated_at": "2026-09-19T13:31:00Z",
-  "mode": "DEVPOST_DRAFT_UPDATED_JURY_STRIP_STRUCTURAL_TEST_PASS",
+  "updated_at": "2026-09-19T13:33:00Z",
+  "mode": "DEVPOST_PR_ALIGNMENT_CUT_FRESH_CLEAN_CLONE_TEST_PASS",
   "authorization": {
     "decision_ids": [
-      "USER-20260918-HAZLO-CONTEST-PREP",
-      "USER-20260918-SIGUR-NPM-TEST",
-      "USER-20260918-SIGUR-REGISTER-TEST-BLOCKER",
-      "USER-20260918-MIRA-REGISTER-NPM-TEST",
-      "USER-20260918-DALEE-CREATE-REVIEW-BRANCH",
-      "USER-20260918-DALEE-COMMIT-CONTEST-SURFACE",
-      "USER-20260918-DALEE-PUSH-REVIEW-BRANCH",
-      "USER-20260918-DALEE-CREATE-DRAFT-PR",
-      "USER-20260918-SI-CLEANCLONE-PR7",
-      "USER-20260918-SI-RECORD-CLEANCLONE",
-      "USER-20260918-REGISTER-SPECIALIZED-AGENT-EVIDENCE-PAG",
-      "USER-20260918-REGISTER-NVCLS-EVIDENCE",
-      "USER-20260918-CREATE-SPECIALIZED-AGENT-DEMO-SPEC",
-      "USER-20260919-IMPLEMENT-CONTRACT-CHECKERS",
-      "USER-20260919-ADD-CONTRACT-CHECKER-TESTS",
-      "USER-20260919-UPDATE-JURY-CONTRACT-DEMO-SURFACE",
-      "USER-20260919-UPDATE-VIDEO-SCRIPT-CONTRACT-DEMO",
-      "USER-20260919-USE-REMOTE-DESKTOP-FOR-TESTS",
-      "USER-20260919-FRESH-CLEANCLONE-CONTRACTS",
       "USER-20260919-UPDATE-PR-AND-DEVPOST-DRAFT",
-      "USER-20260919-ADD-JURY-CONTRACT-STRIP-TEST"
+      "USER-20260919-ADD-JURY-CONTRACT-STRIP-TEST",
+      "USER-20260919-FRESH-CLEANCLONE-DEVPOST-CUT"
     ],
     "source": "human_bridge",
-    "scope": "Continue contest development, update PR body/comment, update Devpost draft, add structural UI assertion for the specialized-agent contract strip, execute tests via Remote Desktop, and record evidence. No merge, deploy, dispatch activation or Devpost submission."
-  },
-  "hackathon": {
-    "name": "Nebius x NVIDIA Global AI Hackathon",
-    "slug": "nebiusglobalaihackathon",
-    "status_observed": "submissions_open",
-    "relationship_observed": "registered",
-    "deadline_observed_utc": "2026-10-30T17:00:00Z",
-    "track_candidate": "Coding and agentic engineering",
-    "submission_state": "not_submitted"
+    "scope": "Update PR and Devpost draft, add structural UI assertion, run live and fresh clean-clone tests, and record evidence. No merge, deploy, dispatch activation or Devpost submission."
   },
   "git": {
     "repository": "rudevairr-sys/phoenix-action-gate",
     "local_branch": "review/contest-surface-20260918",
     "remote_branch": "origin/review/contest-surface-20260918",
     "base_branch": "main",
-    "current_head_last_pushed_before_this_cut": "0860d782bce6133d5645bc064ea7f018ae9f3c72",
+    "current_head_last_pushed_before_final_evidence": "093c9e9",
     "local_has_uncommitted_updates": true
   },
   "pull_request": {
@@ -53,74 +26,56 @@
     "state": "open",
     "draft": true,
     "merged": false,
-    "base": "main",
-    "head": "review/contest-surface-20260918",
     "body_updated_for_contract_demo": true,
     "progress_comment_id": 5742270244
   },
-  "clean_clone": {
-    "state": "FRESH_CLEAN_CLONE_TEST_PASS_BEFORE_DEVPOST_DRAFT_UPDATE",
-    "repository": "rudevairr-sys/phoenix-action-gate",
-    "ref": "review/contest-surface-20260918",
-    "relative_path": "02_CANDIDATOS/phoenix-action-gate-cleanclone-pr7-contracts-20260919",
-    "intake_decision": "ALLOW",
-    "files": 136,
-    "bytes": 672706,
-    "fingerprint": "eff114b321121dec541a7538e0c482b4f3c0b9057d357135bce01b472333d18b",
-    "test_evidence_ref": "docs/04-runtime/evidence/G7_FRESH_CLEAN_CLONE_CONTRACTS_TEST_2026-09-19.json",
-    "node_version": "v24.12.0",
-    "tests": 128,
-    "pass": 128,
-    "fail": 0,
-    "duration_ms": 763.5268
+  "hackathon": {
+    "name": "Nebius x NVIDIA Global AI Hackathon",
+    "track_candidate": "Coding and agentic engineering",
+    "submission_state": "not_submitted"
   },
   "devpost_draft": {
     "state": "UPDATED_NOT_SUBMITTED",
     "path": "BUILDER_OMEGA_CONTEST_PREP_20260918/DEVPOST_SUBMISSION_DRAFT.md",
-    "notes": "Draft now includes specialized-agent contract demo, 128/128 validation evidence, limitations, and explicit prior/live Nebius evidence boundary. No submission performed."
+    "notes": "Draft includes specialized-agent contract demo, validation evidence, limitations, and explicit prior/live Nebius evidence boundary. No submission performed."
+  },
+  "clean_clone": {
+    "state": "FRESH_CLEAN_CLONE_TEST_PASS_FOR_CURRENT_CUT",
+    "repository": "rudevairr-sys/phoenix-action-gate",
+    "ref": "review/contest-surface-20260918",
+    "relative_path": "02_CANDIDATOS/phoenix-action-gate-cleanclone-pr7-devpost-20260919",
+    "intake_decision": "ALLOW",
+    "files": 138,
+    "bytes": 677848,
+    "fingerprint": "d6bb869d55d0dc84a543b92ee3c2023c90b335f1e462076206e1066d19d9b41d",
+    "test_evidence_ref": "docs/04-runtime/evidence/G7_FRESH_CLEAN_CLONE_DEVPOST_CUT_TEST_2026-09-19.json",
+    "node_version": "v24.12.0",
+    "tests": 129,
+    "pass": 129,
+    "fail": 0,
+    "duration_ms": 713.0547
   },
   "specialized_agent_contract_demo": {
-    "state": "IMPLEMENTED_MINIMAL_CHECKERS_LIVE_TEST_PASS_WITH_STRUCTURAL_UI_ASSERTION",
+    "state": "IMPLEMENTED_MINIMAL_CHECKERS_LIVE_AND_FRESH_CLEANCLONE_TEST_PASS_129",
     "spec": "docs/03-product/SPECIALIZED_AGENT_CONTRACT_DEMO.md",
     "implementation": "src/agent-contracts.mjs",
     "tests": "test/agent-contracts.test.mjs",
     "jury_surface_test": "test/jury-surface.test.mjs",
     "live_evidence_ref": "docs/04-runtime/evidence/G5_JURY_CONTRACT_STRIP_TEST_2026-09-19.json",
-    "fresh_clone_evidence_ref": "docs/04-runtime/evidence/G7_FRESH_CLEAN_CLONE_CONTRACTS_TEST_2026-09-19.json",
-    "strategic_thesis": "Phoenix Action Gate verifies that specialized agents stay inside their contract before responding or acting.",
-    "microagents": [
-      { "id": "MONO_SI_NO", "contract_type": "CLOSED_VOCABULARY_CONTRACT", "state": "CHECKER_IMPLEMENTED" },
-      { "id": "FERRUM_RUST", "contract_type": "DOMAIN_BOUNDARY_CONTRACT", "state": "CHECKER_IMPLEMENTED_WITH_PUBLIC_FIXTURES_ONLY" },
-      { "id": "N_VCLS", "contract_type": "OUTPUT_SHAPE_CONTRACT", "state": "CHECKER_IMPLEMENTED / EXTERNAL_RUST_SKELETON_STILL_NOT_CONFORMANT" },
-      { "id": "ACTION_PROPOSER", "contract_type": "NO_DISPATCH_ACTION_CONTRACT", "state": "CHECKER_IMPLEMENTED" }
-    ]
+    "fresh_clone_evidence_ref": "docs/04-runtime/evidence/G7_FRESH_CLEAN_CLONE_DEVPOST_CUT_TEST_2026-09-19.json",
+    "strategic_thesis": "Phoenix Action Gate verifies that specialized agents stay inside their contract before responding or acting."
   },
   "test_gate_current_cut": {
-    "state": "TEST_EXECUTED_PASS",
-    "live_project_path": "01_MESA_PRINCIPAL/phoenix-action-gate",
+    "state": "LIVE_AND_FRESH_CLONE_TEST_EXECUTED_PASS",
     "node_version": "v24.12.0",
-    "command": "npm test",
-    "resolved_command": "node --test",
     "tests": 129,
     "pass": 129,
     "fail": 0,
-    "cancelled": 0,
-    "skipped": 0,
-    "todo": 0,
-    "duration_ms": 706.0295,
-    "evidence_ref": "docs/04-runtime/evidence/G5_JURY_CONTRACT_STRIP_TEST_2026-09-19.json",
+    "evidence_refs": [
+      "docs/04-runtime/evidence/G5_JURY_CONTRACT_STRIP_TEST_2026-09-19.json",
+      "docs/04-runtime/evidence/G7_FRESH_CLEAN_CLONE_DEVPOST_CUT_TEST_2026-09-19.json"
+    ],
     "executor": "Remote Desktop Commander"
-  },
-  "mavo": {
-    "variant": "phoenix-safe-3",
-    "state": "RUNNING",
-    "runtime_profile": "tool-assisted",
-    "decision": "Continue Phoenix Action Gate as primary hackathon candidate. PR and Devpost draft are aligned with the specialized-agent contract demo; structural UI assertion and live tests pass."
-  },
-  "public_thesis": {
-    "short": "A justification firewall for AI coding agents.",
-    "full": "Before an AI agent acts, Phoenix Action Gate checks whether the reason for acting is still valid.",
-    "specialized_agent_angle": "Specialized agents should not become general assistants under pressure. Phoenix Action Gate verifies that each agent stays inside its contract."
   },
   "blocked_claims": [
     "production-ready",
@@ -140,36 +95,23 @@
   "gates": [
     { "id": "G0_DEVPOST_RULES", "state": "DRAFT_UPDATED / RECHECK_BEFORE_SUBMISSION" },
     { "id": "G1_NEBIUS_NVIDIA", "state": "RUNTIME_OBSERVED_PREVIOUSLY_REVALIDATE" },
-    { "id": "G2_PRODUCT_SURFACE", "state": "CURRENT_LIVE_CUT_TEST_PASS_129" },
+    { "id": "G2_PRODUCT_SURFACE", "state": "LIVE_AND_FRESH_CLONE_TEST_PASS_129" },
     { "id": "G3_DIFFERENTIATION", "state": "IMPROVED_BY_SPECIALIZED_AGENT_CONTRACT_CHECKERS" },
-    { "id": "G4_B1_RECEIPT_TAMPER", "state": "NOT_DIFFERENTIATING_VS_B1_USEFUL_CAPABILITY" },
     { "id": "G5_JURY_SURFACE", "state": "STRUCTURAL_REVALIDATION_PASS / SCREENSHOT_PENDING" },
-    { "id": "G6_PUBLICATION_BOUNDARY", "state": "ACTIVE" },
-    { "id": "G7_CLEAN_CLONE", "state": "FRESH_CLEAN_CLONE_TEST_PASS_128_BEFORE_DEVPOST_DRAFT_UPDATE" },
+    { "id": "G7_CLEAN_CLONE", "state": "FRESH_CLEAN_CLONE_TEST_PASS_129" },
     { "id": "G8_DEVPOST_SUBMISSION", "state": "PENDING_HUMAN_AUTHORIZATION" },
-    { "id": "G9_SPECIALIZED_AGENT_CONTRACT_DEMO", "state": "MINIMAL_CHECKERS_IMPLEMENTED / LIVE_TEST_PASS_129" }
+    { "id": "G9_SPECIALIZED_AGENT_CONTRACT_DEMO", "state": "MINIMAL_CHECKERS_IMPLEMENTED / LIVE_AND_FRESH_CLONE_TEST_PASS_129" }
   ],
-  "next_safe_step": "Commit/push Devpost draft and structural UI assertion, then perform fresh clean clone test for this final cut or proceed to Nebius/Nemotron live revalidation. No merge, deploy or Devpost submission without separate authorization.",
+  "next_safe_step": "Update PR body/comment to 129/129 if desired, then Nebius/Nemotron live revalidation or demo URL preparation. No merge, deploy or Devpost submission without separate authorization.",
   "truthcore": {
-    "designed": true,
-    "generated": true,
-    "structurally_validated": true,
     "test_executed_this_cut": true,
     "tests_passed": 129,
     "tests_failed": 0,
-    "branch_created": true,
-    "draft_pr_created": true,
-    "pr_number": 7,
-    "pr_body_updated": true,
-    "pr_progress_comment_posted": true,
-    "fresh_clean_clone_for_previous_cut_pass": true,
-    "fresh_clean_clone_for_current_cut_pass": false,
-    "specialized_agent_contract_evidence_recorded": true,
-    "specialized_agent_contract_demo_designed": true,
+    "fresh_clean_clone_for_current_cut_pass": true,
     "specialized_agent_contract_demo_implemented": true,
     "devpost_draft_updated": true,
-    "n_vcls_evidence_recorded": true,
-    "n_vcls_rust_conformant": false,
+    "pr_body_updated": true,
+    "pr_progress_comment_posted": true,
     "runtime_observed_this_cut": false,
     "production_validated": false,
     "merged": false,
