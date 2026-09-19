@@ -1,7 +1,7 @@
 # Estado retomable
 
-Fecha: 2026-09-19  
-Estado: `LIVE_NEBIUS_NEMOTRON_CHAT_REVALIDATED / CONTRACT_LAB_RUNTIME_TEST_PASS_130 / VISUAL_SCREENSHOT_REVALIDATION_PASS / SUBMISSION_BLOCKED_UNTIL_VALIDATION`
+Fecha: 2026-09-20  
+Estado: `LIVE_NEBIUS_NEMOTRON_CHAT_REVALIDATED / NEMOTRON_PROFILE_GATE_DESIGNED / NEXT_SESSION_READY / SUBMISSION_BLOCKED_UNTIL_VALIDATION`
 
 ## Reentrada
 
@@ -9,7 +9,22 @@ Proyecto: `01_MESA_PRINCIPAL/phoenix-action-gate`
 Rama local actual: `review/contest-surface-20260918`  
 Repo público: `rudevairr-sys/phoenix-action-gate`
 
-No hay autorización para merge, deploy, dispatch productivo ni submission Devpost. La autorización humana permitió recuperar el panel tras reinicio, verificar que `NEBIUS_API_KEY` está cargada en la terminal local y confirmar chat real con Nemotron desde Phoenix Action Gate.
+Proyecto activo marcado en SION como:
+
+```text
+Phoenix Action Gate
+```
+
+Marcadores:
+
+```text
+LIVE_NEBIUS_NEMOTRON_CHAT_REVALIDATED
+NEXT_MISSION_NEMOTRON_PROFILE_GATE
+NO_DISPATCH
+NO_DEVPOST_SUBMISSION_WITHOUT_HUMAN_AUTHORIZATION
+```
+
+No hay autorización para merge, deploy, dispatch productivo ni submission Devpost. La autorización humana permitió dejar preparado y registrado el siguiente bloque de trabajo: **Nemotron Profile Gate**.
 
 ## Panel local
 
@@ -41,10 +56,6 @@ Aclaración crítica:
 Evidencia:
 
 `docs/04-runtime/evidence/G1_LIVE_NEBIUS_NEMOTRON_CHAT_REVALIDATION_2026-09-19.md`
-
-Fuente:
-
-Transcripción aportada por el usuario desde el panel local.
 
 Precondición observada sin exponer secreto:
 
@@ -86,6 +97,55 @@ Alcance:
 - Plan multiacción live en este corte: pendiente.
 - Provider response id/latencia/tokens de estos turnos: no registrado porque el usuario aportó transcripción visible, no JSON de respuesta.
 
+## G10 — Nemotron Profile Gate
+
+Estado:
+
+`DESIGNED / READY_FOR_IMPLEMENTATION_NEXT_SESSION`
+
+Corrección conceptual registrada:
+
+Los perfiles especializados que el usuario compartió no eran para validar salidas de otros GPTs como flujo principal. Eran ejemplos conceptuales para construir **perfiles especializados de Nemotron** con contratos verificables por Phoenix.
+
+Flujo objetivo:
+
+```text
+Usuario
+  ↓
+Perfil especializado seleccionado
+  ↓
+Nemotron responde bajo ese perfil
+  ↓
+Phoenix Profile Gate verifica contrato
+  ↓
+Respuesta aceptada / REVIEW / DENY / SAFE_NOOP
+```
+
+Artefactos creados:
+
+```text
+docs/02-architecture/NEMOTRON_PROFILE_GATE_DESIGN_2026-09-20.md
+BUILDER_OMEGA_CONTEST_PREP_20260918/NEXT_SESSION_NEMOTRON_PROFILE_GATE_20260920.md
+docs/00-governance/BUILDER_OMEGA_RESIDENCE_SEED_2026-09-20.md
+docs/04-runtime/evidence/G10_NEMOTRON_PROFILE_GATE_PREP_2026-09-20.md
+```
+
+Perfiles MVP propuestos:
+
+```text
+MONO_SI_NO
+FERRUM_RUST
+ACTION_PROPOSER
+SAFE_NOOP / VETO_CONSTITUCIONAL opcional
+```
+
+Estado de implementación:
+
+- Diseño: sí.
+- Código: pendiente.
+- Tests: pendiente.
+- Runtime live: pendiente.
+
 ## Contract Lab
 
 Existe un banco de prueba local añadido previamente para evaluar salidas contra contratos de agente.
@@ -98,9 +158,9 @@ Estado:
 
 `CONTRACT_LAB_RUNTIME_TEST_PASS_130`
 
-Nota de foco:
+Nota de corrección:
 
-La prioridad actual para la demo del concurso vuelve a ser conversación real con Nemotron dentro de Phoenix Action Gate. El Contract Lab queda como capacidad secundaria, no como flujo principal de prueba del usuario.
+El Contract Lab no debe presentarse como flujo principal de perfiles. Mañana debe reconducirse o reemplazarse por `Nemotron Profile Gate`: perfiles aplicados directamente a Nemotron y verificados por Phoenix.
 
 ## Test actual previo
 
@@ -149,18 +209,36 @@ Estado conocido:
 - G5 jury surface: `VISUAL_SCREENSHOT_REVALIDATION_PASS / CONTRACT_LAB_STRUCTURAL_PASS`.
 - G7 clean clone: `FRESH_CLEAN_CLONE_TEST_PASS_129_BEFORE_CONTRACT_LAB`.
 - G8 Devpost submission: `PENDING_HUMAN_AUTHORIZATION`.
-- G9 specialized-agent-contract demo: `CONTRACT_LAB_RUNTIME_TEST_PASS`.
+- G9 specialized-agent-contract demo: `CONTRACT_LAB_RUNTIME_TEST_PASS / REORIENT_TO_PROFILE_GATE`.
+- G10 Nemotron Profile Gate: `DESIGNED / IMPLEMENTATION_PENDING`.
 
 ## Bloqueos antes de submission-ready
 
-1. Plan multiacción live con Nemotron en este corte, o clasificación honesta como evidencia previa.
-2. Clean clone fresco del corte con Contract Lab/live-chat evidence si se quiere cierre máximo.
-3. Preparar demo URL/test build.
-4. Grabar vídeo <= 3 minutos.
-5. Enviar Devpost solo con autorización humana separada.
+1. Implementar y probar Nemotron Profile Gate.
+2. Revalidar runtime live con perfiles de Nemotron, o clasificarlo como pendiente.
+3. Plan multiacción live con Nemotron en este corte, o clasificación honesta como evidencia previa.
+4. Clean clone fresco del corte final.
+5. Preparar demo URL/test build.
+6. Grabar vídeo <= 3 minutos.
+7. Enviar Devpost solo con autorización humana separada.
 
 ## Siguiente paso seguro
 
-Probar desde el panel un plan multiacción live con Nemotron, por ejemplo el botón `Evaluar plan` o el prompt guiado de demo. Registrar la decisión de Phoenix y confirmar que `dispatch_attempted=false`.
+Mañana arrancar con:
+
+```text
+Retomamos Nemotron Profile Gate: perfiles especializados para Nemotron verificados por Phoenix, sustituyendo el bloque de “salida real del otro GPT” por perfiles gobernados nativos.
+```
+
+Orden recomendado:
+
+1. Implementar `src/profiles.mjs`.
+2. Implementar `src/profile-gate.mjs`.
+3. Añadir tests unitarios.
+4. Conectar endpoint `/api/profile-chat`.
+5. Cambiar UI para perfiles gobernados de Nemotron.
+6. Ejecutar `npm test`.
+7. Probar live con `NEBIUS_API_KEY` cargada.
+8. Registrar evidencia.
 
 No tocar Phoenix Neuron. No mover MAK. No habilitar dispatch. No publicar claims de superioridad. No hacer merge. No enviar Devpost automáticamente.
