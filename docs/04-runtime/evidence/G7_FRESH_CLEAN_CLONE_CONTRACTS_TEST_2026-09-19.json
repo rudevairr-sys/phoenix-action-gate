@@ -1,0 +1,47 @@
+{
+  "schema_version": "1.0.0",
+  "evidence_id": "G7_FRESH_CLEAN_CLONE_CONTRACTS_TEST_2026-09-19",
+  "created_at": "2026-09-19T12:24:30Z",
+  "project": "Phoenix Action Gate",
+  "state": "FRESH_CLEAN_CLONE_TEST_PASS_FOR_CONTRACT_CHECKERS_CUT",
+  "repository": "rudevairr-sys/phoenix-action-gate",
+  "ref": "review/contest-surface-20260918",
+  "path": "02_CANDIDATOS/phoenix-action-gate-cleanclone-pr7-contracts-20260919",
+  "clone_intake": {
+    "decision": "ALLOW",
+    "files": 136,
+    "bytes": 672706,
+    "fingerprint": "eff114b321121dec541a7538e0c482b4f3c0b9057d357135bce01b472333d18b"
+  },
+  "runtime": {
+    "executor": "Remote Desktop Commander",
+    "device": "DESKTOP-M7OQOC5",
+    "shell": "powershell",
+    "node_version": "v24.12.0"
+  },
+  "command": "npm test",
+  "resolved_command": "node --test",
+  "result": {
+    "tests": 128,
+    "suites": 0,
+    "pass": 128,
+    "fail": 0,
+    "cancelled": 0,
+    "skipped": 0,
+    "todo": 0,
+    "duration_ms": 763.5268
+  },
+  "validated_scope": [
+    "specialized agent contract checkers",
+    "jury surface contract demo strip",
+    "existing action/plan/evidence gate regression suite"
+  ],
+  "truthcore": {
+    "test_executed": true,
+    "runtime_observed": true,
+    "fresh_clean_clone_for_current_cut_pass": true,
+    "current_live_cut_test_pass": true,
+    "production_validated": false,
+    "devpost_submitted": false
+  }
+}

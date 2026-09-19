@@ -1,0 +1,37 @@
+{
+  "schema_version": "1.0",
+  "captured_at": "2026-09-03",
+  "evidence_type": "operator_observed_regression_result",
+  "surface": "JURY_SURFACE_V0_1",
+  "commands": [
+    "cargo test",
+    "npm test"
+  ],
+  "cargo_test": {
+    "status": "NOT_APPLICABLE",
+    "result": "ERROR_NO_CARGO_TOML",
+    "interpretation": "phoenix-action-gate is a Node.js project in this scope; absence of Cargo.toml is not a product regression."
+  },
+  "npm_test": {
+    "status": "PASS",
+    "tests": 122,
+    "pass": 122,
+    "fail": 0,
+    "cancelled": 0,
+    "skipped": 0,
+    "todo": 0,
+    "duration_ms": 656.5955
+  },
+  "jury_surface_specific_tests": [
+    "jury surface exposes the justification map in plain language",
+    "jury surface preserves every dynamic lineage binding exactly once",
+    "guided live demo freezes the four-step lineage scenario without executing anything",
+    "jury surface promotes plan and justification cards to full-width hero rows",
+    "jury surface keeps no-dispatch and existing application wiring visible"
+  ],
+  "runtime_story_evidence": "docs/04-runtime/evidence/G2_JURY_SURFACE_LIVE_DISCRIMINANT_002_2026-09-03.json",
+  "verdict": "PASS / JURY_SURFACE_V0_1_REGRESSION_VALIDATED",
+  "evidence_level": "E4_BOUNDED",
+  "claim_boundary": "This validates the current Node.js regression suite and the bounded jury-surface scenario. It does not establish production readiness, public deployment, general superiority, or Rust/Cargo compatibility.",
+  "evidence_origin": "console_output_supplied_directly_by_operator"
+}

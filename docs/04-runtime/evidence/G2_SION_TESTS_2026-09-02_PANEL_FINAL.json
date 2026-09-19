@@ -1,0 +1,35 @@
+{
+  "schema_version": "1.0",
+  "captured_at": "2026-09-02",
+  "evidence_type": "operator_observed_test_run",
+  "command": "npm test",
+  "suite": "node --test",
+  "result": {
+    "tests": 58,
+    "pass": 58,
+    "fail": 0,
+    "cancelled": 0,
+    "skipped": 0,
+    "todo": 0,
+    "duration_ms": 699.6452
+  },
+  "new_regressions_covered": [
+    "operationally equivalent destructive tool calls may differ in generated metadata but still collapse to one action",
+    "materially different tool calls remain fail-closed and expose only sanitized summaries"
+  ],
+  "closure_scope": [
+    "single-turn clarification and action proposal boundary",
+    "provider fail-closed semantics",
+    "operational duplicate collapse",
+    "destructive command denial",
+    "secret boundary denial",
+    "deterministic single-action gate",
+    "compact live plan adapter",
+    "stale-state detection",
+    "state-aware baseline qualification",
+    "evidence-lineage invalidation",
+    "panel plan/chat endpoints",
+    "no-dispatch invariant"
+  ],
+  "source_note": "Console output supplied directly by the operator from the governed local workspace."
+}

@@ -1,0 +1,59 @@
+{
+  "schema_version": "1.0.0",
+  "generated_at": "2026-08-31T07:35:53Z",
+  "project": "Phoenix Action Gate",
+  "policy": "reference_only_unless_explicitly_authorized",
+  "sources": [
+    {
+      "id": "SRC-001",
+      "name": "PHOENIX_NEURON_LAB",
+      "type": "local_project",
+      "location": "01_MESA_PRINCIPAL/PHOENIX_NEURON_LAB",
+      "authority": "PHOENIX_NEURON_LAB",
+      "role": "upstream architectural reference",
+      "imported_files": [],
+      "version": "pending verification at any future import",
+      "license": "pending verification at any future import",
+      "publication": "not authorized by this registry"
+    },
+    {
+      "id": "SRC-002",
+      "name": "PHOENIX_ACTION_ASSURANCE_LAB",
+      "type": "local_project",
+      "location": "01_MESA_PRINCIPAL/PHOENIX_ACTION_ASSURANCE_LAB",
+      "authority": "PHOENIX_ACTION_ASSURANCE_LAB",
+      "role": "H-PHX-04 experimental evidence and baseline discipline",
+      "imported_files": [],
+      "result": "H-PHX-04 differentiation not corroborated in bounded assurance fixtures",
+      "publication": "summary only; no code imported"
+    },
+    {
+      "id": "SRC-003",
+      "name": "Radar de Oportunidades Phoenix",
+      "type": "github_checkpoint",
+      "repository": "rudevairr-sys/Ag_masv",
+      "ref": "chatgpt/taller",
+      "path": "chatgpt/residencias/chatgpt-custodio-taller/proyectos/radar-oportunidades-phoenix/ESTADO.md",
+      "blob_sha": "5a94358648cbb9c37327ae4c50afe9b709eb5c96",
+      "authority": "continuity checkpoint, not runtime authority",
+      "imported_files": []
+    },
+    {
+      "id": "SRC-004",
+      "name": "Nebius x NVIDIA Global AI Hackathon",
+      "type": "official_devpost_live_data",
+      "slug": "nebiusglobalaihackathon",
+      "url": "https://nebiusglobalaihackathon.devpost.com/",
+      "fetched_at": {
+        "overview": "2026-08-31T07:35:26Z",
+        "prizes": "2026-08-31T07:35:49Z",
+        "rules": "2026-08-31T07:35:50Z",
+        "judging": "2026-08-31T07:35:51Z",
+        "submission_requirements": "2026-08-31T07:35:52Z",
+        "dates": "2026-08-31T07:35:53Z"
+      },
+      "authority": "Devpost official event data",
+      "refresh_policy": "re-check before material gates and submission"
+    }
+  ]
+}

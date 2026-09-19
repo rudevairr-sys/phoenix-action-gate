@@ -1,0 +1,76 @@
+{
+  "schema_version": "1.0",
+  "captured_at": "2026-09-03",
+  "evidence_type": "operator_observed_trial_result",
+  "trial_id": "GOVERNANCE_CONTEXT_BINDING_TRIAL_004",
+  "protocol": "docs/02-research/GOVERNANCE_CONTEXT_BINDING_TRIAL_004_PROTOCOL.md",
+  "commands": [
+    "npm test",
+    "node tools/g2_governance_context_binding_probe.mjs"
+  ],
+  "regression": {
+    "tests": 117,
+    "pass": 117,
+    "fail": 0,
+    "cancelled": 0,
+    "skipped": 0,
+    "todo": 0,
+    "duration_ms": 670.8553
+  },
+  "systems": {
+    "baseline": "coherent-context-receipt-baseline/0.1.0",
+    "phoenix": "phoenix-governance-context-receipt/0.2.0"
+  },
+  "hard_gates_passed": true,
+  "differing_outcome_cases": [],
+  "trial_expectations": {
+    "C0": "PASS_BOTH",
+    "T5": "PASS_BOTH",
+    "T6": "PASS_BOTH",
+    "T8": "PASS_BOTH",
+    "T9": "PASS_BOTH",
+    "T10": "PASS_BOTH",
+    "T11": "PASS_BOTH",
+    "T12": "PASS_BOTH",
+    "T13": "PASS_BOTH",
+    "C1": "PASS_BOTH"
+  },
+  "controls": {
+    "deterministic": {"baseline": true, "phoenix": true},
+    "contract_fail_closed": {"baseline": true, "phoenix": true},
+    "dispatch_attempted": false,
+    "dependencies_added": {"baseline": 0, "phoenix": 0}
+  },
+  "complexity": {
+    "baseline": {
+      "receipt_bytes": 1016,
+      "module_nonblank_loc": 201,
+      "verify_median_ms_250_iterations": 0.2882,
+      "explicit_governance_context_witness": false,
+      "obligation_bytes": 261
+    },
+    "phoenix": {
+      "receipt_bytes": 1675,
+      "module_nonblank_loc": 255,
+      "verify_median_ms_250_iterations": 0.2308,
+      "explicit_governance_context_witness": true,
+      "governance_context_bytes": 909
+    },
+    "delta": {
+      "phoenix_minus_baseline_loc": 54,
+      "phoenix_to_baseline_loc_ratio": 1.2687,
+      "phoenix_minus_baseline_receipt_bytes": 659
+    }
+  },
+  "auditability_difference": {
+    "baseline_explicit_context_witness": false,
+    "phoenix_explicit_context_witness": true,
+    "status": "OBSERVABLE_BUT_NOT_YET_DIFFERENTIATING",
+    "reason": "The explicit governance context witness did not change any preregistered verdict and has not yet demonstrated a measurable auditability/user-value advantage against a stronger competent baseline."
+  },
+  "preregistered_interpretation": "USEFUL_GOVERNANCE_HARDENING / NOT_DIFFERENTIATING_VS_COHERENT_BASELINE",
+  "evidence_level": "E4_BOUNDED",
+  "claim_boundary": "Trial 004 demonstrates bounded governance hardening for evidence completeness, evidence-resource freshness, policy/decision coherence, subject/decision coherence and evidence-registry coherence. It does not demonstrate a Phoenix moat or general superiority over a competent coherent-context baseline.",
+  "evidence_origin": "console_output_supplied_directly_by_operator",
+  "next_test": "Evaluate whether Phoenix's explicit governance-context witness provides measurable auditability, explanation or replay/context-mixing value beyond the simpler baseline. If not, prefer the simpler mechanism for the hardened receipt layer."
+}

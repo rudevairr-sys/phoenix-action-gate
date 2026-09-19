@@ -1,0 +1,29 @@
+{
+  "schema_version": "1.0",
+  "captured_at": "2026-09-01",
+  "evidence_type": "operator_observed_test_run",
+  "command": "npm test",
+  "suite": "node --test",
+  "result": {
+    "tests": 52,
+    "pass": 52,
+    "fail": 0,
+    "cancelled": 0,
+    "skipped": 0,
+    "todo": 0,
+    "duration_ms": 538.0933
+  },
+  "scope": [
+    "single-turn conversational adapter",
+    "deterministic action gate",
+    "compact multi-action Nemotron plan adapter compact-plan/0.2",
+    "projected-state inference for write targets",
+    "explicit stale-state preservation",
+    "state-aware baseline comparison",
+    "evidence-lineage invalidation",
+    "provider fail-closed paths",
+    "panel server regression"
+  ],
+  "dispatch_available": false,
+  "source_note": "Console output supplied by the operator after correcting an obsolete test assertion from proposal_decision.outcome to base_outcome. No runtime logic changed for that correction."
+}

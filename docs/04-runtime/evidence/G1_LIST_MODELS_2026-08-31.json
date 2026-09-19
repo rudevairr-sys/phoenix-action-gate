@@ -1,0 +1,24 @@
+{
+  "probe": "g1-list-models",
+  "ok": true,
+  "state": "RUNTIME_OBSERVED",
+  "endpoint": "https://api.tokenfactory.nebius.com/v1/models",
+  "http_status": 200,
+  "latency_ms": 956,
+  "started_at": "2026-08-31T20:20:14.903Z",
+  "finished_at": "2026-08-31T20:20:15.886Z",
+  "model_count": 30,
+  "nvidia_model_count": 7,
+  "nvidia_models": [
+    "nvidia/Cosmos3-Super-Reasoner",
+    "nvidia/Llama-3_1-Nemotron-Ultra-253B-v1",
+    "nvidia/NVIDIA-Nemotron-3-Nano-30B-A3B",
+    "nvidia/Nemotron-3-Nano-Omni",
+    "nvidia/Nemotron-3-Ultra-550b-a55b",
+    "nvidia/Nemotron-3_5-Lightning",
+    "nvidia/nemotron-3-super-120b-a12b"
+  ],
+  "secret_exposed": false,
+  "evidence_origin": "operator_runtime_output",
+  "recorded_at": "2026-08-31T20:21:47Z"
+}

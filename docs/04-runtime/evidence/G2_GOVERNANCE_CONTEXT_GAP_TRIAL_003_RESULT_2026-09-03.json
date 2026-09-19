@@ -1,0 +1,39 @@
+{
+  "schema_version": "1.0",
+  "captured_at": "2026-09-03",
+  "evidence_type": "operator_observed_trial_result",
+  "trial_id": "GOVERNANCE_CONTEXT_GAP_TRIAL_003",
+  "protocol": "docs/02-research/GOVERNANCE_CONTEXT_GAP_TRIAL_003_PROTOCOL.md",
+  "command": "node tools/g2_governance_context_gap_probe.mjs",
+  "systems_frozen": [
+    {"name": "B1", "version": "lineage-aware-receipt-baseline/0.2.0"},
+    {"name": "Phoenix", "version": "phoenix-evidence-receipt/0.1.0"}
+  ],
+  "controls_passed": true,
+  "trials": {
+    "T8_EVIDENCE_OMISSION": {
+      "b1": "COUNTEREXAMPLE / VALID",
+      "phoenix": "COUNTEREXAMPLE / VALID",
+      "aggregate": "COMMON_GOVERNANCE_GAP / NOT_DIFFERENTIATING"
+    },
+    "T9_EVIDENCE_SELF_STALE": {
+      "b1": "COUNTEREXAMPLE / VALID",
+      "phoenix": "COUNTEREXAMPLE / VALID",
+      "aggregate": "COMMON_GOVERNANCE_GAP / NOT_DIFFERENTIATING"
+    },
+    "T10_POLICY_DECISION_COHERENCE": {
+      "b1": "COUNTEREXAMPLE / VALID",
+      "phoenix": "COUNTEREXAMPLE / VALID",
+      "aggregate": "COMMON_GOVERNANCE_GAP / NOT_DIFFERENTIATING"
+    }
+  },
+  "counterexample_count": 6,
+  "dispatch_attempted": false,
+  "network_used": false,
+  "llm_used": false,
+  "interpretation": "All three preregistered static hypotheses were reproduced as runtime counterexamples in both frozen systems. The findings establish common correctness/governance gaps, not a Phoenix differentiator.",
+  "claim_boundary": "Do not claim evidence completeness, evidence-resource freshness, or policy/decision coherence for phoenix-evidence-receipt/0.1.0 or lineage-aware-receipt-baseline/0.2.0. Governance Context Binding remains a design candidate, not an implemented capability.",
+  "evidence_level": "E4_BOUNDED",
+  "evidence_origin": "console_output_supplied_directly_by_operator",
+  "next_test": "Preregister a minimal coherent-governance-context candidate and a competent simpler baseline, then test T8-T10 plus mixed-context/replay controls before any differentiation claim."
+}

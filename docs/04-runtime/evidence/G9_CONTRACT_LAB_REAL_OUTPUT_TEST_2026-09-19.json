@@ -1,0 +1,79 @@
+{
+  "schema_version": "1.0.0",
+  "evidence_id": "G9_CONTRACT_LAB_REAL_OUTPUT_TEST_2026-09-19",
+  "created_at": "2026-09-19T14:20:00Z",
+  "project": "Phoenix Action Gate",
+  "state": "CONTRACT_LAB_IMPLEMENTED_AND_RUNTIME_TESTED",
+  "runtime": {
+    "executor": "Remote Desktop Commander",
+    "device": "DESKTOP-M7OQOC5",
+    "shell": "powershell",
+    "node_version": "v24.12.0",
+    "panel_url": "http://127.0.0.1:4183"
+  },
+  "implemented_scope": [
+    "POST /api/contract/evaluate",
+    "web contract lab form for real GPT outputs",
+    "structural jury-surface test for contract lab",
+    "contract lab styling"
+  ],
+  "test_command": {
+    "command": "npm test",
+    "resolved_command": "node --test",
+    "result": {
+      "tests": 130,
+      "suites": 0,
+      "pass": 130,
+      "fail": 0,
+      "cancelled": 0,
+      "skipped": 0,
+      "todo": 0,
+      "duration_ms": 719.9257
+    }
+  },
+  "runtime_contract_checks": [
+    {
+      "name": "N_VCLS passing output",
+      "request": {
+        "contract_type": "OUTPUT_SHAPE_CONTRACT",
+        "output": "Crrct. Sn vcls."
+      },
+      "observed_decision": {
+        "outcome": "PREPARED",
+        "reason_codes": ["OUTPUT_SHAPE_OK"],
+        "checks": [
+          { "check": "output_is_string", "status": "PASS", "evidence_ref": "string" },
+          { "check": "no_vowels", "status": "PASS", "evidence_ref": "no_vowels_detected" }
+        ],
+        "dispatch_attempted": false
+      }
+    },
+    {
+      "name": "N_VCLS failing output",
+      "request": {
+        "contract_type": "OUTPUT_SHAPE_CONTRACT",
+        "output": "Correcto, sin vocales."
+      },
+      "observed_decision": {
+        "outcome": "DENY",
+        "reason_codes": ["OUTPUT_SHAPE_VIOLATION"],
+        "checks": [
+          { "check": "output_is_string", "status": "PASS", "evidence_ref": "string" },
+          { "check": "no_vowels", "status": "FAIL", "evidence_ref": "vowel_detected" }
+        ],
+        "dispatch_attempted": false
+      }
+    }
+  ],
+  "scope_note": "This validates the local contract-evaluation endpoint and UI lab against sample outputs similar to real GPT responses. It does not claim integration with external GPT runtimes or automated capture from another GPT.",
+  "truthcore": {
+    "contract_lab_implemented": true,
+    "runtime_endpoint_tested": true,
+    "live_project_tests_passed": true,
+    "tests_passed": 130,
+    "dispatch_attempted": false,
+    "external_gpt_runtime_integrated": false,
+    "production_validated": false,
+    "devpost_submitted": false
+  }
+}

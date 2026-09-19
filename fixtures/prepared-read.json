@@ -1,0 +1,13 @@
+{
+  "schema_version": "0.1",
+  "proposal_id": "readme-inspect-001",
+  "intent": "Inspect README without mutation",
+  "action_type": "READ_CONTEXT",
+  "target": {"workspace_id": "demo-workspace", "relative_path": "README.md"},
+  "operation": {"kind": "read_file"},
+  "requested_capabilities": ["READ_CONTEXT"],
+  "preconditions": ["workspace_exists", "file_exists"],
+  "reversibility": {"kind": "INHERENT", "rollback_plan": null},
+  "estimated_effects": [],
+  "model_context": {"model_id": "nvidia/Nemotron-3_5-Lightning", "provider_request_id": null}
+}

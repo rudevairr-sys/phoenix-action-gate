@@ -1,0 +1,33 @@
+{
+  "schema_version": "1.0.0",
+  "evidence_id": "G7_CLEAN_CLONE_NPM_TEST_2026-09-19",
+  "created_at": "2026-09-19T12:22:00Z",
+  "project": "Phoenix Action Gate",
+  "state": "CLEAN_CLONE_TEST_PASS_FOR_EXISTING_CLONE",
+  "path": "02_CANDIDATOS/phoenix-action-gate-cleanclone-pr7-20260918",
+  "runtime": {
+    "executor": "Remote Desktop Commander",
+    "device": "DESKTOP-M7OQOC5",
+    "shell": "powershell",
+    "node_version": "v24.12.0"
+  },
+  "command": "npm test",
+  "resolved_command": "node --test",
+  "result": {
+    "tests": 122,
+    "suites": 0,
+    "pass": 122,
+    "fail": 0,
+    "cancelled": 0,
+    "skipped": 0,
+    "todo": 0,
+    "duration_ms": 636.8734
+  },
+  "scope_note": "This validates the existing clean clone directory. It does not validate later live-project changes adding specialized-agent contract checkers.",
+  "truthcore": {
+    "test_executed": true,
+    "runtime_observed": true,
+    "clean_clone_test_pass": true,
+    "current_live_cut_after_contract_checkers_validated": false
+  }
+}

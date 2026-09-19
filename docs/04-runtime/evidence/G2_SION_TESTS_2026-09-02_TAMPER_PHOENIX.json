@@ -1,0 +1,33 @@
+{
+  "schema_version": "1.0",
+  "captured_at": "2026-09-02",
+  "evidence_type": "operator_observed_test_run",
+  "command": "npm test",
+  "suite": "node --test",
+  "result": {
+    "tests": 80,
+    "pass": 80,
+    "fail": 0,
+    "cancelled": 0,
+    "skipped": 0,
+    "todo": 0,
+    "duration_ms": 529.5486
+  },
+  "candidate": "phoenix-evidence-receipt/0.1.0",
+  "tamper_candidate_checks": {
+    "T0_untouched": "PASS_VALID",
+    "T1_decision_changed": "PASS_INVALID",
+    "T2_subject_changed": "PASS_INVALID",
+    "T3_policy_changed": "PASS_INVALID",
+    "T4_evidence_changed": "PASS_INVALID",
+    "T5_causal_source_changed": "PASS_INVALID_LINEAGE_BINDING_INVALIDATED",
+    "T6_unrelated_state_changed": "PASS_VALID",
+    "T7_truncated_receipt": "PASS_INVALID",
+    "T7_unknown_receipt_field": "PASS_INVALID",
+    "deterministic_receipt": "PASS",
+    "missing_current_state_fail_closed": "PASS",
+    "issuance_rejects_unsatisfied_causal_obligation": "PASS"
+  },
+  "dispatch_attempted": false,
+  "source_note": "Console output supplied directly by the operator from the governed local workspace."
+}

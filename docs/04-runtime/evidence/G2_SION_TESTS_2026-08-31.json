@@ -1,0 +1,29 @@
+{
+  "suite": "g2-deterministic-gate-core",
+  "state": "TEST_EXECUTED",
+  "execution_origin": "operator_local_sion_runtime",
+  "command": "npm test",
+  "working_directory": "01_MESA_PRINCIPAL/phoenix-action-gate",
+  "result": {
+    "tests": 6,
+    "suites": 0,
+    "pass": 6,
+    "fail": 0,
+    "cancelled": 0,
+    "skipped": 0,
+    "todo": 0,
+    "duration_ms": 201.0834
+  },
+  "cases": [
+    {"name":"bounded read becomes R0/PREPARED and never dispatches","duration_ms":12.0065},
+    {"name":"reversible patch becomes R2/REVIEW","duration_ms":2.3625},
+    {"name":"secret path fails closed as R3/DENY","duration_ms":2.1191},
+    {"name":"allowlisted test command becomes R1/PREPARED without execution","duration_ms":2.6965},
+    {"name":"same proposal produces same deterministic decision hash","duration_ms":3.4434},
+    {"name":"unknown schema fails closed","duration_ms":2.8643}
+  ],
+  "node_version_note": "SION runtime doctor previously observed Node v24.12.0 on this workstation; the npm test output itself does not print the Node version.",
+  "dispatch_attempted": false,
+  "secret_exposed": false,
+  "evidence_origin": "operator_runtime_output"
+}

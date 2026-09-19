@@ -1,0 +1,19 @@
+{
+  "name": "phoenix-action-gate",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "test": "node --test",
+    "demo:gate": "node tools/g2_gate_probe.mjs",
+    "demo:e2e": "node tools/g2_end_to_end_probe.mjs",
+    "demo:plan": "node tools/g2_plan_compare_probe.mjs",
+    "demo:state": "node tools/g2_state_compare_probe.mjs",
+    "demo:lineage": "node tools/g2_lineage_compare_probe.mjs",
+    "demo:plan:live": "node tools/g2_live_plan_probe.mjs",
+    "panel": "node src/server.mjs"
+  },
+  "engines": {
+    "node": ">=22"
+  }
+}

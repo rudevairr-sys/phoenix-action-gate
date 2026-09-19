@@ -1,0 +1,109 @@
+{
+  "schema_version": "1.0.0",
+  "project": "Phoenix Action Gate",
+  "updated_at": "2026-09-19T14:24:00Z",
+  "mode": "CONTRACT_LAB_RUNTIME_TEST_PASS",
+  "authorization": {
+    "decision_ids": [
+      "USER-20260919-CONTRACT-LAB-REAL-GPT-OUTPUTS",
+      "USER-20260919-RECORD-CONTRACT-LAB-REAL-OUTPUT-TEST"
+    ],
+    "source": "human_bridge",
+    "scope": "Implement and test a local contract lab for evaluating real GPT outputs against specialized-agent contracts. No merge, deploy, dispatch activation or Devpost submission."
+  },
+  "git": {
+    "repository": "rudevairr-sys/phoenix-action-gate",
+    "local_branch": "review/contest-surface-20260918",
+    "remote_branch": "origin/review/contest-surface-20260918",
+    "base_branch": "main",
+    "current_head_last_observed": "dec5124",
+    "local_has_uncommitted_updates": true
+  },
+  "pull_request": {
+    "number": 7,
+    "url": "https://github.com/rudevairr-sys/phoenix-action-gate/pull/7",
+    "state": "open",
+    "draft": true,
+    "merged": false
+  },
+  "runtime_panel": {
+    "state": "LOCAL_PANEL_RUNNING_ON_ALT_PORT_WITH_CONTRACT_LAB",
+    "url": "http://127.0.0.1:4183",
+    "reason": "Port 4173 was occupied by another project, Show Drag Factory.",
+    "dispatch_available": false
+  },
+  "contract_lab": {
+    "state": "IMPLEMENTED_AND_RUNTIME_TESTED",
+    "endpoint": "POST /api/contract/evaluate",
+    "ui": "web contract lab form for real GPT outputs",
+    "evidence_ref": "docs/04-runtime/evidence/G9_CONTRACT_LAB_REAL_OUTPUT_TEST_2026-09-19.json",
+    "sample_results": [
+      {
+        "contract_type": "OUTPUT_SHAPE_CONTRACT",
+        "output": "Crrct. Sn vcls.",
+        "outcome": "PREPARED",
+        "reason_codes": ["OUTPUT_SHAPE_OK"]
+      },
+      {
+        "contract_type": "OUTPUT_SHAPE_CONTRACT",
+        "output": "Correcto, sin vocales.",
+        "outcome": "DENY",
+        "reason_codes": ["OUTPUT_SHAPE_VIOLATION"]
+      }
+    ]
+  },
+  "test_gate_current_cut": {
+    "state": "LIVE_TEST_EXECUTED_PASS",
+    "node_version": "v24.12.0",
+    "tests": 130,
+    "pass": 130,
+    "fail": 0,
+    "duration_ms": 719.9257,
+    "evidence_refs": [
+      "docs/04-runtime/evidence/G9_CONTRACT_LAB_REAL_OUTPUT_TEST_2026-09-19.json"
+    ],
+    "executor": "Remote Desktop Commander"
+  },
+  "specialized_agent_contract_demo": {
+    "state": "CONTRACT_LAB_IMPLEMENTED_FOR_REAL_GPT_OUTPUTS",
+    "spec": "docs/03-product/SPECIALIZED_AGENT_CONTRACT_DEMO.md",
+    "implementation": "src/agent-contracts.mjs",
+    "endpoint": "src/server.mjs /api/contract/evaluate",
+    "ui": "web/index.html contract lab",
+    "tests": "test/jury-surface.test.mjs + test/agent-contracts.test.mjs"
+  },
+  "blocked_claims": [
+    "production-ready",
+    "powered by Phoenix Neuron",
+    "canonical Phoenix Neuron integration",
+    "formally verified",
+    "superior to all guardrails",
+    "receipt/tamper as Phoenix moat",
+    "secure AI agent execution without qualification",
+    "automatic execution or dispatch",
+    "submission-ready",
+    "Ferrum Rust integrated as private GPT runtime component",
+    "Phoenix Action Gate runtime-validates external Ferrum Rust instance",
+    "N_VCLS Rust artifact is conformant",
+    "agent factory is final hackathon product"
+  ],
+  "gates": [
+    { "id": "G2_PRODUCT_SURFACE", "state": "LIVE_TEST_PASS_130" },
+    { "id": "G5_JURY_SURFACE", "state": "CONTRACT_LAB_STRUCTURAL_TEST_PASS" },
+    { "id": "G8_DEVPOST_SUBMISSION", "state": "PENDING_HUMAN_AUTHORIZATION" },
+    { "id": "G9_SPECIALIZED_AGENT_CONTRACT_DEMO", "state": "CONTRACT_LAB_RUNTIME_TEST_PASS" }
+  ],
+  "next_safe_step": "Use the browser contract lab with real GPT outputs from MONO_SI_NO, Ferrum Rust or N_VCLS, then record any observed pass/fail examples. No merge, deploy or Devpost submission without separate authorization.",
+  "truthcore": {
+    "test_executed_this_cut": true,
+    "tests_passed": 130,
+    "tests_failed": 0,
+    "contract_lab_implemented": true,
+    "contract_lab_runtime_tested": true,
+    "visual_screenshot_revalidation_pass": true,
+    "external_gpt_runtime_integrated": false,
+    "production_validated": false,
+    "merged": false,
+    "submitted": false
+  }
+}

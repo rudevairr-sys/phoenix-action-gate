@@ -1,0 +1,33 @@
+{
+  "schema_version": "1.0",
+  "captured_at": "2026-09-01",
+  "evidence_type": "operator_observed_test_run",
+  "command": "npm test",
+  "suite": "node --test",
+  "result": {
+    "tests": 44,
+    "pass": 44,
+    "fail": 0,
+    "cancelled": 0,
+    "skipped": 0,
+    "todo": 0,
+    "duration_ms": 464.0955
+  },
+  "scope": [
+    "single forced emit_phoenix_turn adapter",
+    "CHAT without ActionProposal",
+    "bounded conversation history",
+    "README READ_CONTEXT -> R0/PREPARED",
+    ".env READ_CONTEXT -> R3/DENY",
+    "npm test RUN_COMMAND -> R1/PREPARED",
+    "destructive delete -> DENY",
+    "invalid/missing/multiple tool-call fail-closed",
+    "deterministic action gate",
+    "plan dependency propagation",
+    "stale-state Trial 002",
+    "evidence-lineage Trial 003",
+    "panel server fixtures and history validation"
+  ],
+  "dispatch_available": false,
+  "source_note": "Console output supplied by the operator after the final unsupported-mode validation precedence fix."
+}
