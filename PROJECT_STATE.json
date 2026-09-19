@@ -1,23 +1,24 @@
 {
   "schema_version": "1.0.0",
   "project": "Phoenix Action Gate",
-  "updated_at": "2026-09-19T13:33:00Z",
-  "mode": "DEVPOST_PR_ALIGNMENT_CUT_FRESH_CLEAN_CLONE_TEST_PASS",
+  "updated_at": "2026-09-19T13:54:00Z",
+  "mode": "VISUAL_SCREENSHOT_REVALIDATION_PASS",
   "authorization": {
     "decision_ids": [
       "USER-20260919-UPDATE-PR-AND-DEVPOST-DRAFT",
       "USER-20260919-ADD-JURY-CONTRACT-STRIP-TEST",
-      "USER-20260919-FRESH-CLEANCLONE-DEVPOST-CUT"
+      "USER-20260919-FRESH-CLEANCLONE-DEVPOST-CUT",
+      "USER-20260919-VISUAL-SCREENSHOT-REVALIDATION"
     ],
     "source": "human_bridge",
-    "scope": "Update PR and Devpost draft, add structural UI assertion, run live and fresh clean-clone tests, and record evidence. No merge, deploy, dispatch activation or Devpost submission."
+    "scope": "Record visual screenshot revalidation for Phoenix Action Gate running on localhost port 4183. No merge, deploy, dispatch activation or Devpost submission."
   },
   "git": {
     "repository": "rudevairr-sys/phoenix-action-gate",
     "local_branch": "review/contest-surface-20260918",
     "remote_branch": "origin/review/contest-surface-20260918",
     "base_branch": "main",
-    "current_head_last_pushed_before_final_evidence": "093c9e9",
+    "current_head_last_observed": "c9befaf476d70683a3bef6e745c9c54975b7439f",
     "local_has_uncommitted_updates": true
   },
   "pull_request": {
@@ -27,42 +28,57 @@
     "draft": true,
     "merged": false,
     "body_updated_for_contract_demo": true,
-    "progress_comment_id": 5742270244
+    "progress_comment_id": 5742270244,
+    "final_validation_comment_id": 5742288674
   },
   "hackathon": {
     "name": "Nebius x NVIDIA Global AI Hackathon",
     "track_candidate": "Coding and agentic engineering",
     "submission_state": "not_submitted"
   },
+  "runtime_panel": {
+    "state": "LOCAL_PANEL_RUNNING_ON_ALT_PORT",
+    "url": "http://127.0.0.1:4183",
+    "reason": "Port 4173 was occupied by another project, Show Drag Factory.",
+    "dispatch_available": false
+  },
+  "visual_revalidation": {
+    "state": "VISUAL_SCREENSHOT_REVALIDATION_PASS",
+    "evidence_ref": "docs/04-runtime/evidence/G5_VISUAL_SCREENSHOT_REVALIDATION_2026-09-19.md",
+    "source": "user_provided_screenshot",
+    "observed_url": "127.0.0.1:4183",
+    "observed_elements": [
+      "Phoenix Action Gate title",
+      "NO DISPATCH badge",
+      "four-step top flow",
+      "Specialized Agent Contract Demo strip",
+      "MONO_SI_NO card",
+      "FERRUM_RUST card",
+      "N_VCLS card",
+      "ACTION_PROPOSER card",
+      "Conversation panel",
+      "Deterministic policy panel"
+    ]
+  },
   "devpost_draft": {
     "state": "UPDATED_NOT_SUBMITTED",
-    "path": "BUILDER_OMEGA_CONTEST_PREP_20260918/DEVPOST_SUBMISSION_DRAFT.md",
-    "notes": "Draft includes specialized-agent contract demo, validation evidence, limitations, and explicit prior/live Nebius evidence boundary. No submission performed."
+    "path": "BUILDER_OMEGA_CONTEST_PREP_20260918/DEVPOST_SUBMISSION_DRAFT.md"
   },
   "clean_clone": {
     "state": "FRESH_CLEAN_CLONE_TEST_PASS_FOR_CURRENT_CUT",
-    "repository": "rudevairr-sys/phoenix-action-gate",
-    "ref": "review/contest-surface-20260918",
     "relative_path": "02_CANDIDATOS/phoenix-action-gate-cleanclone-pr7-devpost-20260919",
-    "intake_decision": "ALLOW",
-    "files": 138,
-    "bytes": 677848,
-    "fingerprint": "d6bb869d55d0dc84a543b92ee3c2023c90b335f1e462076206e1066d19d9b41d",
     "test_evidence_ref": "docs/04-runtime/evidence/G7_FRESH_CLEAN_CLONE_DEVPOST_CUT_TEST_2026-09-19.json",
     "node_version": "v24.12.0",
     "tests": 129,
     "pass": 129,
-    "fail": 0,
-    "duration_ms": 713.0547
+    "fail": 0
   },
   "specialized_agent_contract_demo": {
-    "state": "IMPLEMENTED_MINIMAL_CHECKERS_LIVE_AND_FRESH_CLEANCLONE_TEST_PASS_129",
+    "state": "IMPLEMENTED_MINIMAL_CHECKERS_LIVE_AND_FRESH_CLEANCLONE_TEST_PASS_129_VISUAL_PASS",
     "spec": "docs/03-product/SPECIALIZED_AGENT_CONTRACT_DEMO.md",
     "implementation": "src/agent-contracts.mjs",
     "tests": "test/agent-contracts.test.mjs",
     "jury_surface_test": "test/jury-surface.test.mjs",
-    "live_evidence_ref": "docs/04-runtime/evidence/G5_JURY_CONTRACT_STRIP_TEST_2026-09-19.json",
-    "fresh_clone_evidence_ref": "docs/04-runtime/evidence/G7_FRESH_CLEAN_CLONE_DEVPOST_CUT_TEST_2026-09-19.json",
     "strategic_thesis": "Phoenix Action Gate verifies that specialized agents stay inside their contract before responding or acting."
   },
   "test_gate_current_cut": {
@@ -73,9 +89,10 @@
     "fail": 0,
     "evidence_refs": [
       "docs/04-runtime/evidence/G5_JURY_CONTRACT_STRIP_TEST_2026-09-19.json",
-      "docs/04-runtime/evidence/G7_FRESH_CLEAN_CLONE_DEVPOST_CUT_TEST_2026-09-19.json"
+      "docs/04-runtime/evidence/G7_FRESH_CLEAN_CLONE_DEVPOST_CUT_TEST_2026-09-19.json",
+      "docs/04-runtime/evidence/G5_VISUAL_SCREENSHOT_REVALIDATION_2026-09-19.md"
     ],
-    "executor": "Remote Desktop Commander"
+    "executor": "Remote Desktop Commander + user screenshot"
   },
   "blocked_claims": [
     "production-ready",
@@ -83,7 +100,7 @@
     "canonical Phoenix Neuron integration",
     "formally verified",
     "superior to all guardrails",
-    "receipt/tamper is a Phoenix moat",
+    "receipt/tamper as Phoenix moat",
     "secure AI agent execution without qualification",
     "automatic execution or dispatch",
     "submission-ready",
@@ -97,21 +114,21 @@
     { "id": "G1_NEBIUS_NVIDIA", "state": "RUNTIME_OBSERVED_PREVIOUSLY_REVALIDATE" },
     { "id": "G2_PRODUCT_SURFACE", "state": "LIVE_AND_FRESH_CLONE_TEST_PASS_129" },
     { "id": "G3_DIFFERENTIATION", "state": "IMPROVED_BY_SPECIALIZED_AGENT_CONTRACT_CHECKERS" },
-    { "id": "G5_JURY_SURFACE", "state": "STRUCTURAL_REVALIDATION_PASS / SCREENSHOT_PENDING" },
+    { "id": "G5_JURY_SURFACE", "state": "VISUAL_SCREENSHOT_REVALIDATION_PASS" },
     { "id": "G7_CLEAN_CLONE", "state": "FRESH_CLEAN_CLONE_TEST_PASS_129" },
     { "id": "G8_DEVPOST_SUBMISSION", "state": "PENDING_HUMAN_AUTHORIZATION" },
-    { "id": "G9_SPECIALIZED_AGENT_CONTRACT_DEMO", "state": "MINIMAL_CHECKERS_IMPLEMENTED / LIVE_AND_FRESH_CLONE_TEST_PASS_129" }
+    { "id": "G9_SPECIALIZED_AGENT_CONTRACT_DEMO", "state": "MINIMAL_CHECKERS_IMPLEMENTED / LIVE_AND_FRESH_CLONE_TEST_PASS_129 / VISUAL_PASS" }
   ],
-  "next_safe_step": "Update PR body/comment to 129/129 if desired, then Nebius/Nemotron live revalidation or demo URL preparation. No merge, deploy or Devpost submission without separate authorization.",
+  "next_safe_step": "Nebius/Nemotron live revalidation or demo/test build URL preparation. No merge, deploy or Devpost submission without separate authorization.",
   "truthcore": {
     "test_executed_this_cut": true,
     "tests_passed": 129,
     "tests_failed": 0,
     "fresh_clean_clone_for_current_cut_pass": true,
+    "visual_screenshot_revalidation_pass": true,
     "specialized_agent_contract_demo_implemented": true,
     "devpost_draft_updated": true,
     "pr_body_updated": true,
-    "pr_progress_comment_posted": true,
     "runtime_observed_this_cut": false,
     "production_validated": false,
     "merged": false,
