@@ -1,36 +1,39 @@
 # Video Script — 3 minutes max
 
-Estado: `DRAFT_NOT_RECORDED`  
-Duración objetivo: 2:30–2:50
+Estado: `DRAFT_NOT_RECORDED / UPDATED_FOR_SPECIALIZED_AGENT_CONTRACT_DEMO`  
+Duración objetivo: 2:30–2:55
 
 ## 0:00–0:15 — Hook
 
-AI coding agents can propose commands, patches and multi-step plans. But before an agent acts, we should ask a different question: is the reason for acting still true?
+AI coding agents are getting better at proposing commands, patches and plans. But a specialized agent should not become a general assistant just because the user insists.
 
 This is Phoenix Action Gate: a justification firewall for AI coding agents.
 
-## 0:15–0:35 — What it is
+## 0:15–0:40 — What it is
 
 The model proposes, but the model does not authorize.
 
-In this demo, NVIDIA Nemotron runs through Nebius Token Factory and turns a user request into a structured plan. Phoenix Action Gate then checks the plan deterministically before anything can move forward.
+In this demo, NVIDIA Nemotron runs through Nebius Token Factory and turns a user request into a structured proposal. Phoenix Action Gate then checks the proposal deterministically before anything can move forward.
 
 There is no automatic dispatch in this MVP.
 
-## 0:35–1:10 — Show the UI
+## 0:40–1:05 — Specialized agent contract demo
 
-On screen we can see four things:
+The UI now shows a simple idea: small agents with clear contracts.
 
-1. the user request;
-2. the plan proposed by Nemotron;
-3. the Phoenix decision;
-4. the justification map.
+One agent may only answer `SI`, `NO` or `SAFE_NOOP`.
 
-The important part is the map. Phoenix does not only ask whether an action is allowed. It checks whether the evidence that justifies the action is still valid.
+One agent may only stay inside the Rust domain.
 
-## 1:10–1:55 — Main demo
+One agent must avoid vowels.
 
-Here is the scenario.
+One agent may propose actions, but must not execute.
+
+Phoenix does not ask whether the response sounds convincing. It asks whether the output stayed inside the contract.
+
+## 1:05–1:45 — Main action gate demo
+
+Here is the main coding scenario.
 
 Nemotron proposes a four-step plan.
 
@@ -52,27 +55,31 @@ Phoenix returns `DENY`.
 
 Nothing is executed.
 
-## 1:55–2:20 — Nebius/NVIDIA centrality
+## 1:45–2:15 — Why this matters
 
-Nebius and Nemotron are central to the demo because the model generates the proposed action plan. Token Factory gives the app hosted access to an NVIDIA model. Phoenix Action Gate then provides the deterministic governance layer around that proposal.
+This is useful because agent safety is not only about blocking dangerous commands. It is also about keeping each agent inside its lane.
+
+A Rust agent should not become a car-buying assistant. A yes/no agent should not start explaining. An action proposer should not claim it executed a change.
+
+Phoenix Action Gate makes those boundaries visible and reviewable.
+
+## 2:15–2:35 — Nebius/NVIDIA centrality
+
+Nebius and Nemotron are central to the demo because the model generates the proposed action or plan. Token Factory gives the app hosted access to an NVIDIA model. Phoenix Action Gate then provides the deterministic governance layer around that proposal.
 
 If you remove Nemotron, you lose the agent proposal. If you remove the gate, you lose the pre-execution decision boundary.
 
-## 2:20–2:40 — Why it matters
-
-This is useful for developers and operators who want agents to help with code, but do not want to blindly trust model output.
-
-The goal is not to make the model more powerful. The goal is to make the action boundary visible, reviewable and fail-closed.
-
-## 2:40–2:55 — Close
+## 2:35–2:55 — Close
 
 Phoenix Action Gate is experimental and not production-ready. It does not claim to solve all agent safety problems.
 
-It demonstrates one practical idea: before an AI agent acts, check whether its reason for acting is still valid.
+It demonstrates one practical idea: before an AI agent acts, check whether the reason for acting is still valid and whether the agent stayed inside its contract.
 
 ## Shots checklist
 
 - Browser on local panel.
+- `Specialized Agent Contract Demo` strip visible.
+- Four microagent cards visible: `MONO_SI_NO`, `FERRUM_RUST`, `N_VCLS`, `ACTION_PROPOSER`.
 - Nebius/Nemotron model/provider area visible.
 - Main prompt loaded.
 - Four-step plan visible.
@@ -89,3 +96,5 @@ It demonstrates one practical idea: before an AI agent acts, check whether its r
 - Do not say Phoenix Neuron is included.
 - Do not say automatic execution.
 - Do not say exclusive or unbeatable guardrail.
+- Do not say the agent factory is the final product.
+- Do not say external GPT ZIPs are integrated runtime components.

@@ -41,3 +41,59 @@
 .lineage-card .flow-node b {
   color: var(--text);
 }
+
+.contract-demo {
+  margin: 18px 0 22px;
+}
+
+.contract-demo .decision-copy {
+  margin-top: 0;
+}
+
+.contract-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 12px;
+  margin-top: 14px;
+}
+
+.contract-card {
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  background: rgba(255, 255, 255, 0.045);
+  padding: 14px;
+  min-height: 116px;
+}
+
+.contract-card span {
+  display: block;
+  color: var(--muted);
+  font-size: 0.72rem;
+  letter-spacing: 0.08em;
+  margin-bottom: 8px;
+}
+
+.contract-card strong {
+  display: block;
+  color: var(--text);
+  font-size: 0.98rem;
+  line-height: 1.25;
+  margin-bottom: 8px;
+}
+
+.contract-card small {
+  color: var(--muted);
+  line-height: 1.35;
+}
+
+@media (max-width: 980px) {
+  .contract-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 560px) {
+  .contract-grid {
+    grid-template-columns: 1fr;
+  }
+}

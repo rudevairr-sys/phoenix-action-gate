@@ -1,8 +1,8 @@
 {
   "schema_version": "1.0.0",
   "project": "Phoenix Action Gate",
-  "updated_at": "2026-09-18T20:34:00Z",
-  "mode": "PR_DRAFT_CREATED_CLEANCLONE_STRUCTURAL_PASS_SPECIALIZED_AGENT_CONTRACT_DEMO_DESIGNED",
+  "updated_at": "2026-09-19T12:23:00Z",
+  "mode": "CONTRACT_CHECKERS_IMPLEMENTED_CURRENT_LIVE_TEST_PASS",
   "authorization": {
     "decision_ids": [
       "USER-20260918-HAZLO-CONTEST-PREP",
@@ -17,10 +17,15 @@
       "USER-20260918-SI-RECORD-CLEANCLONE",
       "USER-20260918-REGISTER-SPECIALIZED-AGENT-EVIDENCE-PAG",
       "USER-20260918-REGISTER-NVCLS-EVIDENCE",
-      "USER-20260918-CREATE-SPECIALIZED-AGENT-DEMO-SPEC"
+      "USER-20260918-CREATE-SPECIALIZED-AGENT-DEMO-SPEC",
+      "USER-20260919-IMPLEMENT-CONTRACT-CHECKERS",
+      "USER-20260919-ADD-CONTRACT-CHECKER-TESTS",
+      "USER-20260919-UPDATE-JURY-CONTRACT-DEMO-SURFACE",
+      "USER-20260919-UPDATE-VIDEO-SCRIPT-CONTRACT-DEMO",
+      "USER-20260919-USE-REMOTE-DESKTOP-FOR-TESTS"
     ],
     "source": "human_bridge",
-    "scope": "Prepare contest candidacy, create PR draft, perform structural clean clone validation, record specialized-agent contract evidence, and design the Specialized Agent Contract Demo. No merge, deploy, dispatch activation or Devpost submission."
+    "scope": "Continue contest development, implement minimal specialized-agent contract checkers, update jury/demo surface, execute local tests via Remote Desktop, and record evidence. No merge, deploy, dispatch activation or Devpost submission."
   },
   "hackathon": {
     "name": "Nebius x NVIDIA Global AI Hackathon",
@@ -36,7 +41,7 @@
     "local_branch": "review/contest-surface-20260918",
     "remote_branch": "origin/review/contest-surface-20260918",
     "base_branch": "main",
-    "current_head_last_observed_before_this_commit": "919ae9468be32f4ff190ae3f131ce8fe46493ee0",
+    "current_head_last_observed_before_this_cut": "345b139aaf8f6298064649effd8e08489b7d1e97",
     "local_has_uncommitted_updates": true
   },
   "pull_request": {
@@ -48,69 +53,34 @@
     "base": "main",
     "base_sha": "a06291a616a96f8dd861db2dc291dd8548ee5f83",
     "head": "review/contest-surface-20260918",
-    "head_sha_latest_observed_before_this_commit": "919ae9468be32f4ff190ae3f131ce8fe46493ee0"
+    "head_sha_latest_observed_before_this_cut": "345b139aaf8f6298064649effd8e08489b7d1e97"
   },
   "clean_clone": {
-    "state": "STRUCTURAL_PASS_TEST_PENDING",
+    "state": "TEST_PASS_FOR_EXISTING_CLONE / REFRESH_NEEDED_AFTER_NEW_COMMIT",
     "repository": "rudevairr-sys/phoenix-action-gate",
     "ref": "review/contest-surface-20260918",
     "relative_path": "02_CANDIDATOS/phoenix-action-gate-cleanclone-pr7-20260918",
-    "intake_decision": "ALLOW",
-    "files": 128,
-    "bytes": 638114,
-    "fingerprint": "ca36715e5ac793004041b1db175a11a418a8d2b20c32f0a0c7a558252ba7d41c",
-    "git_status": "HEAD (no branch)",
-    "markers": ["package.json", "README.md"],
-    "record": "BUILDER_OMEGA_CONTEST_PREP_20260918/CLEAN_CLONE_RECORD_20260918.md"
+    "test_evidence_ref": "docs/04-runtime/evidence/G7_CLEAN_CLONE_NPM_TEST_2026-09-19.json",
+    "node_version": "v24.12.0",
+    "tests": 122,
+    "pass": 122,
+    "fail": 0,
+    "duration_ms": 636.8734,
+    "scope_note": "Existing clean clone passed before specialized contract checker changes. A fresh clone of the new PR head is still needed after commit/push."
   },
   "specialized_agent_contract_demo": {
-    "state": "DESIGNED_NOT_IMPLEMENTED",
+    "state": "IMPLEMENTED_MINIMAL_CHECKERS_CURRENT_LIVE_TEST_PASS",
     "spec": "docs/03-product/SPECIALIZED_AGENT_CONTRACT_DEMO.md",
+    "implementation": "src/agent-contracts.mjs",
+    "tests": "test/agent-contracts.test.mjs",
+    "evidence_ref": "docs/04-runtime/evidence/G9_SPECIALIZED_AGENT_CONTRACT_CHECKERS_TEST_2026-09-19.json",
     "strategic_thesis": "Phoenix Action Gate verifies that specialized agents stay inside their contract before responding or acting.",
     "microagents": [
-      {
-        "id": "MONO_SI_NO",
-        "contract_type": "CLOSED_VOCABULARY_CONTRACT",
-        "state": "USER_EXPERIMENT_OBSERVED"
-      },
-      {
-        "id": "FERRUM_RUST",
-        "contract_type": "DOMAIN_BOUNDARY_CONTRACT",
-        "state": "EXTERNAL_EVIDENCE_RECORDED_NOT_INTEGRATED",
-        "record": "BUILDER_OMEGA_CONTEST_PREP_20260918/SPECIALIZED_AGENT_CONTRACT_EVIDENCE_20260918.md"
-      },
-      {
-        "id": "N_VCLS",
-        "contract_type": "OUTPUT_SHAPE_CONTRACT",
-        "state": "EXTERNAL_AGENT_FACTORY_OUTPUT_RECORDED / RUST_SKELETON_NOT_CONFORMANT / NOT_INTEGRATED",
-        "record": "BUILDER_OMEGA_CONTEST_PREP_20260918/N_VCLS_CONTRACT_EVIDENCE_20260918.md"
-      },
-      {
-        "id": "ACTION_PROPOSER",
-        "contract_type": "NO_DISPATCH_ACTION_CONTRACT",
-        "state": "DESIGNED_IN_SPEC"
-      }
+      { "id": "MONO_SI_NO", "contract_type": "CLOSED_VOCABULARY_CONTRACT", "state": "CHECKER_IMPLEMENTED" },
+      { "id": "FERRUM_RUST", "contract_type": "DOMAIN_BOUNDARY_CONTRACT", "state": "CHECKER_IMPLEMENTED_WITH_PUBLIC_FIXTURES_ONLY" },
+      { "id": "N_VCLS", "contract_type": "OUTPUT_SHAPE_CONTRACT", "state": "CHECKER_IMPLEMENTED / EXTERNAL_RUST_SKELETON_STILL_NOT_CONFORMANT" },
+      { "id": "ACTION_PROPOSER", "contract_type": "NO_DISPATCH_ACTION_CONTRACT", "state": "CHECKER_IMPLEMENTED" }
     ]
-  },
-  "agent_factory_note": {
-    "state": "USER_TOOL_USEFUL_BASIS_NOT_FINAL_PRODUCT",
-    "summary": "The user's custom agent-generation tool is not yet fully polished, but it provides governed contract artifacts that are useful as demo cases. Phoenix Action Gate remains the product; the agent factory is treated as a source of fixtures and future work.",
-    "claim_boundary": [
-      "Do not present the factory as final product.",
-      "Do not claim generated Rust skeletons are conformant unless tested.",
-      "Do not publish full agent ZIPs or private configs without review."
-    ]
-  },
-  "mavo": {
-    "variant": "phoenix-safe-3",
-    "state": "RUNNING",
-    "runtime_profile": "tool-assisted",
-    "decision": "Continue Phoenix Action Gate as primary hackathon candidate. Use specialized-agent contracts as a clear demo surface; keep external agent artifacts as evidence, not authority."
-  },
-  "public_thesis": {
-    "short": "A justification firewall for AI coding agents.",
-    "full": "Before an AI agent acts, Phoenix Action Gate checks whether the reason for acting is still valid.",
-    "specialized_agent_angle": "Specialized agents should not become general assistants under pressure. Phoenix Action Gate verifies that each agent stays inside its contract."
   },
   "test_gate_current_cut": {
     "state": "TEST_EXECUTED_PASS",
@@ -118,15 +88,26 @@
     "node_version": "v24.12.0",
     "command": "npm test",
     "resolved_command": "node --test",
-    "tests": 122,
-    "pass": 122,
+    "tests": 128,
+    "pass": 128,
     "fail": 0,
     "cancelled": 0,
     "skipped": 0,
     "todo": 0,
-    "duration_ms": 737.3368,
-    "evidence_ref": "docs/04-runtime/evidence/G2_CURRENT_CUT_NPM_TEST_2026-09-18.json",
-    "clone_test_state": "PENDING"
+    "duration_ms": 649.6845,
+    "evidence_ref": "docs/04-runtime/evidence/G9_SPECIALIZED_AGENT_CONTRACT_CHECKERS_TEST_2026-09-19.json",
+    "executor": "Remote Desktop Commander"
+  },
+  "mavo": {
+    "variant": "phoenix-safe-3",
+    "state": "RUNNING",
+    "runtime_profile": "tool-assisted",
+    "decision": "Continue Phoenix Action Gate as primary hackathon candidate. Minimal specialized-agent contract checkers are now implemented and locally tested; clean clone must be refreshed after commit/push."
+  },
+  "public_thesis": {
+    "short": "A justification firewall for AI coding agents.",
+    "full": "Before an AI agent acts, Phoenix Action Gate checks whether the reason for acting is still valid.",
+    "specialized_agent_angle": "Specialized agents should not become general assistants under pressure. Phoenix Action Gate verifies that each agent stays inside its contract."
   },
   "blocked_claims": [
     "production-ready",
@@ -138,41 +119,41 @@
     "secure AI agent execution without qualification",
     "automatic execution or dispatch",
     "submission-ready",
-    "Ferrum Rust integrated in Phoenix Action Gate",
-    "Phoenix Action Gate runtime-validates Ferrum Rust",
+    "Ferrum Rust integrated as private GPT runtime component",
+    "Phoenix Action Gate runtime-validates external Ferrum Rust instance",
     "N_VCLS Rust artifact is conformant",
     "agent factory is final hackathon product"
   ],
   "gates": [
     { "id": "G0_DEVPOST_RULES", "state": "PASS_STALE_RECHECK_BEFORE_SUBMISSION" },
     { "id": "G1_NEBIUS_NVIDIA", "state": "RUNTIME_OBSERVED_PREVIOUSLY_REVALIDATE" },
-    { "id": "G2_PRODUCT_SURFACE", "state": "CURRENT_CUT_TEST_PASS" },
-    { "id": "G3_DIFFERENTIATION", "state": "IMPROVED_BY_SPECIALIZED_AGENT_CONTRACT_ANGLE / WARN_BOUNDARY_REQUIRED" },
+    { "id": "G2_PRODUCT_SURFACE", "state": "CURRENT_LIVE_CUT_TEST_PASS_128" },
+    { "id": "G3_DIFFERENTIATION", "state": "IMPROVED_BY_SPECIALIZED_AGENT_CONTRACT_CHECKERS" },
     { "id": "G4_B1_RECEIPT_TAMPER", "state": "NOT_DIFFERENTIATING_VS_B1_USEFUL_CAPABILITY" },
-    { "id": "G5_JURY_SURFACE", "state": "TEST_EXECUTED_LOCAL_PASS_VISUAL_REVALIDATION_PENDING" },
+    { "id": "G5_JURY_SURFACE", "state": "UPDATED_WITH_CONTRACT_DEMO / VISUAL_REVALIDATION_PENDING" },
     { "id": "G6_PUBLICATION_BOUNDARY", "state": "ACTIVE" },
-    { "id": "G7_CLEAN_CLONE", "state": "STRUCTURAL_PASS_TEST_PENDING" },
+    { "id": "G7_CLEAN_CLONE", "state": "EXISTING_CLONE_TEST_PASS / REFRESH_NEEDED_AFTER_NEW_COMMIT" },
     { "id": "G8_DEVPOST_SUBMISSION", "state": "PENDING_HUMAN_AUTHORIZATION" },
-    { "id": "G9_SPECIALIZED_AGENT_CONTRACT_DEMO", "state": "SPEC_CREATED / NOT_IMPLEMENTED" }
+    { "id": "G9_SPECIALIZED_AGENT_CONTRACT_DEMO", "state": "MINIMAL_CHECKERS_IMPLEMENTED / CURRENT_LIVE_TEST_PASS" }
   ],
-  "next_safe_step": "Run npm test inside the clean clone. Then decide whether to implement minimal contract checkers for the demo or keep it video-only. Keep PR #7 draft; no merge, deploy or Devpost submission without separate authorization.",
+  "next_safe_step": "Commit and push the current cut, create a fresh clean clone from the new PR head, and run npm test there. No merge, deploy or Devpost submission without separate authorization.",
   "truthcore": {
     "designed": true,
     "generated": true,
     "structurally_validated": true,
     "test_executed_this_cut": true,
-    "tests_passed": 122,
+    "tests_passed": 128,
     "tests_failed": 0,
     "branch_created": true,
-    "committed": true,
-    "pushed": true,
+    "committed": false,
+    "pushed": false,
     "draft_pr_created": true,
     "pr_number": 7,
-    "clean_clone_structural_pass": true,
-    "clean_clone_test_pass": false,
+    "clean_clone_existing_test_pass": true,
+    "fresh_clean_clone_for_current_cut_pass": false,
     "specialized_agent_contract_evidence_recorded": true,
     "specialized_agent_contract_demo_designed": true,
-    "specialized_agent_contract_demo_implemented": false,
+    "specialized_agent_contract_demo_implemented": true,
     "n_vcls_evidence_recorded": true,
     "n_vcls_rust_conformant": false,
     "runtime_observed_this_cut": false,

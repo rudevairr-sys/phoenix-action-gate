@@ -1,0 +1,47 @@
+{
+  "schema_version": "1.0.0",
+  "evidence_id": "G9_SPECIALIZED_AGENT_CONTRACT_CHECKERS_TEST_2026-09-19",
+  "created_at": "2026-09-19T12:22:30Z",
+  "project": "Phoenix Action Gate",
+  "state": "CURRENT_LIVE_CUT_TEST_PASS_WITH_SPECIALIZED_AGENT_CONTRACT_CHECKERS",
+  "path": "01_MESA_PRINCIPAL/phoenix-action-gate",
+  "runtime": {
+    "executor": "Remote Desktop Commander",
+    "device": "DESKTOP-M7OQOC5",
+    "shell": "powershell",
+    "node_version": "v24.12.0"
+  },
+  "command": "npm test",
+  "resolved_command": "node --test",
+  "implemented_scope": [
+    "src/agent-contracts.mjs",
+    "test/agent-contracts.test.mjs",
+    "web/index.html contract demo strip",
+    "web/jury.css contract demo styling",
+    "updated video script"
+  ],
+  "contract_checkers": [
+    "MONO_SI_NO closed vocabulary checker",
+    "N_VCLS no-vowels output checker",
+    "ACTION_PROPOSER no-dispatch/no execution claim checker",
+    "FERRUM_RUST Rust-domain output checker"
+  ],
+  "result": {
+    "tests": 128,
+    "suites": 0,
+    "pass": 128,
+    "fail": 0,
+    "cancelled": 0,
+    "skipped": 0,
+    "todo": 0,
+    "duration_ms": 649.6845
+  },
+  "truthcore": {
+    "test_executed": true,
+    "runtime_observed": true,
+    "current_live_cut_test_pass": true,
+    "specialized_agent_contract_checkers_implemented": true,
+    "production_validated": false,
+    "devpost_submitted": false
+  }
+}

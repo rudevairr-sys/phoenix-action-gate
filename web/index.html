@@ -32,6 +32,39 @@
       <div class="flow-node"><span>04</span><strong>Evidencia</strong><small>trazable</small></div>
     </section>
 
+    <section class="panel contract-demo" aria-label="Demo de agentes especializados por contrato">
+      <div class="panel-heading">
+        <div>
+          <p class="section-label">SPECIALIZED AGENT CONTRACT DEMO</p>
+          <h2>Agentes pequeños, contratos claros, puerta de salida Phoenix</h2>
+        </div>
+        <span class="policy-pill">SPEC / NO DISPATCH</span>
+      </div>
+      <p class="decision-copy">Un agente especializado no debería convertirse en asistente general solo porque el usuario insista. Phoenix comprueba la salida antes de avanzar.</p>
+      <div class="contract-grid">
+        <article class="contract-card">
+          <span>MONO_SI_NO</span>
+          <strong>Solo SI / NO / SAFE_NOOP</strong>
+          <small>Salida larga → DENY</small>
+        </article>
+        <article class="contract-card">
+          <span>FERRUM_RUST</span>
+          <strong>Solo dominio Rust</strong>
+          <small>Consejo general → DENY; herramienta Rust → REVIEW</small>
+        </article>
+        <article class="contract-card">
+          <span>N_VCLS</span>
+          <strong>Sin vocales</strong>
+          <small>Regex detecta vocal → DENY</small>
+        </article>
+        <article class="contract-card">
+          <span>ACTION_PROPOSER</span>
+          <strong>Propone, no ejecuta</strong>
+          <small>dispatch_attempted=true → DENY</small>
+        </article>
+      </div>
+    </section>
+
     <section class="control-grid">
       <aside class="conversation-panel panel">
         <div class="panel-heading">
