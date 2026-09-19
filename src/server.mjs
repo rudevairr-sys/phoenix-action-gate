@@ -7,6 +7,7 @@ import { DEFAULT_MODEL } from './nebius.mjs';
 import { runConversationPipeline, runReadContextPipeline } from './pipeline.mjs';
 import { PLAN_POLICY_VERSION } from './plan-gate.mjs';
 import { runLivePlanPipeline } from './plan-pipeline.mjs';
+import { evaluateAgentContract } from './agent-contracts.mjs';
 
 const WEB_ROOT = fileURLToPath(new URL('../web/', import.meta.url));
 const FIXTURE_ROOT = fileURLToPath(new URL('../fixtures/', import.meta.url));
@@ -209,6 +210,35 @@ export function createPanelServer({
         sendJson(response, 200, {
           source: 'LIVE_NEBIUS_NEMOTRON',
           ...result
+        });
+        return;
+      }
+
+
+      if (request.method === 'POST' && url.pathname === '/api/contract/evaluate') {
+        const body = await readJsonBody(request);
+        const contractType = typeof body.contract_type === 'string' ? body.contract_type : '';
+        const output = typeof body.output === 'string' ? body.output : null;
+        const contractId = typeof body.contract_id === 'string' ? body.contract_id : undefined;
+        if (!contractType || output === null || output.length > 4000) {
+          sendJson(response, 400, {
+            ok: false,
+            state: 'FAIL_CLOSED',
+            error: 'CONTRACT_EVALUATION_INPUT_INVALID',
+            dispatch_attempted: false
+          });
+          return;
+        }
+
+        const decision = evaluateAgentContract(contractType, output, { contract_id: contractId });
+        sendJson(response, 200, {
+          source: 'LOCAL_CONTRACT_CHECKER',
+          ok: decision.outcome !== 'DENY',
+          state: 'CONTRACT_EVALUATED',
+          contract_type: contractType,
+          output,
+          decision,
+          dispatch_attempted: false
         });
         return;
       }

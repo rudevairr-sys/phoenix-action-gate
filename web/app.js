@@ -61,7 +61,12 @@ const ui = {
   planDecisionCopy: $('#plan-decision-copy'),
   planReasonCodes: $('#plan-reason-codes'),
   planDispatch: $('#plan-dispatch'),
-  planReasonCard: $('.plan-reason-card')
+  planReasonCard: $('.plan-reason-card'),
+  contractForm: $('#contract-lab-form'),
+  contractType: $('#contract-type'),
+  contractOutput: $('#contract-output'),
+  contractEvaluateButton: $('#contract-evaluate-button'),
+  contractResult: $('#contract-result')
 };
 
 const decisionMessages = {
@@ -491,11 +496,60 @@ function renderPlanFailure(result) {
   setStatus(`Plan provider fail-closed (${code}). No hubo ActionPlan evaluable ni dispatch.`, 'error');
 }
 
+
+function renderContractDecision(result) {
+  const decision = result.decision ?? {};
+  const outcome = decision.outcome ?? 'DENY';
+  const reasons = Array.isArray(decision.reason_codes) ? decision.reason_codes.join(' ? ') : 'NO_REASON_CODES';
+  ui.contractResult.className = `contract-result ${String(outcome).toLowerCase()}`;
+  ui.contractResult.replaceChildren();
+
+  const title = document.createElement('strong');
+  title.textContent = outcome;
+  const detail = document.createElement('span');
+  detail.textContent = `${result.contract_type ?? 'CONTRACT'} ? ${reasons} ? dispatch_attempted=false`;
+  ui.contractResult.append(title, detail);
+
+  setStatus(`Contrato evaluado por Phoenix ? ${outcome}. No hubo dispatch.`, outcome === 'DENY' ? 'error' : 'success');
+}
+
+async function runContractEvaluation() {
+  const contractType = ui.contractType.value;
+  const output = ui.contractOutput.value.trim();
+  if (!output) {
+    setStatus('Pega una salida real del otro GPT antes de evaluar.', 'error');
+    ui.contractOutput.focus();
+    return;
+  }
+
+  setBusy(true);
+  setStatus('Phoenix est? verificando la salida contra el contrato seleccionado?', 'running');
+  try {
+    const response = await fetch('/api/contract/evaluate', {
+      method: 'POST',
+      headers: { Accept: 'application/json', 'Content-Type': 'application/json' },
+      body: JSON.stringify({ contract_type: contractType, output })
+    });
+    const result = await response.json();
+    if (!response.ok) throw new Error(result.error ?? `HTTP_${response.status}`);
+    renderContractDecision(result);
+  } catch (error) {
+    ui.contractResult.className = 'contract-result deny';
+    ui.contractResult.innerHTML = '<strong>FAIL-CLOSED</strong><span>No se pudo evaluar el contrato. No hubo dispatch.</span>';
+    setStatus(`Evaluaci?n de contrato cerrada: ${error.message}`, 'error');
+  } finally {
+    setBusy(false);
+  }
+}
+
 function setBusy(busy) {
   ui.sendButton.disabled = busy;
   ui.planButton.disabled = busy;
   ui.userMessage.disabled = busy;
   $$('.fixture-button').forEach((button) => { button.disabled = busy; });
+  if (ui.contractEvaluateButton) ui.contractEvaluateButton.disabled = busy;
+  if (ui.contractOutput) ui.contractOutput.disabled = busy;
+  if (ui.contractType) ui.contractType.disabled = busy;
 }
 
 async function runConversation(message) {
@@ -634,6 +688,13 @@ for (const button of $$('.quick-prompts button')) {
 
 for (const button of $$('.fixture-button')) {
   button.addEventListener('click', () => runFixture(button));
+}
+
+if (ui.contractForm) {
+  ui.contractForm.addEventListener('submit', (event) => {
+    event.preventDefault();
+    runContractEvaluation();
+  });
 }
 
 try {

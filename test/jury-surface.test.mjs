@@ -73,3 +73,16 @@ test('jury surface exposes the specialized agent contract demo strip', () => {
   assert.match(juryCss, /\.contract-grid\s*\{/);
   assert.match(juryCss, /\.contract-card\s*\{/);
 });
+
+
+test('jury surface exposes a contract lab for real GPT outputs', () => {
+  assert.match(html, /id="contract-lab-form"/);
+  assert.match(html, /Salida real del otro GPT/);
+  assert.match(html, /Evaluar contrato/);
+  assert.match(html, /CLOSED_VOCABULARY_CONTRACT/);
+  assert.match(html, /OUTPUT_SHAPE_CONTRACT/);
+  assert.match(html, /DOMAIN_BOUNDARY_CONTRACT/);
+  assert.match(html, /NO_DISPATCH_ACTION_CONTRACT/);
+  assert.match(juryCss, /\.contract-lab\s*\{/);
+  assert.match(juryCss, /\.contract-result\s*\{/);
+});

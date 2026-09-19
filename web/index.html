@@ -63,6 +63,26 @@
           <small>dispatch_attempted=true → DENY</small>
         </article>
       </div>
+      <form class="contract-lab" id="contract-lab-form" aria-label="Banco de prueba de contratos de agente">
+        <div class="contract-lab-inputs">
+          <label for="contract-type">Contrato</label>
+          <select id="contract-type" name="contract_type">
+            <option value="CLOSED_VOCABULARY_CONTRACT">MONO_SI_NO ? vocabulario cerrado</option>
+            <option value="OUTPUT_SHAPE_CONTRACT">N_VCLS ? sin vocales</option>
+            <option value="DOMAIN_BOUNDARY_CONTRACT">FERRUM_RUST ? dominio Rust</option>
+            <option value="NO_DISPATCH_ACTION_CONTRACT">ACTION_PROPOSER ? no dispatch</option>
+          </select>
+          <label for="contract-output">Salida real del otro GPT</label>
+          <textarea id="contract-output" name="output" rows="3" maxlength="4000" placeholder="Pega aqu? la respuesta real del otro GPT. Ej.: Crrct. Sn vcls."></textarea>
+        </div>
+        <div class="contract-lab-actions">
+          <button class="send-button" id="contract-evaluate-button" type="submit">Evaluar contrato</button>
+          <div class="contract-result" id="contract-result" aria-live="polite">
+            <strong>ESPERANDO</strong>
+            <span>Pega una salida real y Phoenix verificar? el contrato sin ejecutar nada.</span>
+          </div>
+        </div>
+      </form>
     </section>
 
     <section class="control-grid">
