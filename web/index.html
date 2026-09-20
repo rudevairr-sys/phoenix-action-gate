@@ -14,7 +14,7 @@
       <div>
         <p class="eyebrow">NEBIUS × NVIDIA GLOBAL AI HACKATHON</p>
         <h1>Phoenix Action Gate</h1>
-        <p class="subtitle">Habla con Nemotron. Nemotron propone. Phoenix comprueba si la razón para actuar sigue siendo válida. Nada se ejecuta.</p>
+        <p class="subtitle">Habla con Nemotron. Nemotron propone o responde bajo perfil. Phoenix verifica contratos. Nada se ejecuta.</p>
       </div>
       <div class="safety-badge" aria-label="Dispatch deshabilitado">
         <span class="pulse"></span>
@@ -23,63 +23,63 @@
     </header>
 
     <section class="flow" aria-label="Flujo del producto">
-      <div class="flow-node"><span>01</span><strong>Tú</strong><small>pides acción o plan</small></div>
+      <div class="flow-node"><span>01</span><strong>Tú</strong><small>pides acción, plan o perfil</small></div>
       <div class="flow-arrow">→</div>
       <div class="flow-node"><span>02</span><strong>Nemotron</strong><small>habla y propone</small></div>
       <div class="flow-arrow">→</div>
-      <div class="flow-node active"><span>03</span><strong>Phoenix Gate</strong><small>verifica la justificación</small></div>
+      <div class="flow-node active"><span>03</span><strong>Phoenix Gate</strong><small>verifica justificación y perfil</small></div>
       <div class="flow-arrow">→</div>
       <div class="flow-node"><span>04</span><strong>Evidencia</strong><small>trazable</small></div>
     </section>
 
-    <section class="panel contract-demo" aria-label="Demo de agentes especializados por contrato">
+    <section class="panel contract-demo" aria-label="Perfiles gobernados de Nemotron">
       <div class="panel-heading">
         <div>
-          <p class="section-label">SPECIALIZED AGENT CONTRACT DEMO</p>
-          <h2>Agentes pequeños, contratos claros, puerta de salida Phoenix</h2>
+          <p class="section-label">NEMOTRON PROFILE GATE</p>
+          <h2>Perfiles especializados para Nemotron, verificados por Phoenix</h2>
         </div>
-        <span class="policy-pill">SPEC / NO DISPATCH</span>
+        <span class="policy-pill">PROFILE / NO DISPATCH</span>
       </div>
-      <p class="decision-copy">Un agente especializado no debería convertirse en asistente general solo porque el usuario insista. Phoenix comprueba la salida antes de avanzar.</p>
+      <p class="decision-copy">Nemotron puede operar bajo un perfil especializado, pero Phoenix no confía solo en el prompt: verifica si la respuesta respeta el contrato del perfil antes de aceptarla.</p>
       <div class="contract-grid">
         <article class="contract-card">
           <span>MONO_SI_NO</span>
           <strong>Solo SI / NO / SAFE_NOOP</strong>
-          <small>Salida larga → DENY</small>
+          <small>Explicación o matiz → DENY</small>
         </article>
         <article class="contract-card">
           <span>FERRUM_RUST</span>
           <strong>Solo dominio Rust</strong>
-          <small>Consejo general → DENY; herramienta Rust → REVIEW</small>
-        </article>
-        <article class="contract-card">
-          <span>N_VCLS</span>
-          <strong>Sin vocales</strong>
-          <small>Regex detecta vocal → DENY</small>
+          <small>Asistente general → DENY; reconducción Rust → PREPARED</small>
         </article>
         <article class="contract-card">
           <span>ACTION_PROPOSER</span>
           <strong>Propone, no ejecuta</strong>
-          <small>dispatch_attempted=true → DENY</small>
+          <small>“He ejecutado...” → DENY</small>
+        </article>
+        <article class="contract-card">
+          <span>SAFE_NOOP</span>
+          <strong>Veto constitucional</strong>
+          <small>Cualquier salida distinta → DENY</small>
         </article>
       </div>
-      <form class="contract-lab" id="contract-lab-form" aria-label="Banco de prueba de contratos de agente">
+      <form class="contract-lab" id="profile-gate-form" aria-label="Perfiles gobernados de Nemotron">
         <div class="contract-lab-inputs">
-          <label for="contract-type">Contrato</label>
-          <select id="contract-type" name="contract_type">
-            <option value="CLOSED_VOCABULARY_CONTRACT">MONO_SI_NO ? vocabulario cerrado</option>
-            <option value="OUTPUT_SHAPE_CONTRACT">N_VCLS ? sin vocales</option>
-            <option value="DOMAIN_BOUNDARY_CONTRACT">FERRUM_RUST ? dominio Rust</option>
-            <option value="NO_DISPATCH_ACTION_CONTRACT">ACTION_PROPOSER ? no dispatch</option>
+          <label for="profile-type">Perfil de Nemotron</label>
+          <select id="profile-type" name="profile_id">
+            <option value="MONO_SI_NO">MONO_SI_NO — solo SI / NO / SAFE_NOOP</option>
+            <option value="FERRUM_RUST">FERRUM_RUST — solo dominio Rust</option>
+            <option value="ACTION_PROPOSER">ACTION_PROPOSER — propone, no ejecuta</option>
+            <option value="SAFE_NOOP">SAFE_NOOP — veto seguro</option>
           </select>
-          <label for="contract-output">Salida real del otro GPT</label>
-          <textarea id="contract-output" name="output" rows="3" maxlength="4000" placeholder="Pega aqu? la respuesta real del otro GPT. Ej.: Crrct. Sn vcls."></textarea>
+          <label for="profile-message">Petición para Nemotron bajo perfil</label>
+          <textarea id="profile-message" name="message" rows="3" maxlength="2000" placeholder="Ej.: ¿Puedo borrar todo? Phoenix verificará si Nemotron respeta el perfil activo."></textarea>
         </div>
         <div class="contract-lab-actions">
-          <button class="send-button" id="contract-evaluate-button" type="submit">Evaluar contrato</button>
-          <div class="contract-result" id="contract-result" aria-live="polite">
+          <button class="send-button" id="profile-send-button" type="submit">Enviar con perfil</button>
+          <div class="contract-result" id="profile-result" aria-live="polite">
             <strong>ESPERANDO</strong>
-            <span>Pega una salida real y Phoenix verificar? el contrato sin ejecutar nada.</span>
+            <span>Elige un perfil. Nemotron responderá bajo contrato y Phoenix verificará la salida sin ejecutar nada.</span>
           </div>
         </div>
       </form>
@@ -97,7 +97,7 @@
 
         <div class="chat-log" id="chat-log" aria-live="polite">
           <div class="chat-message system-message">
-            Escribe una petición. Puedes enviarla como turno individual o pedir a Nemotron un plan multiacción. Phoenix evalúa, pero no ejecuta.
+            Escribe una petición. Puedes enviarla como turno individual, pedir un plan multiacción o usar un perfil gobernado. Phoenix evalúa, pero no ejecuta.
           </div>
         </div>
 
@@ -263,7 +263,7 @@
           </div>
         </section>
 
-        <div class="status-line panel" id="status-line" role="status" aria-live="polite">Listo. Escribe una petición para Nemotron, evalúa un plan o ejecuta un fixture local.</div>
+        <div class="status-line panel" id="status-line" role="status" aria-live="polite">Listo. Escribe una petición para Nemotron, evalúa un plan o prueba un perfil gobernado.</div>
       </section>
     </section>
   </main>

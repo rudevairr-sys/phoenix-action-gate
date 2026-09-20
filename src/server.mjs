@@ -7,6 +7,8 @@ import { DEFAULT_MODEL } from './nebius.mjs';
 import { runConversationPipeline, runReadContextPipeline } from './pipeline.mjs';
 import { PLAN_POLICY_VERSION } from './plan-gate.mjs';
 import { runLivePlanPipeline } from './plan-pipeline.mjs';
+import { runProfilePipeline } from './profile-pipeline.mjs';
+import { listProfiles } from './profiles.mjs';
 import { evaluateAgentContract } from './agent-contracts.mjs';
 
 const WEB_ROOT = fileURLToPath(new URL('../web/', import.meta.url));
@@ -115,6 +117,22 @@ function readBoundedMessage(body) {
   return message && message.length <= 2000 ? message : null;
 }
 
+function readBoundedProfileId(body) {
+  const profileId = typeof body.profile_id === 'string' ? body.profile_id.trim() : '';
+  return profileId && profileId.length <= 80 ? profileId : null;
+}
+
+function publicProfile(profile) {
+  return {
+    id: profile.id,
+    label: profile.label,
+    description: profile.description,
+    contract_type: profile.contract_type,
+    risk_class: profile.risk_class,
+    output_contract: profile.output_contract
+  };
+}
+
 async function readFixture(name) {
   const filename = FIXTURE_SCENARIOS.get(name);
   if (!filename) return null;
@@ -142,7 +160,8 @@ async function serveStatic(pathname, response) {
 
 export function createPanelServer({
   runConversation = runConversationPipeline,
-  runPlan = runLivePlanPipeline
+  runPlan = runLivePlanPipeline,
+  runProfile = runProfilePipeline
 } = {}) {
   return createServer(async (request, response) => {
     try {
@@ -157,6 +176,8 @@ export function createPanelServer({
           default_model: DEFAULT_MODEL,
           chat_history_limit: MAX_HISTORY_ITEMS,
           live_plan_available: true,
+          profile_gate_available: true,
+          profiles: listProfiles().map(publicProfile),
           dispatch_available: false
         });
         return;
@@ -181,6 +202,26 @@ export function createPanelServer({
           source: 'LIVE_NEBIUS_NEMOTRON',
           ...result
         });
+        return;
+      }
+
+      if (request.method === 'POST' && url.pathname === '/api/profile-chat') {
+        const body = await readJsonBody(request);
+        const message = readBoundedMessage(body);
+        const profileId = readBoundedProfileId(body);
+        if (!message || !profileId) {
+          sendJson(response, 400, {
+            ok: false,
+            state: 'FAIL_CLOSED',
+            error: !message ? 'USER_MESSAGE_INVALID' : 'PROFILE_ID_INVALID',
+            dispatch_attempted: false
+          });
+          return;
+        }
+
+        const history = normalizeHistory(body.history);
+        const result = await runProfile(profileId, message, { history });
+        sendJson(response, 200, result);
         return;
       }
 
@@ -213,7 +254,6 @@ export function createPanelServer({
         });
         return;
       }
-
 
       if (request.method === 'POST' && url.pathname === '/api/contract/evaluate') {
         const body = await readJsonBody(request);

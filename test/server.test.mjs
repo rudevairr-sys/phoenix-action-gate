@@ -6,6 +6,9 @@ let server;
 let baseUrl;
 let observedMessage = null;
 let observedHistory = null;
+let observedProfileId = null;
+let observedProfileMessage = null;
+let observedProfileHistory = null;
 
 const conversationStub = async (message, options = {}) => {
   observedMessage = message;
@@ -76,8 +79,54 @@ const conversationStub = async (message, options = {}) => {
   };
 };
 
+const profileStub = async (profileId, message, options = {}) => {
+  observedProfileId = profileId;
+  observedProfileMessage = message;
+  observedProfileHistory = options.history ?? [];
+
+  if (message === 'bad-profile-output') {
+    return {
+      ok: false,
+      state: 'PROFILE_CONTRACT_DENIED',
+      source: 'LIVE_NEBIUS_NEMOTRON_PROFILE',
+      profile_id: profileId,
+      user_message: message,
+      assistant_message: null,
+      rejected_model_output_preview: 'Sí, claro: puedo explicarlo.',
+      profile_decision: {
+        outcome: 'DENY',
+        reason_codes: ['CLOSED_VOCABULARY_VIOLATION'],
+        checks: [{ check: 'closed_vocabulary_member', status: 'FAIL', evidence_ref: 'not_in_allowed_set' }],
+        dispatch_attempted: false
+      },
+      provider: { model: 'nvidia/Nemotron-3_5-Lightning', provider_response_id: 'chatcmpl-profile-deny' },
+      dispatch_attempted: false,
+      secret_exposed: false
+    };
+  }
+
+  return {
+    ok: true,
+    state: 'PROFILE_RESPONSE_ACCEPTED',
+    source: 'LIVE_NEBIUS_NEMOTRON_PROFILE',
+    profile_id: profileId,
+    user_message: message,
+    assistant_message: 'NO',
+    rejected_model_output_preview: null,
+    profile_decision: {
+      outcome: 'PREPARED',
+      reason_codes: ['CLOSED_VOCABULARY_OK'],
+      checks: [{ check: 'closed_vocabulary_member', status: 'PASS', evidence_ref: 'NO' }],
+      dispatch_attempted: false
+    },
+    provider: { model: 'nvidia/Nemotron-3_5-Lightning', provider_response_id: 'chatcmpl-profile-ok' },
+    dispatch_attempted: false,
+    secret_exposed: false
+  };
+};
+
 before(async () => {
-  server = createPanelServer({ runConversation: conversationStub });
+  server = createPanelServer({ runConversation: conversationStub, runProfile: profileStub });
   await new Promise((resolve, reject) => {
     server.once('error', reject);
     server.listen(0, '127.0.0.1', resolve);
@@ -91,14 +140,17 @@ after(async () => {
   await new Promise((resolve, reject) => server.close((error) => error ? reject(error) : resolve()));
 });
 
-test('panel health exposes policy, bounded history and confirms dispatch is unavailable', async () => {
+test('panel health exposes policy, bounded history, profile gate and confirms dispatch is unavailable', async () => {
   const response = await fetch(`${baseUrl}/api/health`);
   assert.equal(response.status, 200);
   const body = await response.json();
   assert.equal(body.ok, true);
   assert.equal(body.dispatch_available, false);
+  assert.equal(body.profile_gate_available, true);
   assert.equal(body.chat_history_limit, 8);
   assert.equal(body.policy_version, 'phoenix-action-gate/0.1.0');
+  assert.ok(body.profiles.some((profile) => profile.id === 'MONO_SI_NO'));
+  assert.ok(body.profiles.some((profile) => profile.id === 'FERRUM_RUST'));
 });
 
 test('panel chat can return Nemotron speech without forcing an ActionProposal', async () => {
@@ -115,6 +167,63 @@ test('panel chat can return Nemotron speech without forcing an ActionProposal', 
   assert.equal(body.decision, null);
   assert.match(body.assistant_message, /Nemotron/);
   assert.equal(body.dispatch_attempted, false);
+});
+
+test('panel profile chat forwards profile, user message and bounded history', async () => {
+  const history = [
+    { role: 'user', content: 'solo responde sí o no' },
+    { role: 'assistant', content: 'SAFE_NOOP' }
+  ];
+  const response = await fetch(`${baseUrl}/api/profile-chat`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ profile_id: 'MONO_SI_NO', message: '¿Puedo borrar todo?', history })
+  });
+  assert.equal(response.status, 200);
+  const body = await response.json();
+  assert.equal(observedProfileId, 'MONO_SI_NO');
+  assert.equal(observedProfileMessage, '¿Puedo borrar todo?');
+  assert.deepEqual(observedProfileHistory, history);
+  assert.equal(body.source, 'LIVE_NEBIUS_NEMOTRON_PROFILE');
+  assert.equal(body.state, 'PROFILE_RESPONSE_ACCEPTED');
+  assert.equal(body.assistant_message, 'NO');
+  assert.equal(body.profile_decision.outcome, 'PREPARED');
+  assert.equal(body.dispatch_attempted, false);
+});
+
+test('panel profile chat can deny a non-compliant Nemotron output without dispatch', async () => {
+  const response = await fetch(`${baseUrl}/api/profile-chat`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ profile_id: 'MONO_SI_NO', message: 'bad-profile-output', history: [] })
+  });
+  assert.equal(response.status, 200);
+  const body = await response.json();
+  assert.equal(body.state, 'PROFILE_CONTRACT_DENIED');
+  assert.equal(body.assistant_message, null);
+  assert.match(body.rejected_model_output_preview, /puedo explicarlo/);
+  assert.ok(body.profile_decision.reason_codes.includes('CLOSED_VOCABULARY_VIOLATION'));
+  assert.equal(body.dispatch_attempted, false);
+});
+
+test('panel profile chat rejects empty message or missing profile id before invoking Nemotron', async () => {
+  observedProfileMessage = null;
+  const noMessage = await fetch(`${baseUrl}/api/profile-chat`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ profile_id: 'MONO_SI_NO', message: '   ' })
+  });
+  assert.equal(noMessage.status, 400);
+  assert.equal((await noMessage.json()).error, 'USER_MESSAGE_INVALID');
+  assert.equal(observedProfileMessage, null);
+
+  const noProfile = await fetch(`${baseUrl}/api/profile-chat`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ message: 'hola' })
+  });
+  assert.equal(noProfile.status, 400);
+  assert.equal((await noProfile.json()).error, 'PROFILE_ID_INVALID');
 });
 
 test('panel chat forwards bounded conversation history for follow-up references', async () => {

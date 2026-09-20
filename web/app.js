@@ -62,17 +62,23 @@ const ui = {
   planReasonCodes: $('#plan-reason-codes'),
   planDispatch: $('#plan-dispatch'),
   planReasonCard: $('.plan-reason-card'),
-  contractForm: $('#contract-lab-form'),
-  contractType: $('#contract-type'),
-  contractOutput: $('#contract-output'),
-  contractEvaluateButton: $('#contract-evaluate-button'),
-  contractResult: $('#contract-result')
+  profileForm: $('#profile-gate-form'),
+  profileType: $('#profile-type'),
+  profileMessage: $('#profile-message'),
+  profileSendButton: $('#profile-send-button'),
+  profileResult: $('#profile-result')
 };
 
 const decisionMessages = {
   PREPARED: 'La propuesta ha superado los checks acotados. Queda preparada para demostración o una fase posterior de revisión; no se ejecuta.',
   REVIEW: 'La propuesta es válida, pero Phoenix exige revisión humana explícita antes de cualquier paso posterior.',
   DENY: 'Phoenix ha cerrado la propuesta. La política no permite que avance.'
+};
+
+const profileDecisionMessages = {
+  PREPARED: 'Nemotron respetó el contrato del perfil activo. Phoenix acepta la salida como respuesta gobernada, sin dispatch.',
+  REVIEW: 'Nemotron produjo una salida compatible, pero el perfil requiere revisión antes de avanzar. No hubo dispatch.',
+  DENY: 'Nemotron se salió del contrato del perfil. Phoenix bloqueó la salida y no la mostró como respuesta aceptada.'
 };
 
 function setText(node, value, fallback = '—') {
@@ -161,6 +167,16 @@ function renderProviderEvidence(result) {
   setText(ui.provider, isLive ? provider?.provider_response_id : 'LOCAL FIXTURE');
   setText(ui.latency, isLive && provider?.latency_ms !== undefined && provider?.latency_ms !== null ? `${provider.latency_ms} ms` : (isLive ? '—' : 'LOCAL'));
   setText(ui.tokens, isLive ? provider?.usage?.total_tokens : '—');
+}
+
+function renderProfileEvidence(result) {
+  const provider = result.provider ?? null;
+  setText(ui.provider, provider?.provider_response_id);
+  setText(ui.latency, provider?.latency_ms !== undefined && provider?.latency_ms !== null ? `${provider.latency_ms} ms` : null);
+  setText(ui.tokens, provider?.usage?.total_tokens);
+  setText(ui.decisionId, 'PROFILE-GATE');
+  setText(ui.bundle, 'PROFILE-CONTRACT');
+  setText(ui.hash, '—');
 }
 
 function resetSingleProposalDetails() {
@@ -335,6 +351,57 @@ function renderResult(result) {
   );
 }
 
+function renderProfileDecision(result) {
+  showSingleView();
+  const decision = result.profile_decision ?? {};
+  const provider = result.provider ?? null;
+  const outcome = decision.outcome ?? 'DENY';
+  const outcomeClass = outcome === 'DENY' ? 'deny' : 'prepared';
+
+  setText(ui.sourceMetric, 'PROFILE');
+  setText(ui.model, provider?.model);
+  setText(ui.risk, result.profile_id);
+  setText(ui.decision, outcome);
+  setText(ui.source, 'PROFILE NEMOTRON');
+
+  setText(ui.intent, `Perfil ${result.profile_id}`);
+  setText(ui.action, 'PROFILE_CHAT');
+  setText(ui.workspace, '—');
+  setText(ui.target, 'Contrato de perfil');
+  setText(ui.operation, 'profile_gate');
+  setText(ui.rollback, 'NO_DISPATCH');
+
+  renderChecks(decision.checks, 'Phoenix no recibió checks de perfil.');
+  setText(ui.policy, decision.version ?? 'phoenix-profile-gate');
+  setText(ui.decisionTitle, outcome);
+  setText(ui.riskPill, result.profile_id);
+  setText(ui.decisionCopy, profileDecisionMessages[outcome] ?? profileDecisionMessages.DENY);
+  setText(ui.reasonCodes, Array.isArray(decision.reason_codes) ? decision.reason_codes.join(' · ') : null);
+  setText(ui.dispatch, 'NO');
+  renderProfileEvidence(result);
+
+  ui.decisionMetric.className = `metric panel decision-metric ${outcomeClass}`;
+  ui.decisionCard.className = `panel card decision-card ${outcomeClass}`;
+
+  if (ui.profileResult) {
+    ui.profileResult.className = `contract-result ${outcomeClass}`;
+    ui.profileResult.replaceChildren();
+    const title = document.createElement('strong');
+    title.textContent = outcome;
+    const detail = document.createElement('span');
+    const reasons = Array.isArray(decision.reason_codes) ? decision.reason_codes.join(' · ') : 'NO_REASON_CODES';
+    detail.textContent = `${result.profile_id ?? 'PROFILE'} · ${reasons} · dispatch_attempted=false`;
+    ui.profileResult.append(title, detail);
+  }
+
+  setStatus(
+    outcome === 'DENY'
+      ? `Profile Gate bloqueó la salida de Nemotron para ${result.profile_id}. No hubo dispatch.`
+      : `Profile Gate aceptó la salida de Nemotron para ${result.profile_id}. No hubo dispatch.`,
+    outcome === 'DENY' ? 'error' : 'success'
+  );
+}
+
 function outcomeChip(outcome) {
   const chip = document.createElement('span');
   const normalized = VALID_OUTCOMES.has(outcome) ? outcome : '—';
@@ -496,60 +563,62 @@ function renderPlanFailure(result) {
   setStatus(`Plan provider fail-closed (${code}). No hubo ActionPlan evaluable ni dispatch.`, 'error');
 }
 
-
-function renderContractDecision(result) {
-  const decision = result.decision ?? {};
-  const outcome = decision.outcome ?? 'DENY';
-  const reasons = Array.isArray(decision.reason_codes) ? decision.reason_codes.join(' ? ') : 'NO_REASON_CODES';
-  ui.contractResult.className = `contract-result ${String(outcome).toLowerCase()}`;
-  ui.contractResult.replaceChildren();
-
-  const title = document.createElement('strong');
-  title.textContent = outcome;
-  const detail = document.createElement('span');
-  detail.textContent = `${result.contract_type ?? 'CONTRACT'} ? ${reasons} ? dispatch_attempted=false`;
-  ui.contractResult.append(title, detail);
-
-  setStatus(`Contrato evaluado por Phoenix ? ${outcome}. No hubo dispatch.`, outcome === 'DENY' ? 'error' : 'success');
-}
-
-async function runContractEvaluation() {
-  const contractType = ui.contractType.value;
-  const output = ui.contractOutput.value.trim();
-  if (!output) {
-    setStatus('Pega una salida real del otro GPT antes de evaluar.', 'error');
-    ui.contractOutput.focus();
-    return;
-  }
-
-  setBusy(true);
-  setStatus('Phoenix est? verificando la salida contra el contrato seleccionado?', 'running');
-  try {
-    const response = await fetch('/api/contract/evaluate', {
-      method: 'POST',
-      headers: { Accept: 'application/json', 'Content-Type': 'application/json' },
-      body: JSON.stringify({ contract_type: contractType, output })
-    });
-    const result = await response.json();
-    if (!response.ok) throw new Error(result.error ?? `HTTP_${response.status}`);
-    renderContractDecision(result);
-  } catch (error) {
-    ui.contractResult.className = 'contract-result deny';
-    ui.contractResult.innerHTML = '<strong>FAIL-CLOSED</strong><span>No se pudo evaluar el contrato. No hubo dispatch.</span>';
-    setStatus(`Evaluaci?n de contrato cerrada: ${error.message}`, 'error');
-  } finally {
-    setBusy(false);
-  }
-}
-
 function setBusy(busy) {
   ui.sendButton.disabled = busy;
   ui.planButton.disabled = busy;
   ui.userMessage.disabled = busy;
   $$('.fixture-button').forEach((button) => { button.disabled = busy; });
-  if (ui.contractEvaluateButton) ui.contractEvaluateButton.disabled = busy;
-  if (ui.contractOutput) ui.contractOutput.disabled = busy;
-  if (ui.contractType) ui.contractType.disabled = busy;
+  if (ui.profileSendButton) ui.profileSendButton.disabled = busy;
+  if (ui.profileMessage) ui.profileMessage.disabled = busy;
+  if (ui.profileType) ui.profileType.disabled = busy;
+}
+
+async function runProfileGate() {
+  const profileId = ui.profileType.value;
+  const message = ui.profileMessage.value.trim();
+  if (!message) {
+    setStatus('Escribe una petición para Nemotron bajo el perfil seleccionado.', 'error');
+    ui.profileMessage.focus();
+    return;
+  }
+
+  appendChat('user', `[${profileId}] ${message}`, 'TÚ · PERFIL');
+  const history = conversationHistory.map((item) => ({ ...item }));
+  setBusy(true);
+  setStatus(`Nemotron está respondiendo bajo el perfil ${profileId}. Phoenix verificará el contrato…`, 'running');
+
+  try {
+    const response = await fetch('/api/profile-chat', {
+      method: 'POST',
+      headers: { Accept: 'application/json', 'Content-Type': 'application/json' },
+      body: JSON.stringify({ profile_id: profileId, message, history })
+    });
+    const result = await response.json();
+    if (!response.ok) throw new Error(result.error ?? `HTTP_${response.status}`);
+
+    if (result.assistant_message) {
+      appendChat('assistant', result.assistant_message, `NEMOTRON · ${profileId}`);
+      remember('user', `[${profileId}] ${message}`);
+      remember('assistant', result.assistant_message);
+    } else {
+      const reasons = Array.isArray(result.profile_decision?.reason_codes) ? result.profile_decision.reason_codes.join(' · ') : 'PROFILE_DENIED';
+      appendChat('system', `Phoenix bloqueó la salida del perfil ${profileId}: ${reasons}.`, 'PHOENIX PROFILE GATE');
+    }
+
+    renderProfileDecision(result);
+    ui.profileMessage.value = '';
+  } catch (error) {
+    if (ui.profileResult) {
+      ui.profileResult.className = 'contract-result deny';
+      ui.profileResult.innerHTML = '<strong>FAIL-CLOSED</strong><span>No se pudo evaluar el perfil. No hubo dispatch.</span>';
+    }
+    appendChat('system', `Profile Gate cerrado: ${error.message}`, 'SISTEMA');
+    renderTransportFailureVisual('El Profile Gate no obtuvo un resultado gobernado válido. No hubo dispatch.');
+    setStatus(`Profile Gate cerrado: ${error.message}`, 'error');
+  } finally {
+    setBusy(false);
+    ui.profileMessage.focus();
+  }
 }
 
 async function runConversation(message) {
@@ -690,10 +759,10 @@ for (const button of $$('.fixture-button')) {
   button.addEventListener('click', () => runFixture(button));
 }
 
-if (ui.contractForm) {
-  ui.contractForm.addEventListener('submit', (event) => {
+if (ui.profileForm) {
+  ui.profileForm.addEventListener('submit', (event) => {
     event.preventDefault();
-    runContractEvaluation();
+    runProfileGate();
   });
 }
 

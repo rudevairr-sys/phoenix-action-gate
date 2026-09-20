@@ -3,6 +3,7 @@ import { readFile } from 'node:fs/promises';
 import test from 'node:test';
 
 const html = await readFile(new URL('../web/index.html', import.meta.url), 'utf8');
+const appJs = await readFile(new URL('../web/app.js', import.meta.url), 'utf8');
 const juryCss = await readFile(new URL('../web/jury.css', import.meta.url), 'utf8');
 const serverSource = await readFile(new URL('../src/server.mjs', import.meta.url), 'utf8');
 
@@ -58,31 +59,31 @@ test('jury surface keeps no-dispatch and existing application wiring visible', (
   assert.equal(occurrences(html, 'id="plan-dispatch"'), 1);
 });
 
-test('jury surface exposes the specialized agent contract demo strip', () => {
-  assert.match(html, /SPECIALIZED AGENT CONTRACT DEMO/);
-  assert.match(html, /Agentes pequeños, contratos claros, puerta de salida Phoenix/);
-  assert.match(html, /Un agente especializado no debería convertirse en asistente general/);
+test('jury surface exposes Nemotron Profile Gate instead of an external GPT paste lab', () => {
+  assert.match(html, /NEMOTRON PROFILE GATE/);
+  assert.match(html, /Perfiles especializados para Nemotron, verificados por Phoenix/);
+  assert.match(html, /Nemotron puede operar bajo un perfil especializado/);
+  assert.match(html, /Phoenix no confía solo en el prompt/);
   assert.match(html, /MONO_SI_NO/);
   assert.match(html, /Solo SI \/ NO \/ SAFE_NOOP/);
   assert.match(html, /FERRUM_RUST/);
   assert.match(html, /Solo dominio Rust/);
-  assert.match(html, /N_VCLS/);
-  assert.match(html, /Sin vocales/);
   assert.match(html, /ACTION_PROPOSER/);
   assert.match(html, /Propone, no ejecuta/);
-  assert.match(juryCss, /\.contract-grid\s*\{/);
-  assert.match(juryCss, /\.contract-card\s*\{/);
+  assert.match(html, /SAFE_NOOP/);
+  assert.match(html, /Veto constitucional/);
+  assert.doesNotMatch(html, /Salida real del otro GPT/);
+  assert.doesNotMatch(html, /Pega aquí la respuesta real del otro GPT/);
 });
 
-
-test('jury surface exposes a contract lab for real GPT outputs', () => {
-  assert.match(html, /id="contract-lab-form"/);
-  assert.match(html, /Salida real del otro GPT/);
-  assert.match(html, /Evaluar contrato/);
-  assert.match(html, /CLOSED_VOCABULARY_CONTRACT/);
-  assert.match(html, /OUTPUT_SHAPE_CONTRACT/);
-  assert.match(html, /DOMAIN_BOUNDARY_CONTRACT/);
-  assert.match(html, /NO_DISPATCH_ACTION_CONTRACT/);
+test('jury surface wires the governed profile form to /api/profile-chat', () => {
+  assert.match(html, /id="profile-gate-form"/);
+  assert.match(html, /id="profile-type"/);
+  assert.match(html, /id="profile-message"/);
+  assert.match(html, /id="profile-send-button"/);
+  assert.match(html, /Enviar con perfil/);
+  assert.match(appJs, /fetch\('\/api\/profile-chat'/);
+  assert.match(appJs, /renderProfileDecision/);
   assert.match(juryCss, /\.contract-lab\s*\{/);
   assert.match(juryCss, /\.contract-result\s*\{/);
 });
