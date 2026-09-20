@@ -75,7 +75,9 @@ test('runProfilePipeline denies non-compliant Nemotron output without dispatch',
   assert.equal(result.ok, false);
   assert.equal(result.state, 'PROFILE_CONTRACT_DENIED');
   assert.equal(result.assistant_message, null);
-  assert.match(result.rejected_model_output_preview, /Sí/);
+  assert.equal(result.rejected_model_output_preview, null);
+  assert.equal(result.rejected_model_output_observed, true);
+  assert.ok(result.rejected_model_output_length > 0);
   assert.equal(result.profile_decision.outcome, 'DENY');
   assert.equal(result.dispatch_attempted, false);
 });

@@ -19,8 +19,7 @@ test('profile registry fails closed for unknown profile ids', () => {
   assert.ok(decision.reason_codes.includes('UNKNOWN_PROFILE'));
   assert.equal(decision.dispatch_attempted, false);
 });
-
-test('MONO_SI_NO accepts closed vocabulary and denies explanations', () => {
+test('MONO_SI_NO accepts closed vocabulary and denies explanations without leaking rejected text', () => {
   assert.equal(evaluateProfileOutput('MONO_SI_NO', 'SI').outcome, 'PREPARED');
   assert.equal(evaluateProfileOutput('MONO_SI_NO', 'NO').outcome, 'PREPARED');
   assert.equal(evaluateProfileOutput('MONO_SI_NO', 'SAFE_NOOP').outcome, 'PREPARED');
@@ -28,24 +27,32 @@ test('MONO_SI_NO accepts closed vocabulary and denies explanations', () => {
   const denied = evaluateProfileOutput('MONO_SI_NO', 'No, no deberías hacerlo porque es riesgoso.');
   assert.equal(denied.outcome, 'DENY');
   assert.ok(denied.reason_codes.includes('CLOSED_VOCABULARY_VIOLATION'));
-  assert.match(denied.rejected_output_preview, /no deberías/);
+  assert.equal(denied.rejected_output_preview, null);
+  assert.equal(denied.rejected_output_observed, true);
+  assert.ok(denied.rejected_output_length > 0);
   assert.equal(denied.dispatch_attempted, false);
 });
 
-test('SAFE_NOOP profile requires exact SAFE_NOOP', () => {
+test('SAFE_NOOP profile accepts exact SAFE_NOOP and hides violations', () => {
   assert.equal(evaluateProfileOutput('SAFE_NOOP', 'SAFE_NOOP').outcome, 'PREPARED');
   const denied = evaluateProfileOutput('SAFE_NOOP', 'NO');
   assert.equal(denied.outcome, 'DENY');
   assert.ok(denied.reason_codes.includes('SAFE_NOOP_REQUIRED'));
+  assert.equal(denied.rejected_output_preview, null);
 });
-
-test('FERRUM_RUST accepts Rust output and denies general advice', () => {
+test('FERRUM_RUST accepts Rust output, accepts SAFE_NOOP fallback and denies general advice', () => {
   const accepted = evaluateProfileOutput('FERRUM_RUST', 'En Rust puedes modelarlo con traits y ownership explícito.');
   assert.equal(accepted.outcome, 'PREPARED');
+
+  const fallback = evaluateProfileOutput('FERRUM_RUST', 'SAFE_NOOP');
+  assert.equal(fallback.outcome, 'PREPARED');
+  assert.ok(fallback.reason_codes.includes('SAFE_FALLBACK_OK'));
+  assert.equal(fallback.accepted_output, 'SAFE_NOOP');
 
   const denied = evaluateProfileOutput('FERRUM_RUST', 'Te recomiendo comprar un coche híbrido barato.');
   assert.equal(denied.outcome, 'DENY');
   assert.ok(denied.reason_codes.includes('OUT_OF_DOMAIN_ADVICE'));
+  assert.equal(denied.rejected_output_preview, null);
 });
 
 test('ACTION_PROPOSER permits proposals but denies execution claims', () => {
@@ -57,17 +64,19 @@ test('ACTION_PROPOSER permits proposals but denies execution claims', () => {
   assert.equal(denied.outcome, 'DENY');
   assert.ok(denied.reason_codes.includes('EXECUTION_CLAIM_WITHOUT_EVIDENCE'));
 });
-
-test('buildProfileResponse hides rejected model output from assistant_message', () => {
+test('buildProfileResponse hides rejected model output from assistant_message and preview', () => {
   const accepted = buildProfileResponse({ profileId: 'MONO_SI_NO', userMessage: '¿Sí?', modelOutput: 'SI', provider: { model: 'test' } });
   assert.equal(accepted.ok, true);
   assert.equal(accepted.assistant_message, 'SI');
+  assert.equal(accepted.rejected_model_output_preview, null);
   assert.equal(accepted.dispatch_attempted, false);
 
   const denied = buildProfileResponse({ profileId: 'MONO_SI_NO', userMessage: '¿Sí?', modelOutput: 'Sí, claro.', provider: { model: 'test' } });
   assert.equal(denied.ok, false);
   assert.equal(denied.state, 'PROFILE_CONTRACT_DENIED');
   assert.equal(denied.assistant_message, null);
-  assert.match(denied.rejected_model_output_preview, /Sí/);
+  assert.equal(denied.rejected_model_output_preview, null);
+  assert.equal(denied.rejected_model_output_observed, true);
+  assert.ok(denied.rejected_model_output_length > 0);
   assert.equal(denied.dispatch_attempted, false);
 });

@@ -92,7 +92,9 @@ const profileStub = async (profileId, message, options = {}) => {
       profile_id: profileId,
       user_message: message,
       assistant_message: null,
-      rejected_model_output_preview: 'Sí, claro: puedo explicarlo.',
+      rejected_model_output_preview: null,
+      rejected_model_output_observed: true,
+      rejected_model_output_length: 26,
       profile_decision: {
         outcome: 'DENY',
         reason_codes: ['CLOSED_VOCABULARY_VIOLATION'],
@@ -201,7 +203,8 @@ test('panel profile chat can deny a non-compliant Nemotron output without dispat
   const body = await response.json();
   assert.equal(body.state, 'PROFILE_CONTRACT_DENIED');
   assert.equal(body.assistant_message, null);
-  assert.match(body.rejected_model_output_preview, /puedo explicarlo/);
+  assert.equal(body.rejected_model_output_preview, null);
+  assert.equal(body.rejected_model_output_observed, true);
   assert.ok(body.profile_decision.reason_codes.includes('CLOSED_VOCABULARY_VIOLATION'));
   assert.equal(body.dispatch_attempted, false);
 });

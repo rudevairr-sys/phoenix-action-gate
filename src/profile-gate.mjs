@@ -1,11 +1,14 @@
 import { evaluateAgentContract } from './agent-contracts.mjs';
 import { PROFILE_REGISTRY_VERSION, requireProfile } from './profiles.mjs';
 
-export const PROFILE_GATE_VERSION = 'phoenix-profile-gate/0.1.0';
+export const PROFILE_GATE_VERSION = 'phoenix-profile-gate/0.1.1';
 
-function sanitizePreview(value, maxChars = 240) {
-  if (typeof value !== 'string') return '';
-  return value.replace(/[\r\n\t]+/g, ' ').replace(/\s{2,}/g, ' ').trim().slice(0, maxChars);
+function hiddenRejectedOutput(value) {
+  return {
+    rejected_output_preview: null,
+    rejected_output_observed: typeof value === 'string' && value.trim().length > 0,
+    rejected_output_length: typeof value === 'string' ? value.trim().length : null
+  };
 }
 
 function fail(profile, reasonCodes, checks = [], output = '') {
@@ -17,12 +20,32 @@ function fail(profile, reasonCodes, checks = [], output = '') {
     outcome: 'DENY',
     reason_codes: [...reasonCodes],
     checks,
-    rejected_output_preview: sanitizePreview(output),
+    ...hiddenRejectedOutput(output),
     accepted_output: null,
     dispatch_attempted: false
   };
 }
 
+function acceptSafeFallback(profile, output) {
+  return {
+    version: PROFILE_GATE_VERSION,
+    registry_version: PROFILE_REGISTRY_VERSION,
+    profile_id: profile.id,
+    profile_label: profile.label,
+    contract_id: profile.id,
+    contract_type: profile.contract_type,
+    outcome: 'PREPARED',
+    reason_codes: ['SAFE_FALLBACK_OK'],
+    checks: [
+      { check: 'safe_fallback_exact', status: 'PASS', evidence_ref: profile.output_contract.safe_fallback }
+    ],
+    rejected_output_preview: null,
+    rejected_output_observed: false,
+    rejected_output_length: null,
+    accepted_output: output.trim(),
+    dispatch_attempted: false
+  };
+}
 function normalizeProfileDecision(profile, contractDecision, output) {
   const outcome = contractDecision.outcome === 'DENY' ? 'DENY' : 'PREPARED';
   return {
@@ -35,7 +58,11 @@ function normalizeProfileDecision(profile, contractDecision, output) {
     outcome,
     reason_codes: Array.isArray(contractDecision.reason_codes) ? [...contractDecision.reason_codes] : [],
     checks: Array.isArray(contractDecision.checks) ? contractDecision.checks : [],
-    rejected_output_preview: outcome === 'DENY' ? sanitizePreview(output) : null,
+    ...(outcome === 'DENY' ? hiddenRejectedOutput(output) : {
+      rejected_output_preview: null,
+      rejected_output_observed: false,
+      rejected_output_length: null
+    }),
     accepted_output: outcome === 'DENY' ? null : output.trim(),
     dispatch_attempted: false
   };
@@ -64,6 +91,10 @@ export function evaluateProfileOutput(profileId, output) {
     ], output);
   }
 
+  if (profile.output_contract?.safe_fallback && boundedOutput === profile.output_contract.safe_fallback) {
+    return acceptSafeFallback(profile, boundedOutput);
+  }
+
   const contractDecision = evaluateAgentContract(profile.contract_type, boundedOutput, { contract_id: profile.id });
 
   if (profile.id === 'SAFE_NOOP' && boundedOutput !== 'SAFE_NOOP') {
@@ -87,7 +118,9 @@ export function buildProfileResponse({ profileId, userMessage, modelOutput, prov
     profile_id: decision.profile_id,
     user_message: typeof userMessage === 'string' ? userMessage : null,
     assistant_message: accepted ? decision.accepted_output : null,
-    rejected_model_output_preview: accepted ? null : decision.rejected_output_preview,
+    rejected_model_output_preview: null,
+    rejected_model_output_observed: accepted ? false : decision.rejected_output_observed,
+    rejected_model_output_length: accepted ? null : decision.rejected_output_length,
     profile_decision: decision,
     provider,
     dispatch_attempted: false,
