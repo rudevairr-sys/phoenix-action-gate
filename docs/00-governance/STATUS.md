@@ -293,3 +293,46 @@ duration_ms: 701.0988
 ```
 
 Pendiente: reiniciar el panel con esta versiÃ³n y repetir live revalidation sanitizada.
+
+## G11 — Dashboard profile lock
+
+Estado: `IMPLEMENTED / TEST_EXECUTED_PASS / LIVE_RUNTIME_PENDING`
+
+El dashboard ahora expone un selector explícito de modo/perfil de operación de Nemotron:
+
+```text
+ACTION_GATE
+MONO_SI_NO
+FERRUM_RUST
+ACTION_PROPOSER
+SAFE_NOOP
+```
+
+Comportamiento implementado:
+
+- `ACTION_GATE` conserva el flujo normal de chat/action gate.
+- Cualquier perfil especializado seleccionado en el dashboard hace que el botón `Enviar turno` use `/api/profile-chat`.
+- El perfil seleccionado se sincroniza con el bloque `Nemotron Profile Gate`.
+- El chip `Perfil: ...` muestra el modo activo.
+- El backend sigue validando `profile_id` contra allowlist y cerrando perfiles desconocidos.
+- Dispatch sigue deshabilitado.
+
+Evidencia:
+
+```text
+docs/04-runtime/evidence/G11_DASHBOARD_PROFILE_LOCK_TESTS_2026-09-20.json
+```
+
+Regresión ejecutada:
+
+```text
+node --version -> v24.12.0
+npm test -> 149/149 PASS
+fail: 0
+duration_ms: 804.0266
+```
+
+Pendiente:
+
+- Reiniciar panel para cargar este cambio.
+- Repetir validación live con Nebius/Nemotron bajo selector de perfil del dashboard.

@@ -87,3 +87,21 @@ test('jury surface wires the governed profile form to /api/profile-chat', () => 
   assert.match(juryCss, /\.contract-lab\s*\{/);
   assert.match(juryCss, /\.contract-result\s*\{/);
 });
+
+test('dashboard forces an explicit Nemotron operating profile before main chat submission', () => {
+  assert.match(html, /id="active-profile"/);
+  assert.match(html, /Perfil activo de Nemotron/);
+  assert.match(html, /value="ACTION_GATE"/);
+  assert.match(html, /value="MONO_SI_NO"/);
+  assert.match(html, /value="FERRUM_RUST"/);
+  assert.match(html, /value="ACTION_PROPOSER"/);
+  assert.match(html, /value="SAFE_NOOP"/);
+  assert.match(html, /id="active-profile-chip"/);
+  assert.match(appJs, /getDashboardProfileMode/);
+  assert.match(appJs, /runProfileMessage\(activeProfile, message/);
+  assert.match(appJs, /Dashboard lock: Nemotron opera exactamente/);
+  assert.match(appJs, /fetch\('\/api\/profile-chat'/);
+});
+test('dashboard profile chip does not leak escaped newline artifacts into HTML', () => {
+  assert.doesNotMatch(html, /`n\s*<span>Dispatch deshabilitado<\/span>/);
+});

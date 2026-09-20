@@ -102,6 +102,17 @@
         </div>
 
         <form class="chat-form" id="chat-form">
+          <div class="profile-lock">
+            <label for="active-profile">Perfil activo de Nemotron</label>
+            <select id="active-profile" name="active_profile_id" aria-describedby="active-profile-note">
+              <option value="ACTION_GATE">ACTION_GATE — chat/acciones normales</option>
+              <option value="MONO_SI_NO">MONO_SI_NO — solo SI / NO / SAFE_NOOP</option>
+              <option value="FERRUM_RUST">FERRUM_RUST — solo dominio Rust</option>
+              <option value="ACTION_PROPOSER">ACTION_PROPOSER — propone, no ejecuta</option>
+              <option value="SAFE_NOOP">SAFE_NOOP — veto seguro</option>
+            </select>
+            <small id="active-profile-note">El dashboard decide el modo exacto. Si eliges un perfil especializado, el turno se envía por Phoenix Profile Gate.</small>
+          </div>
           <label for="user-message">Tu petición</label>
           <textarea id="user-message" name="message" maxlength="2000" rows="4" placeholder="Ej.: Quiero revisar README.md antes de modificar nada." required></textarea>
           <div class="submit-row">
@@ -129,6 +140,7 @@
         <div class="control-note">
           <span>127.0.0.1</span>
           <span>Sin executor</span>
+          <span id="active-profile-chip">Perfil: ACTION_GATE</span>
           <span>Dispatch deshabilitado</span>
         </div>
       </aside>

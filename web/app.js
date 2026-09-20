@@ -3,6 +3,7 @@ const $$ = (selector) => [...document.querySelectorAll(selector)];
 
 const VALID_OUTCOMES = new Set(['PREPARED', 'REVIEW', 'DENY']);
 const MAX_HISTORY_ITEMS = 8;
+const PROFILE_MODE_ACTION_GATE = 'ACTION_GATE';
 const conversationHistory = [];
 
 const ui = {
@@ -567,25 +568,37 @@ function setBusy(busy) {
   ui.sendButton.disabled = busy;
   ui.planButton.disabled = busy;
   ui.userMessage.disabled = busy;
+  if (ui.activeProfile) ui.activeProfile.disabled = busy;
   $$('.fixture-button').forEach((button) => { button.disabled = busy; });
   if (ui.profileSendButton) ui.profileSendButton.disabled = busy;
   if (ui.profileMessage) ui.profileMessage.disabled = busy;
   if (ui.profileType) ui.profileType.disabled = busy;
 }
 
-async function runProfileGate() {
-  const profileId = ui.profileType.value;
-  const message = ui.profileMessage.value.trim();
-  if (!message) {
-    setStatus('Escribe una petición para Nemotron bajo el perfil seleccionado.', 'error');
-    ui.profileMessage.focus();
-    return;
+function isProfileMode(profileId) {
+  return typeof profileId === 'string' && profileId.length > 0 && profileId !== PROFILE_MODE_ACTION_GATE;
+}
+
+function getDashboardProfileMode() {
+  return ui.activeProfile?.value ?? PROFILE_MODE_ACTION_GATE;
+}
+
+function syncActiveProfileSelection(profileId = getDashboardProfileMode()) {
+  if (ui.activeProfileChip) setText(ui.activeProfileChip, `Perfil: ${profileId}`);
+  if (ui.activeProfile && ui.activeProfile.value !== profileId) ui.activeProfile.value = profileId;
+  if (ui.profileType && isProfileMode(profileId) && ui.profileType.value !== profileId) ui.profileType.value = profileId;
+}
+
+async function runProfileMessage(profileId, message, { clearNode = null, focusNode = ui.userMessage, label = 'TÚ · PERFIL' } = {}) {
+  if (!isProfileMode(profileId)) {
+    return runConversation(message);
   }
 
-  appendChat('user', `[${profileId}] ${message}`, 'TÚ · PERFIL');
+  appendChat('user', `[${profileId}] ${message}`, label);
   const history = conversationHistory.map((item) => ({ ...item }));
   setBusy(true);
-  setStatus(`Nemotron está respondiendo bajo el perfil ${profileId}. Phoenix verificará el contrato…`, 'running');
+  syncActiveProfileSelection(profileId);
+  setStatus(`Dashboard lock: Nemotron opera exactamente como ${profileId}. Phoenix verificará el contrato…`, 'running');
 
   try {
     const response = await fetch('/api/profile-chat', {
@@ -606,7 +619,7 @@ async function runProfileGate() {
     }
 
     renderProfileDecision(result);
-    ui.profileMessage.value = '';
+    if (clearNode) clearNode.value = '';
   } catch (error) {
     if (ui.profileResult) {
       ui.profileResult.className = 'contract-result deny';
@@ -617,8 +630,19 @@ async function runProfileGate() {
     setStatus(`Profile Gate cerrado: ${error.message}`, 'error');
   } finally {
     setBusy(false);
-    ui.profileMessage.focus();
+    focusNode?.focus();
   }
+}
+
+async function runProfileGate() {
+  const profileId = ui.profileType.value;
+  const message = ui.profileMessage.value.trim();
+  if (!message) {
+    setStatus('Escribe una petición para Nemotron bajo el perfil seleccionado.', 'error');
+    ui.profileMessage.focus();
+    return;
+  }
+  return runProfileMessage(profileId, message, { clearNode: ui.profileMessage, focusNode: ui.profileMessage });
 }
 
 async function runConversation(message) {
@@ -731,8 +755,13 @@ ui.chatForm.addEventListener('submit', (event) => {
   event.preventDefault();
   const message = ui.userMessage.value.trim();
   if (!message) return;
+  const activeProfile = getDashboardProfileMode();
   ui.userMessage.value = '';
-  runConversation(message);
+  if (isProfileMode(activeProfile)) {
+    runProfileMessage(activeProfile, message, { focusNode: ui.userMessage, label: 'TÚ · DASHBOARD PERFIL' });
+  } else {
+    runConversation(message);
+  }
 });
 
 ui.planButton.addEventListener('click', () => {
@@ -759,6 +788,24 @@ for (const button of $$('.fixture-button')) {
   button.addEventListener('click', () => runFixture(button));
 }
 
+if (ui.activeProfile) {
+  ui.activeProfile.addEventListener('change', () => {
+    const profileId = getDashboardProfileMode();
+    syncActiveProfileSelection(profileId);
+    setStatus(
+      isProfileMode(profileId)
+        ? `Perfil activo fijado en ${profileId}. El siguiente turno irá por Phoenix Profile Gate.`
+        : 'Modo ACTION_GATE activo. El siguiente turno irá por el chat/action gate normal.',
+      ''
+    );
+  });
+  syncActiveProfileSelection();
+}
+
+if (ui.profileType) {
+  ui.profileType.addEventListener('change', () => syncActiveProfileSelection(ui.profileType.value));
+}
+
 if (ui.profileForm) {
   ui.profileForm.addEventListener('submit', (event) => {
     event.preventDefault();
@@ -771,6 +818,7 @@ try {
   if (health.ok) {
     setText(ui.policy, health.policy_version);
     if (health.dispatch_available === false) setText(ui.dispatch, 'NO');
+    syncActiveProfileSelection();
   }
 } catch {
   setStatus('El health check del panel falló. No se intentó ninguna acción.', 'error');

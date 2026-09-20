@@ -27,7 +27,7 @@ body {
     var(--bg);
   color: var(--text);
 }
-button, textarea, code { font: inherit; }
+button, textarea, select, code { font: inherit; }
 button { color: inherit; }
 
 .shell { width: min(1540px, calc(100% - 40px)); margin: 0 auto; padding: 34px 0 56px; }
@@ -81,6 +81,26 @@ h2 { margin:0; font-size:1.05rem; letter-spacing:-.02em; }
   background:#0b0e12; color:var(--text); outline:none; line-height:1.45;
 }
 .chat-form textarea:focus { border-color:rgba(255,177,74,.5); box-shadow:0 0 0 3px rgba(255,177,74,.06); }
+.profile-lock {
+  display: grid;
+  gap: 7px;
+  padding: 11px 12px;
+  border: 1px solid rgba(255, 177, 74, .25);
+  border-radius: 14px;
+  background: rgba(255, 177, 74, .055);
+}
+.profile-lock select {
+  width: 100%;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  background: #0b0e12;
+  color: var(--text);
+  padding: 10px 11px;
+  outline: none;
+}
+.profile-lock select:focus { border-color: rgba(255,177,74,.5); box-shadow: 0 0 0 3px rgba(255,177,74,.06); }
+.profile-lock small { color: var(--muted); line-height: 1.35; }
+
 .submit-row { display:grid; grid-template-columns:1fr 1fr; gap:8px; }
 .send-button, .plan-button {
   border-radius:13px; padding:12px 14px; font-weight:800; cursor:pointer;
