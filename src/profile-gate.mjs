@@ -1,7 +1,7 @@
-import { evaluateAgentContract } from './agent-contracts.mjs';
+﻿import { evaluateAgentContract } from './agent-contracts.mjs';
 import { PROFILE_REGISTRY_VERSION, requireProfile } from './profiles.mjs';
 
-export const PROFILE_GATE_VERSION = 'phoenix-profile-gate/0.1.1';
+export const PROFILE_GATE_VERSION = 'phoenix-profile-gate/0.1.2';
 
 function hiddenRejectedOutput(value) {
   return {
@@ -11,6 +11,27 @@ function hiddenRejectedOutput(value) {
   };
 }
 
+
+const REASONING_LEAK_PATTERNS = Object.freeze([
+  { code: 'THINKING_PROCESS', regex: /thinking process/i },
+  { code: 'ANALYZE_USER_INPUT', regex: /analyze user input/i },
+  { code: 'CHECK_ACTIVE_PROFILE', regex: /check active profile/i },
+  { code: 'EVALUATE_REQUEST', regex: /evaluate request/i },
+  { code: 'DETERMINE_RESPONSE', regex: /determine response/i },
+  { code: 'LET_ME_DOUBLE_CHECK', regex: /let me double-check/i },
+  { code: 'SAFEST_RESPONSE_META', regex: /safest\s+.*response/i }
+]);
+
+function detectReasoningLeak(output) {
+  for (const pattern of REASONING_LEAK_PATTERNS) {
+    if (pattern.regex.test(output)) return pattern.code;
+  }
+  return null;
+}
+
+function hasActionProposalLanguage(output) {
+  return /\b(propongo|propuesta|preparar|prepararia|prepararía|reversible|rollback|riesgo|paso|revisión|revision)\b/i.test(output);
+}
 function fail(profile, reasonCodes, checks = [], output = '') {
   return {
     version: PROFILE_GATE_VERSION,
@@ -91,11 +112,24 @@ export function evaluateProfileOutput(profileId, output) {
     ], output);
   }
 
+  const reasoningLeak = detectReasoningLeak(boundedOutput);
+  if (reasoningLeak) {
+    return fail(profile, ['MODEL_REASONING_LEAK'], [
+      { check: 'model_reasoning_leak_absent', status: 'FAIL', evidence_ref: reasoningLeak }
+    ], output);
+  }
+
   if (profile.output_contract?.safe_fallback && boundedOutput === profile.output_contract.safe_fallback) {
     return acceptSafeFallback(profile, boundedOutput);
   }
 
   const contractDecision = evaluateAgentContract(profile.contract_type, boundedOutput, { contract_id: profile.id });
+
+  if (contractDecision.outcome !== 'DENY' && profile.id === 'ACTION_PROPOSER' && (boundedOutput.length < 16 || !hasActionProposalLanguage(boundedOutput))) {
+    return fail(profile, ['ACTION_PROPOSAL_TEXT_INSUFFICIENT'], [
+      { check: 'action_proposal_language_present', status: 'FAIL', evidence_ref: 'missing_proposal_language' }
+    ], output);
+  }
 
   if (profile.id === 'SAFE_NOOP' && boundedOutput !== 'SAFE_NOOP') {
     return fail(profile, ['SAFE_NOOP_REQUIRED'], [

@@ -269,3 +269,27 @@ Evidencia:
 `docs/04-runtime/evidence/G10_NEMOTRON_PROFILE_GATE_LIVE_PROBE_AND_MITIGATION_2026-09-20.md`
 
 Pendiente: reiniciar el panel en la terminal con `NEBIUS_API_KEY` cargada para observar live la versión mitigada.
+
+## G10 follow-up — reasoning scaffold mitigation
+
+Estado adicional: `PROFILE_GATE_REASONING_LEAK_MITIGATED / TEST_PASS_147 / FINAL_LIVE_RERUN_PENDING`
+
+Durante el primer probe live del Profile Gate se observó que Nemotron podía incluir texto de razonamiento dentro de una salida aceptada por el contrato heurístico. No se promueve como validación final.
+
+Mitigación aplicada:
+
+- `phoenix-profile-gate/0.1.2`.
+- Deniega salidas con patrones de razonamiento del modelo (`MODEL_REASONING_LEAK`).
+- Deniega salidas demasiado cortas/no propositivas en `ACTION_PROPOSER` (`ACTION_PROPOSAL_TEXT_INSUFFICIENT`).
+- Mantiene previews de salida rechazada suprimidas.
+
+Regresión ejecutada:
+
+```text
+node --version -> v24.12.0
+npm test -> 147/147 PASS
+fail: 0
+duration_ms: 701.0988
+```
+
+Pendiente: reiniciar el panel con esta versión y repetir live revalidation sanitizada.

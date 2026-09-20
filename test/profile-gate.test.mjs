@@ -80,3 +80,24 @@ test('buildProfileResponse hides rejected model output from assistant_message an
   assert.ok(denied.rejected_model_output_length > 0);
   assert.equal(denied.dispatch_attempted, false);
 });
+
+test('profile gate denies model reasoning scaffolding before accepting output', () => {
+  const denied = evaluateProfileOutput('FERRUM_RUST', [
+    "Here's a thinking process:",
+    '1. Analyze User Input: Dame ideas de marketing.',
+    '2. Check Active Profile: FERRUM_RUST.',
+    'I will output SAFE_NOOP.'
+  ].join('\n'));
+
+  assert.equal(denied.outcome, 'DENY');
+  assert.ok(denied.reason_codes.includes('MODEL_REASONING_LEAK'));
+  assert.equal(denied.rejected_output_preview, null);
+  assert.equal(denied.rejected_output_observed, true);
+});
+
+test('ACTION_PROPOSER denies too-short non-proposal output', () => {
+  const denied = evaluateProfileOutput('ACTION_PROPOSER', 'Prop');
+  assert.equal(denied.outcome, 'DENY');
+  assert.ok(denied.reason_codes.includes('ACTION_PROPOSAL_TEXT_INSUFFICIENT'));
+  assert.equal(denied.rejected_output_preview, null);
+});

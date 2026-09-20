@@ -1,0 +1,43 @@
+﻿{
+    "id":  "G10_NEMOTRON_PROFILE_GATE_LIVE_REVALIDATION_2026-09-20",
+    "status":  "INTERIM_LIVE_PROBE_SUPERSEDED_BY_REASONING_LEAK_MITIGATION",
+    "at":  "2026-09-20T18:16:17Z",
+    "project":  "Phoenix Action Gate",
+    "branch":  "review/contest-surface-20260918",
+    "head":  "650b6f3db7816436c2a11944521ab443f1407084",
+    "summary":  "Initial live probe reached Nebius/Nemotron through /api/profile-chat, but revealed that model reasoning scaffolding could appear inside outputs accepted by the heuristic gate. This file intentionally contains no raw model output. Final live revalidation must be repeated after restarting the panel with profile-gate 0.1.2.",
+    "observed":  {
+                     "profile_gate_endpoint_reached":  true,
+                     "provider_model":  "nvidia/Nemotron-3_5-Lightning",
+                     "provider_responses_observed":  4,
+                     "dispatch_attempted_any":  false,
+                     "secret_exposed_any":  false,
+                     "rejected_previews_present_after_0_1_1":  false,
+                     "accepted_reasoning_scaffold_detected":  true
+                 },
+    "mitigation":  {
+                       "profile_gate_version":  "phoenix-profile-gate/0.1.2",
+                       "added_reasoning_scaffold_detector":  true,
+                       "added_action_proposer_insufficient_text_detector":  true,
+                       "test_command":  "node --version; npm test",
+                       "node_version":  "v24.12.0",
+                       "tests":  147,
+                       "pass":  147,
+                       "fail":  0,
+                       "duration_ms":  701.0988
+                   },
+    "final_live_revalidation":  {
+                                    "required":  true,
+                                    "reason":  "The server must be restarted so the live runtime loads profile-gate 0.1.2.",
+                                    "pending":  true
+                                },
+    "truthcore":  {
+                      "LIVE_PROFILE_GATE_ENDPOINT_REACHED":  true,
+                      "FINAL_LIVE_PROFILE_GATE_VALIDATED":  false,
+                      "REASONING_LEAK_MITIGATED_IN_CODE":  true,
+                      "TEST_EXECUTED_AFTER_MITIGATION":  true,
+                      "DISPATCH_ATTEMPTED":  false,
+                      "SECRET_EXPOSED":  false,
+                      "PRODUCTION_VALIDATED":  false
+                  }
+}
