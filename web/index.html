@@ -31,61 +31,7 @@
       <div class="flow-arrow">→</div>
       <div class="flow-node"><span>04</span><strong>Evidencia</strong><small>trazable</small></div>
     </section>
-
-    <section class="panel contract-demo" aria-label="Perfiles gobernados de Nemotron">
-      <div class="panel-heading">
-        <div>
-          <p class="section-label">NEMOTRON PROFILE GATE</p>
-          <h2>Perfiles especializados para Nemotron, verificados por Phoenix</h2>
-        </div>
-        <span class="policy-pill">PROFILE / NO DISPATCH</span>
-      </div>
-      <p class="decision-copy">Nemotron puede operar bajo un perfil especializado, pero Phoenix no confía solo en el prompt: verifica si la respuesta respeta el contrato del perfil antes de aceptarla.</p>
-      <div class="contract-grid">
-        <article class="contract-card">
-          <span>MONO_SI_NO</span>
-          <strong>Solo SI / NO / SAFE_NOOP</strong>
-          <small>Explicación o matiz → DENY</small>
-        </article>
-        <article class="contract-card">
-          <span>FERRUM_RUST</span>
-          <strong>Solo dominio Rust</strong>
-          <small>Asistente general → DENY; reconducción Rust → PREPARED</small>
-        </article>
-        <article class="contract-card">
-          <span>ACTION_PROPOSER</span>
-          <strong>Propone, no ejecuta</strong>
-          <small>“He ejecutado...” → DENY</small>
-        </article>
-        <article class="contract-card">
-          <span>SAFE_NOOP</span>
-          <strong>Veto constitucional</strong>
-          <small>Cualquier salida distinta → DENY</small>
-        </article>
-      </div>
-      <form class="contract-lab" id="profile-gate-form" aria-label="Perfiles gobernados de Nemotron">
-        <div class="contract-lab-inputs">
-          <label for="profile-type">Perfil de Nemotron</label>
-          <select id="profile-type" name="profile_id">
-            <option value="MONO_SI_NO">MONO_SI_NO — solo SI / NO / SAFE_NOOP</option>
-            <option value="FERRUM_RUST">FERRUM_RUST — solo dominio Rust</option>
-            <option value="ACTION_PROPOSER">ACTION_PROPOSER — propone, no ejecuta</option>
-            <option value="SAFE_NOOP">SAFE_NOOP — veto seguro</option>
-          </select>
-          <label for="profile-message">Petición para Nemotron bajo perfil</label>
-          <textarea id="profile-message" name="message" rows="3" maxlength="2000" placeholder="Ej.: ¿Puedo borrar todo? Phoenix verificará si Nemotron respeta el perfil activo."></textarea>
-        </div>
-        <div class="contract-lab-actions">
-          <button class="send-button" id="profile-send-button" type="submit">Enviar con perfil</button>
-          <div class="contract-result" id="profile-result" aria-live="polite">
-            <strong>ESPERANDO</strong>
-            <span>Elige un perfil. Nemotron responderá bajo contrato y Phoenix verificará la salida sin ejecutar nada.</span>
-          </div>
-        </div>
-      </form>
-    </section>
-
-    <section class="control-grid">
+<section class="control-grid">
       <aside class="conversation-panel panel">
         <div class="panel-heading">
           <div>
@@ -104,14 +50,10 @@
         <form class="chat-form" id="chat-form">
           <div class="profile-lock">
             <label for="active-profile">Perfil activo de Nemotron</label>
-            <select id="active-profile" name="active_profile_id" aria-describedby="active-profile-note">
+            <select id="active-profile" name="active_profile_id" aria-describedby="active-profile-note" data-source="/api/health">
               <option value="ACTION_GATE">ACTION_GATE — chat/acciones normales</option>
-              <option value="MONO_SI_NO">MONO_SI_NO — solo SI / NO / SAFE_NOOP</option>
-              <option value="FERRUM_RUST">FERRUM_RUST — solo dominio Rust</option>
-              <option value="ACTION_PROPOSER">ACTION_PROPOSER — propone, no ejecuta</option>
-              <option value="SAFE_NOOP">SAFE_NOOP — veto seguro</option>
             </select>
-            <small id="active-profile-note">El dashboard decide el modo exacto. Si eliges un perfil especializado, el turno se envía por Phoenix Profile Gate.</small>
+            <small id="active-profile-note">El dashboard decide el modo exacto. Los perfiles especializados se cargan desde /api/health; si eliges uno, el turno se envía por Phoenix Profile Gate.</small>
           </div>
           <label for="user-message">Tu petición</label>
           <textarea id="user-message" name="message" maxlength="2000" rows="4" placeholder="Ej.: Quiero revisar README.md antes de modificar nada." required></textarea>

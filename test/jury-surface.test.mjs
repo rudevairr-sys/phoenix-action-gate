@@ -59,43 +59,37 @@ test('jury surface keeps no-dispatch and existing application wiring visible', (
   assert.equal(occurrences(html, 'id="plan-dispatch"'), 1);
 });
 
-test('jury surface exposes Nemotron Profile Gate instead of an external GPT paste lab', () => {
-  assert.match(html, /NEMOTRON PROFILE GATE/);
-  assert.match(html, /Perfiles especializados para Nemotron, verificados por Phoenix/);
-  assert.match(html, /Nemotron puede operar bajo un perfil especializado/);
-  assert.match(html, /Phoenix no confía solo en el prompt/);
-  assert.match(html, /MONO_SI_NO/);
-  assert.match(html, /Solo SI \/ NO \/ SAFE_NOOP/);
-  assert.match(html, /FERRUM_RUST/);
-  assert.match(html, /Solo dominio Rust/);
-  assert.match(html, /ACTION_PROPOSER/);
-  assert.match(html, /Propone, no ejecuta/);
-  assert.match(html, /SAFE_NOOP/);
-  assert.match(html, /Veto constitucional/);
+test('jury surface uses only the dashboard profile lock, not a second profile form', () => {
+  assert.match(html, /Perfil activo de Nemotron/);
+  assert.match(html, /El dashboard decide el modo exacto/);
+  assert.match(html, /id="active-profile"/);
+  assert.match(html, /id="active-profile-chip"/);
+  assert.doesNotMatch(html, /id="profile-gate-form"/);
+  assert.doesNotMatch(html, /id="profile-type"/);
+  assert.doesNotMatch(html, /id="profile-message"/);
+  assert.doesNotMatch(html, /id="profile-send-button"/);
+  assert.doesNotMatch(html, /Enviar con perfil/);
   assert.doesNotMatch(html, /Salida real del otro GPT/);
   assert.doesNotMatch(html, /Pega aquí la respuesta real del otro GPT/);
 });
 
-test('jury surface wires the governed profile form to /api/profile-chat', () => {
-  assert.match(html, /id="profile-gate-form"/);
-  assert.match(html, /id="profile-type"/);
-  assert.match(html, /id="profile-message"/);
-  assert.match(html, /id="profile-send-button"/);
-  assert.match(html, /Enviar con perfil/);
+test('dashboard profile lock loads backend profiles from health before routing to profile chat', () => {
+  assert.match(html, /data-source="\/api\/health"/);
+  assert.match(appJs, /loadBackendProfiles/);
+  assert.match(appJs, /health\.profiles/);
+  assert.match(appJs, /renderProfileOptions/);
+  assert.match(appJs, /PROFILE_OPTIONS_UNAVAILABLE/);
   assert.match(appJs, /fetch\('\/api\/profile-chat'/);
-  assert.match(appJs, /renderProfileDecision/);
-  assert.match(juryCss, /\.contract-lab\s*\{/);
-  assert.match(juryCss, /\.contract-result\s*\{/);
+  assert.match(appJs, /runProfileMessage\(activeProfile, message/);
 });
-
 test('dashboard forces an explicit Nemotron operating profile before main chat submission', () => {
   assert.match(html, /id="active-profile"/);
   assert.match(html, /Perfil activo de Nemotron/);
   assert.match(html, /value="ACTION_GATE"/);
-  assert.match(html, /value="MONO_SI_NO"/);
-  assert.match(html, /value="FERRUM_RUST"/);
-  assert.match(html, /value="ACTION_PROPOSER"/);
-  assert.match(html, /value="SAFE_NOOP"/);
+  assert.doesNotMatch(html, /value="MONO_SI_NO"/);
+  assert.doesNotMatch(html, /value="FERRUM_RUST"/);
+  assert.doesNotMatch(html, /value="ACTION_PROPOSER"/);
+  assert.doesNotMatch(html, /value="SAFE_NOOP"/);
   assert.match(html, /id="active-profile-chip"/);
   assert.match(appJs, /getDashboardProfileMode/);
   assert.match(appJs, /runProfileMessage\(activeProfile, message/);

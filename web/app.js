@@ -5,6 +5,8 @@ const VALID_OUTCOMES = new Set(['PREPARED', 'REVIEW', 'DENY']);
 const MAX_HISTORY_ITEMS = 8;
 const PROFILE_MODE_ACTION_GATE = 'ACTION_GATE';
 const conversationHistory = [];
+let backendProfileIds = new Set();
+let backendProfilesLoaded = false;
 
 const ui = {
   chatForm: $('#chat-form'),
@@ -63,6 +65,9 @@ const ui = {
   planReasonCodes: $('#plan-reason-codes'),
   planDispatch: $('#plan-dispatch'),
   planReasonCard: $('.plan-reason-card'),
+  
+  activeProfile: $('#active-profile'),
+  activeProfileChip: $('#active-profile-chip'),
   profileForm: $('#profile-gate-form'),
   profileType: $('#profile-type'),
   profileMessage: $('#profile-message'),
@@ -568,7 +573,7 @@ function setBusy(busy) {
   ui.sendButton.disabled = busy;
   ui.planButton.disabled = busy;
   ui.userMessage.disabled = busy;
-  if (ui.activeProfile) ui.activeProfile.disabled = busy;
+  if (ui.activeProfile) ui.activeProfile.disabled = busy || !backendProfilesLoaded;
   $$('.fixture-button').forEach((button) => { button.disabled = busy; });
   if (ui.profileSendButton) ui.profileSendButton.disabled = busy;
   if (ui.profileMessage) ui.profileMessage.disabled = busy;
@@ -576,7 +581,48 @@ function setBusy(busy) {
 }
 
 function isProfileMode(profileId) {
-  return typeof profileId === 'string' && profileId.length > 0 && profileId !== PROFILE_MODE_ACTION_GATE;
+  return typeof profileId === 'string'
+    && profileId.length > 0
+    && profileId !== PROFILE_MODE_ACTION_GATE
+    && backendProfileIds.has(profileId);
+}
+
+function renderProfileOptions(profiles = []) {
+  if (!ui.activeProfile) return;
+  const previous = ui.activeProfile.value || PROFILE_MODE_ACTION_GATE;
+  ui.activeProfile.replaceChildren();
+
+  const actionGate = document.createElement('option');
+  actionGate.value = PROFILE_MODE_ACTION_GATE;
+  actionGate.textContent = 'ACTION_GATE — chat/acciones normales';
+  ui.activeProfile.append(actionGate);
+
+  backendProfileIds = new Set();
+  for (const profile of profiles) {
+    if (!profile || typeof profile.id !== 'string' || !profile.id.trim()) continue;
+    const option = document.createElement('option');
+    option.value = profile.id;
+    option.textContent = `${profile.id} — ${profile.description ?? profile.label ?? 'perfil especializado'}`;
+    ui.activeProfile.append(option);
+    backendProfileIds.add(profile.id);
+  }
+
+  backendProfilesLoaded = backendProfileIds.size > 0;
+  ui.activeProfile.disabled = !backendProfilesLoaded;
+  if (backendProfilesLoaded && (previous === PROFILE_MODE_ACTION_GATE || backendProfileIds.has(previous))) {
+    ui.activeProfile.value = previous;
+  } else {
+    ui.activeProfile.value = PROFILE_MODE_ACTION_GATE;
+  }
+  syncActiveProfileSelection(ui.activeProfile.value);
+}
+
+function loadBackendProfiles(health) {
+  const profiles = Array.isArray(health?.profiles) ? health.profiles : [];
+  renderProfileOptions(profiles);
+  if (!backendProfilesLoaded) {
+    setStatus('PROFILE_OPTIONS_UNAVAILABLE: no se cargaron perfiles desde /api/health. El dashboard queda en ACTION_GATE.', 'error');
+  }
 }
 
 function getDashboardProfileMode() {
@@ -818,7 +864,7 @@ try {
   if (health.ok) {
     setText(ui.policy, health.policy_version);
     if (health.dispatch_available === false) setText(ui.dispatch, 'NO');
-    syncActiveProfileSelection();
+    loadBackendProfiles(health);
   }
 } catch {
   setStatus('El health check del panel falló. No se intentó ninguna acción.', 'error');
