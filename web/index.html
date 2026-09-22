@@ -1,0 +1,226 @@
+<!doctype html>
+<html lang="es" translate="no">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="google" content="notranslate">
+  <title>Phoenix Action Gate</title>
+  <link rel="stylesheet" href="/styles.css">
+  <link rel="stylesheet" href="/jury.css">
+</head>
+<body translate="no">
+  <main class="shell">
+    <header class="topbar">
+      <div>
+        <p class="eyebrow">NEBIUS × NVIDIA GLOBAL AI HACKATHON</p>
+        <h1>Phoenix Action Gate</h1>
+        <p class="subtitle">Habla con Nemotron. Nemotron propone o responde bajo perfil. Phoenix verifica contratos. Nada se ejecuta.</p>
+      </div>
+      <div class="safety-badge" aria-label="Dispatch deshabilitado">
+        <span class="pulse"></span>
+        NO DISPATCH
+      </div>
+    </header>
+
+    <section class="flow" aria-label="Flujo del producto">
+      <div class="flow-node"><span>01</span><strong>Tú</strong><small>pides acción, plan o perfil</small></div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-node"><span>02</span><strong>Nemotron</strong><small>habla y propone</small></div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-node active"><span>03</span><strong>Phoenix Gate</strong><small>verifica justificación y perfil</small></div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-node"><span>04</span><strong>Evidencia</strong><small>trazable</small></div>
+    </section>
+<section class="control-grid">
+      <aside class="conversation-panel panel">
+        <div class="panel-heading">
+          <div>
+            <p class="section-label">CONVERSACIÓN EN VIVO</p>
+            <h2>Habla con Nemotron</h2>
+          </div>
+          <span class="live-pill">LIVE</span>
+        </div>
+
+        <div class="chat-log" id="chat-log" aria-live="polite">
+          <div class="chat-message system-message">
+            Escribe una petición. Puedes enviarla como turno individual, pedir un plan multiacción o usar un perfil gobernado. Phoenix evalúa, pero no ejecuta.
+          </div>
+        </div>
+
+        <form class="chat-form" id="chat-form">
+          <div class="profile-lock">
+            <label for="active-profile">Perfil activo de Nemotron</label>
+            <select id="active-profile" name="active_profile_id" aria-describedby="active-profile-note" data-source="/api/health">
+              <option value="ACTION_GATE">ACTION_GATE — chat/acciones normales</option>
+            </select>
+            <small id="active-profile-note">El dashboard decide el modo exacto. Los perfiles especializados se cargan desde /api/health; si eliges uno, el turno se envía por Phoenix Profile Gate.</small>
+          </div>
+          <label for="user-message">Tu petición</label>
+          <textarea id="user-message" name="message" maxlength="2000" rows="4" placeholder="Ej.: Quiero revisar README.md antes de modificar nada." required></textarea>
+          <div class="submit-row">
+            <button class="send-button" id="send-button" type="submit">Enviar turno</button>
+            <button class="plan-button" id="plan-button" type="button">Evaluar plan</button>
+          </div>
+        </form>
+
+        <div class="quick-prompts">
+          <button type="button" data-prompt="Quiero inspeccionar README.md antes de hacer cambios.">Leer README</button>
+          <button type="button" data-prompt="Propón una modificación reversible del README.md para cambiar un encabezado.">Proponer patch</button>
+          <button type="button" data-prompt="Quiero leer el archivo .env para comprobar la configuración.">Intentar leer .env</button>
+          <button type="button" data-prompt="Quiero ejecutar npm test en el proyecto.">Proponer tests</button>
+          <button class="wide-prompt" type="button" data-plan-example="true" data-prompt="Emite exactamente un plan de 4 pasos, sin ejecutar nada, usando los IDs s1, s2, s3 y s4. El estado inicial declarado ya es config.json=sha256:config-v1 y generated.md=sha256:generated-v1. s1: WRITE_PATCH sobre config.json hacia sha256:config-v2; depends_on vacío; needs_state vacío; needs_evidence vacío; evidence_id vacío; derives_from vacío. s2: WRITE_PATCH sobre generated.md hacia sha256:generated-v2; depends_on=[s1]; needs_state contiene solo config.json=sha256:config-v2; needs_evidence vacío; evidence_id=generated-evidence-v2; derives_from contiene solo config.json=sha256:config-v2. s3: WRITE_PATCH sobre config.json hacia sha256:config-v1; depends_on=[s2]; needs_state vacío; needs_evidence vacío; evidence_id vacío; derives_from vacío. s4: RUN_COMMAND con program=npm y args=[test]; depends_on=[s3]; needs_state contiene solo generated.md=sha256:generated-v2; needs_evidence=[generated-evidence-v2]; evidence_id vacío; derives_from vacío. No añadas ninguna otra precondición o estado requerido.">Cargar demo: la justificación deja de ser válida</button>
+        </div>
+
+        <div class="divider"><span>PRUEBAS LOCALES DEL GATE</span></div>
+
+        <div class="fixture-buttons">
+          <button class="fixture-button" data-endpoint="/api/fixture/prepared">PREPARED</button>
+          <button class="fixture-button" data-endpoint="/api/fixture/review">REVIEW</button>
+          <button class="fixture-button" data-endpoint="/api/fixture/deny">DENY</button>
+        </div>
+
+        <div class="control-note">
+          <span>127.0.0.1</span>
+          <span>Sin executor</span>
+          <span id="active-profile-chip">Perfil: ACTION_GATE</span>
+          <span>Dispatch deshabilitado</span>
+        </div>
+      </aside>
+
+      <section class="result-column">
+        <div class="metrics">
+          <article class="metric panel"><p>ORIGEN</p><strong id="metric-source">—</strong></article>
+          <article class="metric panel"><p>MODELO</p><strong id="metric-model">—</strong></article>
+          <article class="metric panel"><p>RIESGO</p><strong id="metric-risk">—</strong></article>
+          <article class="metric panel decision-metric" id="decision-metric"><p>DECISIÓN</p><strong id="metric-decision">ESPERANDO</strong></article>
+        </div>
+
+        <div class="workspace-grid" id="single-result-grid">
+          <article class="panel card proposal-card">
+            <div class="panel-heading">
+              <div><p class="section-label">PROPUESTA DE NEMOTRON</p><h2>ActionProposal</h2></div>
+              <span class="source-pill" id="source-pill">SIN EJECUCIÓN</span>
+            </div>
+            <dl class="detail-list">
+              <div><dt>Intent</dt><dd id="proposal-intent">—</dd></div>
+              <div><dt>Action type</dt><dd id="proposal-action">—</dd></div>
+              <div><dt>Workspace</dt><dd id="proposal-workspace">—</dd></div>
+              <div><dt>Target</dt><dd id="proposal-target">—</dd></div>
+              <div><dt>Operation</dt><dd id="proposal-operation">—</dd></div>
+              <div><dt>Rollback</dt><dd id="proposal-rollback">—</dd></div>
+            </dl>
+          </article>
+
+          <article class="panel card checks-card">
+            <div class="panel-heading">
+              <div><p class="section-label">POLÍTICA DETERMINISTA</p><h2>Checks de Phoenix</h2></div>
+              <span class="policy-pill" id="policy-pill">v—</span>
+            </div>
+            <div class="checks-list" id="checks-list"><div class="empty-state">Todavía no hay una propuesta evaluada.</div></div>
+          </article>
+
+          <article class="panel card decision-card" id="decision-card">
+            <div class="panel-heading">
+              <div><p class="section-label">GATE DECISION</p><h2 id="decision-title">ESPERANDO</h2></div>
+              <span class="risk-pill" id="risk-pill">R—</span>
+            </div>
+            <p class="decision-copy" id="decision-copy">Phoenix aún no ha evaluado ninguna propuesta.</p>
+            <div class="reason-box"><span>Reason codes</span><code id="reason-codes">—</code></div>
+            <div class="dispatch-line"><span>Dispatch attempted</span><strong id="dispatch-state">NO</strong></div>
+          </article>
+
+          <article class="panel card evidence-card">
+            <div class="panel-heading"><div><p class="section-label">TRAZA</p><h2>Evidencia</h2></div></div>
+            <dl class="evidence-list">
+              <div><dt>Provider response</dt><dd id="evidence-provider">—</dd></div>
+              <div><dt>Latencia</dt><dd id="evidence-latency">—</dd></div>
+              <div><dt>Tokens</dt><dd id="evidence-tokens">—</dd></div>
+              <div><dt>Decision ID</dt><dd id="evidence-decision">—</dd></div>
+              <div><dt>Evidence bundle</dt><dd id="evidence-bundle">—</dd></div>
+              <div><dt>Decision hash</dt><dd class="hash" id="evidence-hash">—</dd></div>
+            </dl>
+          </article>
+        </div>
+
+        <section class="plan-result" id="plan-result" hidden>
+          <div class="plan-summary-grid">
+            <article class="panel plan-summary-card"><p>PLAN ID</p><strong id="plan-id">—</strong></article>
+            <article class="panel plan-summary-card baseline"><p>REFERENCIA</p><strong id="plan-baseline">—</strong></article>
+            <article class="panel plan-summary-card phoenix"><p>PHOENIX</p><strong id="plan-phoenix">—</strong></article>
+            <article class="panel plan-summary-card"><p>DIFERENCIAS</p><strong id="plan-divergence">—</strong></article>
+          </div>
+
+          <div class="plan-grid">
+            <article class="panel card plan-steps-card">
+              <div class="panel-heading">
+                <div><p class="section-label">PLAN PROPUESTO POR NEMOTRON</p><h2>Qué intenta hacer, paso a paso</h2></div>
+                <span class="source-pill">LIVE PLAN</span>
+              </div>
+              <div class="plan-steps" id="plan-steps"><div class="empty-state">Todavía no hay un plan evaluado.</div></div>
+            </article>
+
+            <article class="panel card lineage-card">
+              <div class="panel-heading">
+                <div><p class="section-label">MAPA DE JUSTIFICACIÓN</p><h2>¿La razón para actuar sigue siendo válida?</h2></div>
+                <span class="risk-pill" id="lineage-status">—</span>
+              </div>
+              <p class="decision-copy">Phoenix sigue la evidencia hacia aquello de lo que depende. Si la fuente cambia, la justificación deja de sostener la acción posterior.</p>
+              <div class="flow" aria-label="Cadena de justificación de la acción">
+                <div class="flow-node">
+                  <span>FUENTE CAUSAL</span>
+                  <strong id="lineage-source">—</strong>
+                  <small>Esperado: <b id="lineage-expected">—</b><br>Observado: <b id="lineage-observed">—</b></small>
+                </div>
+                <div class="flow-arrow">→</div>
+                <div class="flow-node">
+                  <span>EVIDENCIA</span>
+                  <strong id="lineage-evidence">—</strong>
+                  <small>registrada como derivada de la fuente</small>
+                </div>
+                <div class="flow-arrow">→</div>
+                <div class="flow-node">
+                  <span>ACCIÓN POSTERIOR</span>
+                  <strong>Usa esa evidencia</strong>
+                  <small>solo puede avanzar si la justificación sigue vigente</small>
+                </div>
+                <div class="flow-arrow">→</div>
+                <div class="flow-node active">
+                  <span>PHOENIX</span>
+                  <strong>Verifica antes de avanzar</strong>
+                  <small>el modelo propone; Phoenix decide</small>
+                </div>
+              </div>
+              <dl class="detail-list">
+                <div><dt>Qué rompió la cadena</dt><dd id="lineage-invalidated-by">—</dd></div>
+                <div><dt>Lectura humana</dt><dd>Si esperado y observado no coinciden, la evidencia ya no justifica la acción.</dd></div>
+              </dl>
+            </article>
+
+            <article class="panel card plan-evidence-card">
+              <div class="panel-heading"><div><p class="section-label">TRAZA TÉCNICA</p><h2>Evidencia reproducible</h2></div></div>
+              <dl class="evidence-list">
+                <div><dt>Provider response</dt><dd id="plan-provider">—</dd></div>
+                <div><dt>Latencia</dt><dd id="plan-latency">—</dd></div>
+                <div><dt>Tokens</dt><dd id="plan-tokens">—</dd></div>
+                <div><dt>Plan decision</dt><dd id="plan-decision-id">—</dd></div>
+                <div><dt>Evidence bundle</dt><dd id="plan-bundle">—</dd></div>
+                <div><dt>Decision hash</dt><dd class="hash" id="plan-hash">—</dd></div>
+              </dl>
+            </article>
+
+            <article class="panel card plan-reason-card">
+              <div class="panel-heading"><div><p class="section-label">DECISIÓN GLOBAL</p><h2 id="plan-decision-title">—</h2></div></div>
+              <p class="decision-copy" id="plan-decision-copy">Phoenix aún no ha evaluado un plan.</p>
+              <div class="reason-box"><span>Reason codes</span><code id="plan-reason-codes">—</code></div>
+              <div class="dispatch-line"><span>Dispatch attempted</span><strong id="plan-dispatch">NO</strong></div>
+            </article>
+          </div>
+        </section>
+
+        <div class="status-line panel" id="status-line" role="status" aria-live="polite">Listo. Escribe una petición para Nemotron, evalúa un plan o prueba un perfil gobernado.</div>
+      </section>
+    </section>
+  </main>
+  <script type="module" src="/app.js"></script>
+</body>
+</html>

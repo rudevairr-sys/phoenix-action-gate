@@ -1,0 +1,13 @@
+{
+  "schema_version": "0.1",
+  "proposal_id": "patch-readme-001",
+  "intent": "Update one documented heading",
+  "action_type": "WRITE_PATCH",
+  "target": {"workspace_id": "demo-workspace", "relative_path": "README.md"},
+  "operation": {"kind": "write_patch", "diff": "@@ -1 +1 @@\n-Old\n+New", "base_version": "sha256:demo"},
+  "requested_capabilities": ["WRITE_PATCH"],
+  "preconditions": ["base_version_matches"],
+  "reversibility": {"kind": "ROLLBACK_PLAN", "rollback_plan": {"kind": "reverse_diff"}},
+  "estimated_effects": ["README heading changes"],
+  "model_context": {"model_id": "nvidia/Nemotron-3_5-Lightning", "provider_request_id": null}
+}

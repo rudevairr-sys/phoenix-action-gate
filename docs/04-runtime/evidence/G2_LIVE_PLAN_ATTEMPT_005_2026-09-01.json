@@ -1,0 +1,22 @@
+{
+  "schema_version": "1.0",
+  "captured_at": "2026-09-01",
+  "evidence_type": "operator_observed_live_plan_failure",
+  "command": "npm run demo:plan:live",
+  "result": {
+    "ok": false,
+    "state": "FAIL_CLOSED",
+    "provider_error_code": "TOKEN_FACTORY_TIMEOUT",
+    "dispatch_attempted": false
+  },
+  "provider": {
+    "transport": "responses",
+    "endpoint": "https://api.tokenfactory.nebius.com/v1/responses",
+    "timeout_ms": 60000,
+    "observed_latency_ms": 60039
+  },
+  "classification": "COUNTEREXAMPLE",
+  "conclusion": "After removing the live-rejected max_tool_calls field, the synchronous Responses request did not return before the 60 second application timeout. For a hackathon demo path, extending synchronous latency beyond one minute is pruned rather than promoted.",
+  "next_candidate": "Return to the already runtime-observed Chat Completions explicit-function transport, but replace the verbose multi-action function contract with a compact semantic plan envelope. The adapter will deterministically derive proposal IDs, intents, preconditions, estimated effects and non-executable patch projection metadata; Nemotron still proposes dependencies, state transitions and evidence lineage. Phoenix Plan Gate remains unchanged.",
+  "promotion": "NOT_PROMOTED"
+}

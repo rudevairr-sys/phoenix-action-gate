@@ -1,0 +1,28 @@
+{
+  "schema_version": "1.0",
+  "captured_at": "2026-09-01",
+  "evidence_type": "operator_observed_test_run",
+  "command": "npm test",
+  "suite": "node --test",
+  "result": {
+    "tests": 56,
+    "pass": 56,
+    "fail": 0,
+    "cancelled": 0,
+    "skipped": 0,
+    "todo": 0,
+    "duration_ms": 638.0994
+  },
+  "scope": [
+    "single-turn conversation",
+    "incomplete write clarification",
+    "exact duplicate destructive-call deduplication",
+    "deterministic gate",
+    "compact multi-action plan",
+    "stale-state and evidence-lineage trials",
+    "panel live-plan endpoint",
+    "panel chat and fixture regressions"
+  ],
+  "boundary": "This run occurred before the later operational-equivalence tool-call deduplication change and before two additional regression tests were added. The current worktree therefore requires a fresh test run expected to contain 58 tests before checkpoint promotion.",
+  "source_note": "Console output supplied by the operator."
+}

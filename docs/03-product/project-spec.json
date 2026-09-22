@@ -1,0 +1,263 @@
+{
+  "objective": "Construir una aplicación pública nueva que convierta una intención de agente en una propuesta de acción estructurada mediante un modelo NVIDIA servido por Nebius, y que someta esa propuesta a un gate determinista que emita DENY, REVIEW o PREPARED con evidencia, sin ejecutar la acción.",
+  "actors": [
+    {
+      "id": "operator",
+      "role": "Desarrollador u operador que solicita y revisa una acción propuesta sobre un workspace acotado."
+    },
+    {
+      "id": "human_reviewer",
+      "role": "Persona que resuelve las decisiones REVIEW sin conceder dispatch productivo."
+    },
+    {
+      "id": "nemotron_proposer",
+      "role": "Modelo NVIDIA que transforma una intención en ActionProposal; no decide ni ejecuta."
+    },
+    {
+      "id": "deterministic_gate",
+      "role": "Componente que valida contrato, riesgo, preflight, reversibilidad y evidencia."
+    },
+    {
+      "id": "hackathon_judge",
+      "role": "Evaluador que debe poder reproducir la demostración desde el repositorio público."
+    }
+  ],
+  "journeys": [
+    {
+      "id": "prepare_bounded_test_command",
+      "summary": "El operador solicita ejecutar tests; Nemotron propone RUN_COMMAND; el gate comprueba allowlist, argumentos, cwd, timeout y evidencia y devuelve PREPARED sin ejecutar."
+    },
+    {
+      "id": "review_reversible_patch",
+      "summary": "Nemotron propone WRITE_PATCH con diff y rollback; el gate clasifica R2 y devuelve REVIEW; el humano acepta o rechaza la preparación, pero no se produce dispatch."
+    },
+    {
+      "id": "deny_destructive_or_secret_action",
+      "summary": "Una propuesta destructiva, ambigua, dirigida a secretos o sin rollback suficiente se clasifica R3 y devuelve DENY con códigos de razón y evidencia."
+    },
+    {
+      "id": "fail_closed_on_model_or_contract_error",
+      "summary": "Timeout, rechazo del proveedor, JSON inválido, versión desconocida o campos incompletos producen DENY y una traza sanitizada."
+    }
+  ],
+  "functional_requirements": [
+    {
+      "id": "FR-01",
+      "requirement": "Recibir una intención textual no sensible y solicitar a un modelo NVIDIA disponible en Nebius Token Factory una ActionProposal estructurada."
+    },
+    {
+      "id": "FR-02",
+      "requirement": "Validar ActionProposal contra un esquema versionado antes de cualquier clasificación."
+    },
+    {
+      "id": "FR-03",
+      "requirement": "Soportar en el MVP únicamente READ_CONTEXT, WRITE_PATCH y RUN_COMMAND."
+    },
+    {
+      "id": "FR-04",
+      "requirement": "Clasificar cada propuesta como R0, R1, R2 o R3 mediante reglas deterministas versionadas."
+    },
+    {
+      "id": "FR-05",
+      "requirement": "Ejecutar preflight de esquema, alcance, capacidad, secreto, allowlist, reversibilidad y evidencia."
+    },
+    {
+      "id": "FR-06",
+      "requirement": "Emitir exactamente uno de DENY, REVIEW o PREPARED; ningún resultado ejecuta acciones."
+    },
+    {
+      "id": "FR-07",
+      "requirement": "Permitir que un revisor humano acepte o rechace una preparación cuando el resultado sea REVIEW, conservando la decisión como evidencia."
+    },
+    {
+      "id": "FR-08",
+      "requirement": "Mostrar intención, propuesta, riesgo, checks, reversibilidad, resultado, razones y procedencia en una interfaz única."
+    },
+    {
+      "id": "FR-09",
+      "requirement": "Persistir un evidence bundle sanitizado y reproducible por evaluación."
+    },
+    {
+      "id": "FR-10",
+      "requirement": "Proporcionar fixtures para un PREPARED, un REVIEW, un DENY y fallos de proveedor o contrato."
+    }
+  ],
+  "non_functional_requirements": [
+    {
+      "id": "NFR-01",
+      "requirement": "Misma propuesta normalizada y misma versión de política deben producir la misma decisión y el mismo hash de decisión."
+    },
+    {
+      "id": "NFR-02",
+      "requirement": "Toda condición desconocida, inválida o no demostrada debe fallar cerrada."
+    },
+    {
+      "id": "NFR-03",
+      "requirement": "Claves, prompts sensibles, rutas absolutas y contenido secreto no deben persistirse en repositorio, UI o evidencia pública."
+    },
+    {
+      "id": "NFR-04",
+      "requirement": "El repositorio público debe funcionar desde un clon limpio sin depender de los laboratorios privados Phoenix."
+    },
+    {
+      "id": "NFR-05",
+      "requirement": "La evaluación determinista local de un fixture debe completar en menos de 100 ms en el entorno de referencia, excluyendo inferencia y renderizado."
+    },
+    {
+      "id": "NFR-06",
+      "requirement": "Cada decisión debe enlazar proposal_id, policy_version, model_id, provider_request_id sanitizado, checks y evidence_bundle_id."
+    },
+    {
+      "id": "NFR-07",
+      "requirement": "La interfaz debe explicar el resultado sin exigir conocimiento interno de Phoenix."
+    },
+    {
+      "id": "NFR-08",
+      "requirement": "La aplicación debe conservar separación explícita entre documentado, implementado, test ejecutado, runtime observado y producción validada."
+    }
+  ],
+  "assumptions": [
+    {
+      "id": "A-01",
+      "assumption": "El usuario inicial es un desarrollador u operador que revisa acciones de un agente de código."
+    },
+    {
+      "id": "A-02",
+      "assumption": "Token Factory Serverless será suficiente para el MVP; el ID definitivo de Nemotron se obtendrá mediante GET /v1/models."
+    },
+    {
+      "id": "A-03",
+      "assumption": "El MVP usa un workspace ficticio o fixture sin secretos ni código privado."
+    },
+    {
+      "id": "A-04",
+      "assumption": "La revisión humana se demuestra en la UI, pero no activa un ejecutor."
+    },
+    {
+      "id": "A-05",
+      "assumption": "No se importará código del core Phoenix durante F0.5; cualquier reutilización posterior pasará un gate de procedencia y licencia."
+    }
+  ],
+  "architecture": {
+    "style": "modular_monolith",
+    "modules": [
+      {
+        "id": "web_ui",
+        "responsibility": "Capturar intención y presentar propuesta, checks, revisión y evidencia."
+      },
+      {
+        "id": "nemotron_adapter",
+        "responsibility": "Encapsular la API compatible con OpenAI de Token Factory, timeouts, IDs y sanitización."
+      },
+      {
+        "id": "contracts",
+        "responsibility": "Definir y validar ActionProposal, GateDecision y HumanReviewRecord."
+      },
+      {
+        "id": "deterministic_policy",
+        "responsibility": "Clasificar riesgo y ejecutar preflight con política versionada."
+      },
+      {
+        "id": "review_service",
+        "responsibility": "Registrar aceptación o rechazo humano de propuestas REVIEW."
+      },
+      {
+        "id": "evidence_store",
+        "responsibility": "Guardar bundles sanitizados y exportables para demo y benchmark."
+      }
+    ],
+    "excluded_modules": [
+      "production_dispatcher",
+      "general_domainpack_registry",
+      "private_phoenix_core_dependency",
+      "multi_tenant_platform",
+      "autonomous_shell_executor"
+    ],
+    "data": "Artefactos JSON versionados y evidence bundles locales; persistencia de producción fuera de alcance.",
+    "external_boundary": "Únicamente el adaptador Nebius realiza red; el gate determinista no delega su decisión al modelo."
+  },
+  "acceptance_criteria": [
+    {
+      "id": "AC-01",
+      "criterion": "Una respuesta Nemotron válida produce una ActionProposal que supera validación de esquema."
+    },
+    {
+      "id": "AC-02",
+      "criterion": "JSON inválido, timeout, modelo no disponible o versión de esquema desconocida produce DENY sin excepción abierta."
+    },
+    {
+      "id": "AC-03",
+      "criterion": "RUN_COMMAND allowlisted para tests, con cwd y timeout acotados, produce PREPARED y no ejecuta el comando."
+    },
+    {
+      "id": "AC-04",
+      "criterion": "WRITE_PATCH con diff y rollback suficientes produce REVIEW y permite registrar decisión humana sin dispatch."
+    },
+    {
+      "id": "AC-05",
+      "criterion": "Comando destructivo, target secreto, path traversal, capacidad desconocida o rollback insuficiente produce DENY."
+    },
+    {
+      "id": "AC-06",
+      "criterion": "Repetir un fixture con la misma policy_version produce el mismo outcome, reason_codes y decision_hash."
+    },
+    {
+      "id": "AC-07",
+      "criterion": "La UI permite distinguir visualmente la propuesta del modelo de la decisión del gate."
+    },
+    {
+      "id": "AC-08",
+      "criterion": "Cada demo exporta un evidence bundle sanitizado con identificadores, checks y versiones."
+    },
+    {
+      "id": "AC-09",
+      "criterion": "Una búsqueda estática y revisión manual no encuentran claves, secretos ni rutas privadas en el repositorio o fixtures."
+    },
+    {
+      "id": "AC-10",
+      "criterion": "Un evaluador puede clonar, instalar, ejecutar tests e iniciar la demo siguiendo únicamente el README público."
+    },
+    {
+      "id": "AC-11",
+      "criterion": "No existe módulo ni endpoint que despache la acción propuesta."
+    }
+  ],
+  "risks": [
+    {
+      "id": "RISK-01",
+      "risk": "El modelo candidato cambia o deja de estar disponible en Token Factory.",
+      "mitigation": "Descubrir y registrar el ID mediante GET /v1/models; desacoplarlo en el adaptador."
+    },
+    {
+      "id": "RISK-02",
+      "risk": "Nemotron no respeta consistentemente el esquema estructurado.",
+      "mitigation": "Validación estricta, reintento máximo acotado y DENY ante fallo."
+    },
+    {
+      "id": "RISK-03",
+      "risk": "El gate parece un conjunto de ifs sin valor diferencial frente al baseline.",
+      "mitigation": "Mantener claims limitados y ejecutar H-PHX-05 contra un bespoke competente."
+    },
+    {
+      "id": "RISK-04",
+      "risk": "La importación de Phoenix introduce licencia, acoplamiento o dependencia privada.",
+      "mitigation": "Preferir contratos limpios; registrar fuente, versión, hash, licencia y transformación de toda importación."
+    },
+    {
+      "id": "RISK-05",
+      "risk": "La candidatura queda como prueba técnica sin experiencia coherente.",
+      "mitigation": "Diseñar una única pantalla de revisión y una demo de tres casos conectados."
+    },
+    {
+      "id": "RISK-06",
+      "risk": "El trabajo remoto se etiqueta como implementado sin compilación o runtime.",
+      "mitigation": "Mantener F0.5 como documentación y validar código únicamente al recuperar SION."
+    },
+    {
+      "id": "RISK-07",
+      "risk": "El alcance crece hacia una plataforma general antes de cerrar el MVP.",
+      "mitigation": "Limitar a un usuario, tres clases de acción, una integración y ausencia de dispatch."
+    }
+  ],
+  "status": "specified_with_assumptions"
+}

@@ -1,0 +1,38 @@
+{
+  "id": "G11_DASHBOARD_PROFILE_LOCK_TESTS_2026-09-20",
+  "status": "TEST_EXECUTED_PASS",
+  "at": "2026-09-20T20:13:00+02:00",
+  "project": "Phoenix Action Gate",
+  "branch": "review/contest-surface-20260918",
+  "scope": "Dashboard-level Nemotron operating profile selector",
+  "command": "node --version; npm test",
+  "executed_via": "Remote_Desktop_Commander",
+  "node_version": "v24.12.0",
+  "test_runner": "node --test",
+  "tests": 149,
+  "pass": 149,
+  "fail": 0,
+  "cancelled": 0,
+  "skipped": 0,
+  "todo": 0,
+  "duration_ms": 804.0266,
+  "implemented_behavior": [
+    "Dashboard exposes active-profile selector for Nemotron operating mode",
+    "ACTION_GATE preserves normal chat/action flow",
+    "MONO_SI_NO, FERRUM_RUST, ACTION_PROPOSER and SAFE_NOOP route main chat submission through /api/profile-chat",
+    "Profile selector synchronizes with the Profile Gate lab selector",
+    "Active profile chip shows the selected operating mode",
+    "Dispatch remains disabled"
+  ],
+  "dispatch_attempted": false,
+  "secret_exposed": false,
+  "live_nebius_runtime_observed_after_dashboard_lock": false,
+  "truthcore": {
+    "DASHBOARD_PROFILE_LOCK_IMPLEMENTED": true,
+    "DASHBOARD_PROFILE_LOCK_TEST_EXECUTED": true,
+    "DASHBOARD_PROFILE_LOCK_LOCAL_TEST_PASS": true,
+    "LIVE_NEBIUS_PROFILE_LOCK_RUNTIME_OBSERVED": false,
+    "PRODUCTION_VALIDATED": false,
+    "DEVPOST_SUBMITTED": false
+  }
+}

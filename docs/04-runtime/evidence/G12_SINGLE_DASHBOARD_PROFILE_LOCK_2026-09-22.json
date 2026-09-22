@@ -1,0 +1,31 @@
+{
+  "id": "G12_SINGLE_DASHBOARD_PROFILE_LOCK_2026-09-22",
+  "status": "TEST_EXECUTED_PASS",
+  "at": "2026-09-22T11:17:00+02:00",
+  "scope": "Remove duplicated profile form and load dashboard Nemotron profiles from backend health response",
+  "problem_observed": "UI still showed the secondary 'Perfil de Nemotron / Enviar con perfil' block and did not make backend-loaded profiles the single source of truth.",
+  "changes": [
+    "Removed secondary profile-gate form block from web/index.html",
+    "Kept one dashboard selector: Perfil activo de Nemotron",
+    "Changed profile selector to load specialized profiles from /api/health",
+    "Maintained ACTION_GATE as normal chat/action mode",
+    "Specialized dashboard selections route main Enviar turno flow to /api/profile-chat",
+    "Added regression assertions that the second profile form does not return"
+  ],
+  "command": "node --version; npm test",
+  "node_version": "v24.12.0",
+  "tests": 149,
+  "pass": 149,
+  "fail": 0,
+  "duration_ms": 597.319,
+  "dispatch_attempted": false,
+  "secret_exposed": false,
+  "live_nebius_runtime_observed": false,
+  "truthcore": {
+    "SECONDARY_PROFILE_FORM_REMOVED": true,
+    "DASHBOARD_PROFILE_LOCK_SINGLE_ENTRYPOINT": true,
+    "PROFILES_LOADED_FROM_BACKEND_HEALTH": true,
+    "LOCAL_TEST_PASS": true,
+    "LIVE_RUNTIME_AFTER_RESTART_PENDING": true
+  }
+}

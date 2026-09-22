@@ -1,0 +1,73 @@
+{
+  "schema_version": "0.1",
+  "plan_id": "stale-state-plan-001",
+  "goal": "Inspect README, prepare a reversible patch, then run tests using declared evidence without executing anything.",
+  "initial_state": {
+    "README.md": "sha256:v1"
+  },
+  "actions": [
+    {
+      "step_id": "s1-read-readme-v1",
+      "depends_on": [],
+      "requires_state": {
+        "README.md": "sha256:v1"
+      },
+      "proposal": {
+        "schema_version": "0.1",
+        "proposal_id": "stale-read-001",
+        "intent": "Inspect README at the current known version",
+        "action_type": "READ_CONTEXT",
+        "target": {"workspace_id": "demo-workspace", "relative_path": "README.md"},
+        "operation": {"kind": "read_file"},
+        "requested_capabilities": ["READ_CONTEXT"],
+        "preconditions": ["README.md is sha256:v1"],
+        "reversibility": {"kind": "INHERENT", "rollback_plan": null},
+        "estimated_effects": [],
+        "model_context": {"model_id": "nvidia/Nemotron-3_5-Lightning", "provider_request_id": "fixture-stale"}
+      }
+    },
+    {
+      "step_id": "s2-patch-v1-to-v2",
+      "depends_on": ["s1-read-readme-v1"],
+      "requires_state": {
+        "README.md": "sha256:v1"
+      },
+      "produces_state": {
+        "README.md": "sha256:v2"
+      },
+      "proposal": {
+        "schema_version": "0.1",
+        "proposal_id": "stale-patch-001",
+        "intent": "Prepare a reversible README heading update from version v1",
+        "action_type": "WRITE_PATCH",
+        "target": {"workspace_id": "demo-workspace", "relative_path": "README.md"},
+        "operation": {"kind": "write_patch", "diff": "@@ -1 +1 @@\n-Welcome\n+Welcome to Phoenix", "base_version": "sha256:v1"},
+        "requested_capabilities": ["WRITE_PATCH"],
+        "preconditions": ["README.md is sha256:v1"],
+        "reversibility": {"kind": "ROLLBACK_PLAN", "rollback_plan": {"kind": "reverse_diff"}},
+        "estimated_effects": ["README.md projected to sha256:v2 if approved"],
+        "model_context": {"model_id": "nvidia/Nemotron-3_5-Lightning", "provider_request_id": "fixture-stale"}
+      }
+    },
+    {
+      "step_id": "s3-test-with-stale-evidence",
+      "depends_on": ["s2-patch-v1-to-v2"],
+      "requires_state": {
+        "README.md": "sha256:v1"
+      },
+      "proposal": {
+        "schema_version": "0.1",
+        "proposal_id": "stale-tests-001",
+        "intent": "Run bounded tests while relying on the previously observed README version v1",
+        "action_type": "RUN_COMMAND",
+        "target": {"workspace_id": "demo-workspace", "relative_path": null},
+        "operation": {"kind": "run_command", "program": "npm", "args": ["test"], "cwd": ".", "timeout_ms": 60000},
+        "requested_capabilities": ["RUN_COMMAND"],
+        "preconditions": ["README.md evidence remains sha256:v1"],
+        "reversibility": {"kind": "INHERENT", "rollback_plan": null},
+        "estimated_effects": ["test process only"],
+        "model_context": {"model_id": "nvidia/Nemotron-3_5-Lightning", "provider_request_id": "fixture-stale"}
+      }
+    }
+  ]
+}

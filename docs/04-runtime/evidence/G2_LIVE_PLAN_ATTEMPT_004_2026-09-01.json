@@ -1,0 +1,35 @@
+{
+  "schema_version": "1.0",
+  "captured_at": "2026-09-01",
+  "evidence_type": "operator_observed_live_plan_failure",
+  "command": "npm run demo:plan:live",
+  "result": {
+    "ok": false,
+    "state": "FAIL_CLOSED",
+    "provider_error_code": "TOKEN_FACTORY_HTTP_ERROR",
+    "dispatch_attempted": false
+  },
+  "provider": {
+    "transport": "responses",
+    "model": "nvidia/Nemotron-3_5-Lightning",
+    "endpoint": "https://api.tokenfactory.nebius.com/v1/responses",
+    "http_status": 400,
+    "latency_ms": 9417,
+    "provider_response_id": null,
+    "response_status": null,
+    "usage": null
+  },
+  "provider_diagnostic": {
+    "detail": "Invalid request. Please check the parameters and try again. Details: Failed to deserialize the JSON body into the target type: max_tool_calls: unknown field `max_tool_calls`.",
+    "error": {
+      "message": "Failed to deserialize the JSON body into the target type: max_tool_calls: unknown field `max_tool_calls`.",
+      "type": "invalid_request_error",
+      "code": "json_parse_error",
+      "param": null
+    }
+  },
+  "classification": "COUNTEREXAMPLE",
+  "conclusion": "The live Nebius Responses endpoint accepts the request shape up to JSON deserialization but rejects the top-level max_tool_calls field as unknown. The provider diagnostic explicitly lists tool_choice and parallel_tool_calls among accepted fields. No other request field is changed by this counterexample.",
+  "next_candidate": "Remove only max_tool_calls from the Responses request, keep tool_choice=required and parallel_tool_calls=false, preserve the local invariant that exactly one function_call is accepted, and rerun the same live probe.",
+  "promotion": "NOT_PROMOTED"
+}

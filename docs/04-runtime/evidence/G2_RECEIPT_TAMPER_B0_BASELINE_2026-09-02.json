@@ -1,0 +1,44 @@
+{
+  "schema_version": "1.0",
+  "captured_at": "2026-09-02",
+  "trial_id": "EVIDENCE_RECEIPT_TAMPER_TRIAL_001",
+  "stage": "BASELINE_B0_ONLY",
+  "baseline_version": "snapshot-receipt-baseline/0.1.0",
+  "baseline_capabilities": {
+    "canonical_hashing": true,
+    "subject_binding": true,
+    "decision_binding": true,
+    "policy_artifact_binding": true,
+    "explicit_evidence_binding": true,
+    "current_state_input_accepted": true,
+    "current_state_reasoning": false,
+    "evidence_lineage_reasoning": false,
+    "dispatch_available": false
+  },
+  "base_plan_outcome": "REVIEW",
+  "base_plan_reason_codes": [
+    "PLAN_REQUIRES_REVIEW",
+    "CAUSAL_DEPENDENCY_ENFORCED"
+  ],
+  "cases": [
+    {"id":"T0","expected":"VALID","actual":"VALID","passed":true,"reason_codes":["SNAPSHOT_BINDINGS_VALID"]},
+    {"id":"T1","expected":"INVALID","actual":"INVALID","passed":true,"reason_codes":["DECISION_BINDING_MISMATCH"]},
+    {"id":"T2","expected":"INVALID","actual":"INVALID","passed":true,"reason_codes":["SUBJECT_BINDING_MISMATCH"]},
+    {"id":"T3","expected":"INVALID","actual":"INVALID","passed":true,"reason_codes":["POLICY_BINDING_MISMATCH"]},
+    {"id":"T4","expected":"INVALID","actual":"INVALID","passed":true,"reason_codes":["EVIDENCE_BINDING_MISMATCH"]},
+    {"id":"T5","expected":"VALID","actual":"VALID","passed":true,"reason_codes":["SNAPSHOT_BINDINGS_VALID"]},
+    {"id":"T6","expected":"VALID","actual":"VALID","passed":true,"reason_codes":["SNAPSHOT_BINDINGS_VALID"]},
+    {"id":"T7","expected":"INVALID","actual":"INVALID","passed":true,"reason_codes":["RECEIPT_CONTRACT_INVALID"]}
+  ],
+  "all_preregistered_expectations_met": true,
+  "t5_snapshot_result": "VALID",
+  "receipt_deterministic": true,
+  "receipt_bytes": 724,
+  "baseline_module_nonblank_loc": 203,
+  "verify_median_ms_250_local_iterations": 0.14765,
+  "dependencies_added": 0,
+  "dispatch_attempted": false,
+  "qualification": "B0_QUALIFIED_FOR_TRIAL_001",
+  "evidence_boundary": "This evidence qualifies B0 only. The Phoenix causal receipt candidate has not been implemented or executed, so H-TAMPER-001 remains a hypothesis and no positive receipt/tamper differentiation claim is supported.",
+  "source_note": "JSON output supplied directly by the operator after running node tools/g2_receipt_baseline_probe.mjs in the governed local workspace."
+}

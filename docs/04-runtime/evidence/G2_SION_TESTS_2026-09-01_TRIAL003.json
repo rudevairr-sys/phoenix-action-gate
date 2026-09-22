@@ -1,0 +1,29 @@
+{
+  "suite": "phoenix-action-gate-regression-trial003",
+  "state": "TEST_EXECUTED",
+  "execution_origin": "operator_local_sion_runtime",
+  "command": "npm test",
+  "working_directory": "01_MESA_PRINCIPAL/phoenix-action-gate",
+  "result": {
+    "tests": 29,
+    "suites": 0,
+    "pass": 29,
+    "fail": 0,
+    "cancelled": 0,
+    "skipped": 0,
+    "todo": 0,
+    "duration_ms": 490.5008
+  },
+  "coverage_summary": [
+    "single-action PREPARED/REVIEW/DENY",
+    "fail-closed schema and reversibility semantics",
+    "dependency propagation",
+    "Trial 002 stale-state detection and state-aware baseline qualification",
+    "Trial 003 evidence-lineage invalidation",
+    "Trial 003 negative control",
+    "deterministic plan decisions",
+    "panel health and chat contract"
+  ],
+  "dispatch_attempted": false,
+  "evidence_origin": "operator_runtime_output"
+}

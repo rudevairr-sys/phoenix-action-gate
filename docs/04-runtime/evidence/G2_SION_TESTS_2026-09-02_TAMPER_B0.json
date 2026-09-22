@@ -1,0 +1,29 @@
+{
+  "schema_version": "1.0",
+  "captured_at": "2026-09-02",
+  "evidence_type": "operator_observed_test_run",
+  "command": "npm test",
+  "suite": "node --test",
+  "result": {
+    "tests": 68,
+    "pass": 68,
+    "fail": 0,
+    "cancelled": 0,
+    "skipped": 0,
+    "todo": 0,
+    "duration_ms": 593.0824
+  },
+  "tamper_baseline_tests": {
+    "T0_untouched_snapshot": "PASS",
+    "T1_decision_changed": "PASS",
+    "T2_subject_changed": "PASS",
+    "T3_policy_artifact_changed_without_version_bump": "PASS",
+    "T4_explicit_evidence_artifact_changed": "PASS",
+    "T5_causal_source_changed_snapshot_remains_valid": "PASS",
+    "T6_unrelated_state_changed": "PASS",
+    "T7_truncated_receipt": "PASS",
+    "T7_unknown_receipt_field": "PASS",
+    "deterministic_receipt": "PASS"
+  },
+  "source_note": "Console output supplied directly by the operator from the governed local workspace. This evidence covers the full regression suite after adding snapshot-receipt-baseline/0.1.0."
+}

@@ -1,0 +1,57 @@
+{
+  "schema_version": "1.0",
+  "captured_at": "2026-09-18T10:24:00Z",
+  "evidence_type": "human_terminal_observed_test_result",
+  "project": "Phoenix Action Gate",
+  "relative_path": "01_MESA_PRINCIPAL/phoenix-action-gate",
+  "command_sequence": [
+    "cd C:\\Users\\Usuario\\.chatgpt\\Gobernanza_Phoenix\\SION_TALLER_RUST\\SION_WORKSPACE\\01_MESA_PRINCIPAL\\phoenix-action-gate",
+    "node --version",
+    "npm test"
+  ],
+  "runtime": {
+    "node_version": "v24.12.0",
+    "shell": "PowerShell"
+  },
+  "npm_script": {
+    "package": "phoenix-action-gate@0.1.0",
+    "script": "test",
+    "resolved_command": "node --test"
+  },
+  "result": {
+    "tests": 122,
+    "suites": 0,
+    "pass": 122,
+    "fail": 0,
+    "cancelled": 0,
+    "skipped": 0,
+    "todo": 0,
+    "duration_ms": 737.3368,
+    "exit_status_inferred": "success"
+  },
+  "coverage_scope_observed_from_output": [
+    "single-turn adapter and fail-closed provider behavior",
+    "core gate PREPARED/REVIEW/DENY decisions without dispatch",
+    "coherent baseline receipts",
+    "Phoenix governance context receipts",
+    "jury surface justification map",
+    "B1 lineage-aware receipt baseline",
+    "compact live plan contract",
+    "Phoenix tamper receipt cases",
+    "Plan Gate causal propagation and Trial 002/003 fixtures",
+    "snapshot receipt baseline",
+    "panel endpoints and no-dispatch behavior"
+  ],
+  "limitations": [
+    "Test output was supplied by the human operator from PowerShell, not executed directly by SION action because npm_test action was unavailable.",
+    "This proves current local tests passed, not clean clone, live Nebius revalidation, public repo readiness, deployment, production readiness or Devpost submission."
+  ],
+  "source_attachment": "file_00000000e10481f48b47101d026bbc8f / Pegado text.txt",
+  "truthcore": {
+    "test_executed": true,
+    "runtime_observed": false,
+    "production_validated": false,
+    "pushed": false,
+    "submitted": false
+  }
+}
